@@ -317,7 +317,7 @@ export const DocumentForm = ({ mode }: DocumentFormProps) => {
                 <Input id="webViewLink" {...register("webViewLink")} placeholder="https://..." className="bg-slate-50/50 border-slate-200 focus:bg-white transition-all rounded-xl" />
                 {errors.webViewLink && <p className="text-xs text-destructive">{errors.webViewLink.message}</p>}
               </div>
-            </CardHeader>
+            </CardContent>
             <CardHeader className="border-t border-slate-50">
               <CardTitle className="text-lg font-bold text-slate-900">Tags, Keywords & Authors</CardTitle>
             </CardHeader>
