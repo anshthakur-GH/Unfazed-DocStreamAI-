@@ -32,6 +32,7 @@ const documentSchema = z.object({
   keywords: z.array(z.string()).optional(),
   urgency_level: z.enum(["High", "Medium", "Low"]),
   google_drive_link: z.string().url("Must be a valid URL").optional().nullable().or(z.literal("")),
+  webViewLink: z.string().url("Must be a valid URL").optional().nullable().or(z.literal("")),
 });
 
 type DocumentFormData = z.infer<typeof documentSchema>;
@@ -110,6 +111,7 @@ export const DocumentForm = ({ mode }: DocumentFormProps) => {
         date_published: data.date_published ?? null,
         funding_source: data.funding_source ?? null,
         google_drive_link: data.google_drive_link ?? null,
+        webViewLink: data.webViewLink ?? null,
       };
 
       if (mode === 'create') {
@@ -244,28 +246,6 @@ export const DocumentForm = ({ mode }: DocumentFormProps) => {
           </Card>
 
           <Card>
-            <CardHeader><CardTitle>Academic Details</CardTitle></CardHeader>
-            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="research_domain">Research Domain</Label>
-                <Input id="research_domain" {...register("research_domain")} />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="course_code">Course Code</Label>
-                <Input id="course_code" {...register("course_code")} />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="academic_year">Academic Year</Label>
-                <Input id="academic_year" {...register("academic_year")} placeholder="e.g., 2023-24" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="date_published">Date Published</Label>
-                <Input id="date_published" type="date" {...register("date_published")} />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
             <CardHeader><CardTitle>Content & Summary</CardTitle></CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
@@ -276,6 +256,11 @@ export const DocumentForm = ({ mode }: DocumentFormProps) => {
                 <Label htmlFor="google_drive_link">Google Drive Link</Label>
                 <Input id="google_drive_link" {...register("google_drive_link")} placeholder="https://drive.google.com/..." />
                 {errors.google_drive_link && <p className="text-xs text-destructive">{errors.google_drive_link.message}</p>}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="webViewLink">Web View Link</Label>
+                <Input id="webViewLink" {...register("webViewLink")} placeholder="https://..." />
+                {errors.webViewLink && <p className="text-xs text-destructive">{errors.webViewLink.message}</p>}
               </div>
             </CardContent>
           </Card>
@@ -307,6 +292,32 @@ export const DocumentForm = ({ mode }: DocumentFormProps) => {
                     <Badge key={t} variant="outline" className="bg-cyan-50">{t} <X className="h-3 w-3 ml-1 cursor-pointer" onClick={() => setSubjectTags(subjectTags.filter(x => x !== t))} /></Badge>
                   ))}
                 </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader><CardTitle>Academic Details</CardTitle></CardHeader>
+            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="research_domain">Research Domain</Label>
+                <Input id="research_domain" {...register("research_domain")} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="course_code">Course Code</Label>
+                <Input id="course_code" {...register("course_code")} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="academic_year">Academic Year</Label>
+                <Input id="academic_year" {...register("academic_year")} placeholder="e.g., 2023-24" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="date_published">Date Published</Label>
+                <Input id="date_published" type="date" {...register("date_published")} />
+              </div>
+              <div className="space-y-2 col-span-2">
+                <Label htmlFor="funding_source">Funding Source</Label>
+                <Input id="funding_source" {...register("funding_source")} />
               </div>
             </CardContent>
           </Card>

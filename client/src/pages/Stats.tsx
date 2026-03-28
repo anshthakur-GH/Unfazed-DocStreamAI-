@@ -143,12 +143,12 @@ const Stats = () => {
             </CardContent>
           </Card>
 
-          {/* Department Distribution */}
+          {/* Profile Distribution */}
           <Card>
             <CardHeader>
-              <CardTitle>Department Distribution</CardTitle>
+              <CardTitle>Profile Distribution</CardTitle>
               <CardDescription>
-                Documents tagged by department
+                Documents tagged by user profile
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -161,17 +161,17 @@ const Stats = () => {
                     </div>
                   ))}
                 </div>
-              ) : stats?.departments && stats.departments.length > 0 ? (
+              ) : stats?.profiles && stats.profiles.length > 0 ? (
                 <div className="space-y-3">
-                  {stats.departments.map((dept) => (
-                    <div key={dept._id} className="flex items-center justify-between">
-                      <span className="text-sm font-medium">{dept._id}</span>
-                      <Badge variant="outline">{dept.count}</Badge>
+                  {stats.profiles.map((prof) => (
+                    <div key={prof._id} className="flex items-center justify-between">
+                      <span className="text-sm font-medium">{prof._id}</span>
+                      <Badge variant="outline">{prof.count}</Badge>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground">No department data available</p>
+                <p className="text-sm text-muted-foreground">No profile data available</p>
               )}
             </CardContent>
           </Card>

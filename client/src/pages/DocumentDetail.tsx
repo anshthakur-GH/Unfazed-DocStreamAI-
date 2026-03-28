@@ -143,10 +143,11 @@ export default function DocumentDetail() {
           </div>
 
           <div className="flex items-center space-x-3">
-            {document.google_drive_link && (
-              <a href={document.google_drive_link} target="_blank" rel="noopener noreferrer" 
+            {(document.webViewLink || document.google_drive_link) && (
+              <a href={document.webViewLink || document.google_drive_link || "#"} target="_blank" rel="noopener noreferrer" 
                 className="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium border border-input bg-orange-500 text-white hover:bg-orange-600 h-9 px-3">
-                See Original Document
+                <ExternalLink className="h-4 w-4 mr-2" />
+                View Original
               </a>
             )}
             <Button variant="outline" size="sm" className="bg-green-500 text-white hover:bg-green-600" onClick={handleDownloadPdf}>
@@ -168,6 +169,15 @@ export default function DocumentDetail() {
                     <p className="text-foreground leading-relaxed">{document.summary}</p>
                   </div>
                   
+                  <div>
+                    <h4 className="text-sm font-medium text-muted-foreground mb-2">Subject Tags</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {document.subject_tags?.map(tag => (
+                        <Badge key={tag} variant="outline" className="bg-cyan-50">{tag}</Badge>
+                      ))}
+                    </div>
+                  </div>
+
                   <Separator />
                   
                   <div className="grid grid-cols-2 gap-6">
@@ -186,17 +196,6 @@ export default function DocumentDetail() {
                     <div>
                       <h4 className="text-sm font-medium text-muted-foreground mb-1">Funding Source</h4>
                       <p>{document.funding_source || "N/A"}</p>
-                    </div>
-                  </div>
-
-                  <Separator />
-
-                  <div>
-                    <h4 className="text-sm font-medium text-muted-foreground mb-2">Subject Tags</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {document.subject_tags?.map(tag => (
-                        <Badge key={tag} variant="outline" className="bg-cyan-50">{tag}</Badge>
-                      ))}
                     </div>
                   </div>
                 </div>
@@ -235,6 +234,59 @@ export default function DocumentDetail() {
             </Card>
           </div>
         </div>
+
+        {/* Relevant Research Papers Section - Only for Lecture Notes */}
+        {document.document_type === 'Lecture Notes' && relatedDocuments && relatedDocuments.data.length > 0 && (
+          <div className="mt-12">
+            <div className="flex items-center space-x-3 mb-6 border-b border-blue-500/20 pb-4">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <FileText className="h-6 w-6 text-blue-600" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-foreground">Relevant Research Papers</h2>
+                <p className="text-sm text-muted-foreground">Expand your knowledge with these related publications</p>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {relatedDocuments.data.map((relatedDoc: any) => (
+                <Card key={relatedDoc._id} className="group hover:border-blue-400/50 hover:shadow-lg transition-all duration-300 border-cyan-100">
+                  <CardContent className="p-6">
+                    <div className="flex flex-col h-full">
+                      <div className="flex items-center justify-between mb-3">
+                        <Badge variant="secondary" className="bg-blue-100 text-blue-800 text-[10px] font-semibold border-none">
+                          RESEARCH PAPER
+                        </Badge>
+                        <span className="text-[10px] text-muted-foreground font-medium flex items-center">
+                          <Calendar className="h-3 w-3 mr-1 opacity-70" />
+                          {safeFormatDate(relatedDoc.upload_timestamp, 'MMM dd, yyyy')}
+                        </span>
+                      </div>
+                      <Link to={`/documents/${relatedDoc._id}`} className="group-hover:text-blue-600 transition-colors mb-3">
+                        <h4 className="font-bold text-lg line-clamp-1 text-foreground leading-tight">{relatedDoc.document_title}</h4>
+                      </Link>
+                      <p className="text-sm text-muted-foreground line-clamp-2 mb-5 flex-grow italic">
+                        {relatedDoc.summary}
+                      </p>
+                      <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100">
+                        <div className="text-xs font-medium text-slate-500 truncate max-w-[150px] flex items-center">
+                          <Users className="h-3 w-3 mr-1.5 opacity-50" />
+                          {relatedDoc.authors?.length > 0 ? relatedDoc.authors[0] : 'Unknown Author'}
+                          {relatedDoc.authors?.length > 1 && ` +${relatedDoc.authors.length - 1}`}
+                        </div>
+                        <Button variant="ghost" size="sm" asChild className="h-8 px-3 text-blue-600 hover:text-blue-700 hover:bg-blue-50 font-semibold group-hover:translate-x-1 transition-transform">
+                          <Link to={`/documents/${relatedDoc._id}`}>
+                            Details <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
+                          </Link>
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

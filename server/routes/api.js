@@ -129,6 +129,50 @@ router.get('/data/:id', async (req, res) => {
   }
 });
 
+// Get related research papers for a document
+router.get('/data/:id/related', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { limit = 5 } = req.query;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: 'Invalid document ID' });
+    }
+
+    const currentDoc = await Document.findById(id);
+    if (!currentDoc) {
+      return res.status(404).json({ error: 'Document not found' });
+    }
+
+    // Build query for related research papers
+    // 1. Must be a Research Paper
+    // 2. Must not be the current document
+    // 3. Should match subject tags OR research domain
+    const relatedQuery = {
+      _id: { $ne: currentDoc._id },
+      document_type: 'Research Paper',
+      $or: [
+        { research_domain: currentDoc.research_domain },
+        { subject_tags: { $in: currentDoc.subject_tags || [] } }
+      ]
+    };
+
+    const relatedDocs = await Document.find(relatedQuery)
+      .limit(parseInt(limit))
+      .sort({ upload_timestamp: -1 });
+
+    res.json({
+      data: relatedDocs,
+      count: relatedDocs.length,
+      currentDocumentId: id,
+      limit: parseInt(limit)
+    });
+  } catch (error) {
+    console.error('❌ Error fetching related documents:', error);
+    res.status(500).json({ error: 'Failed to fetch related documents', details: error.message });
+  }
+});
+
 // Create new document
 router.post('/createData', async (req, res) => {
   try {

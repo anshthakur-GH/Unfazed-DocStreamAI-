@@ -17,7 +17,9 @@ import {
   RefreshCw,
   Plus,
   Trash2,
-  Edit
+  Edit,
+  ExternalLink,
+  AlertTriangle
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -43,6 +45,7 @@ const urgencyLevelColors = {
 
 interface DocumentTableProps {
   userProfileFilter?: string;
+  documentTypeFilter?: string;
   showControls?: boolean;
   sortOrderProp?: 'asc' | 'desc';
   onSortChange?: (value: 'asc' | 'desc') => void;
@@ -51,6 +54,7 @@ interface DocumentTableProps {
 
 export const DocumentTable = ({ 
   userProfileFilter,
+  documentTypeFilter,
   showControls = true,
   sortOrderProp,
   onSortChange,
@@ -75,6 +79,7 @@ export const DocumentTable = ({
     search: searchTerm || undefined,
     urgency_sort: urgencySort,
     user_profile: userProfileFilter,
+    document_type: documentTypeFilter,
   };
 
   const { data, isLoading, error, refetch } = useDocumentsList(queryParams);
@@ -103,28 +108,39 @@ export const DocumentTable = ({
     else setSortOrderState(value);
   };
 
-  if (isLoading) {
+  if (error) {
     return (
-      <div className="space-y-6">
-        {!hideHeading && (
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-semibold text-foreground">
-                {userProfileFilter ? `${userProfileFilter} Documents` : "Latest documents"}
-              </h1>
-              <p className="text-muted-foreground">Loading documents...</p>
-            </div>
-          </div>
-        )}
-        <div className="bg-card rounded-lg border shadow-sm p-8 text-center">
-          <RefreshCw className="h-8 w-8 text-muted-foreground mx-auto mb-4 animate-spin" />
-        </div>
+      <div className="bg-destructive/10 border border-destructive rounded-lg p-6 text-center">
+        <AlertTriangle className="h-8 w-8 text-destructive mx-auto mb-2" />
+        <h3 className="text-lg font-semibold text-destructive">Failed to load documents</h3>
+        <p className="text-sm text-destructive/80 mb-4">{error instanceof Error ? error.message : "An unexpected network error occurred."}</p>
+        <Button variant="outline" size="sm" onClick={() => refetch()} className="border-destructive text-destructive hover:bg-destructive hover:text-white">
+          <RefreshCw className="h-4 w-4 mr-2" />
+          Try Again
+        </Button>
       </div>
     );
   }
 
   const documents = data?.data || [];
   const pagination = data?.pagination;
+
+  if (!isLoading && documents.length === 0) {
+    return (
+      <div className="bg-card rounded-lg border border-dashed border-cyan-400 p-12 text-center">
+        <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4 opacity-20" />
+        <h3 className="text-xl font-semibold text-foreground">No documents found</h3>
+        <p className="text-muted-foreground mt-2 max-w-sm mx-auto">
+          {userProfileFilter 
+            ? `There are currently no documents assigned to the ${userProfileFilter} profile.`
+            : "The document library is currently empty."}
+        </p>
+        <Button size="sm" asChild className="mt-6 bg-cyan-500 hover:bg-cyan-600 text-white">
+          <Link to="/documents/new"><Plus className="h-4 w-4 mr-2" />Add First Document</Link>
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -221,6 +237,13 @@ export const DocumentTable = ({
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center space-x-2">
+                    {(doc.webViewLink || doc.google_drive_link) && (
+                      <Button variant="ghost" size="sm" asChild>
+                        <a href={doc.webViewLink || doc.google_drive_link || "#"} target="_blank" rel="noopener noreferrer">
+                          <ExternalLink className="h-4 w-4" />
+                        </a>
+                      </Button>
+                    )}
                     <Button variant="ghost" size="sm" asChild>
                       <Link to={`/documents/${doc._id}`}><Eye className="h-4 w-4" /></Link>
                     </Button>

@@ -20,6 +20,7 @@ export interface Document {
   keywords: string[];
   urgency_level: "High" | "Medium" | "Low";
   google_drive_link: string | null;
+  webViewLink: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -42,6 +43,7 @@ export interface DocumentCreateData {
   keywords?: string[];
   urgency_level: "High" | "Medium" | "Low";
   google_drive_link?: string | null;
+  webViewLink?: string | null;
 }
 
 export interface DocumentUpdateData extends Partial<DocumentCreateData> {}
@@ -64,7 +66,7 @@ export interface ApiResponse<T> {
 export interface StatsResponse {
   total: number;
   documentTypes: Array<{ _id: string; count: number }>;
-  departments: Array<{ _id: string; count: number }>;
+  profiles: Array<{ _id: string; count: number }>;
 }
 
 export interface HealthResponse {

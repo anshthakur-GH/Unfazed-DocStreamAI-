@@ -4,7 +4,7 @@ import { DocumentTable } from "@/components/documents/DocumentTable";
 import { LatestNewsSection } from "@/components/layout/LatestNewsSection";
 import { Input } from "@/components/ui/input"; // Import Input component
 import { Button } from "@/components/ui/button"; // Import Button component
-import { Search, BookOpen, X } from 'lucide-react'; // Import Search and BookOpen icons
+import { Search, BookOpen, X, FileText, Layout } from 'lucide-react'; // Import Search, BookOpen, X, FileText, and Layout icons
 import { useSearch } from "@/contexts/SearchContext"; // Import useSearch hook
 import { useDebounce } from "@/hooks/useDebounce"; // Import useDebounce hook
 import { useState, useEffect } from "react"; // Import useState and useEffect
@@ -41,7 +41,7 @@ export default function ProfileView() {
 
   return (
     <div className="min-h-screen bg-background">
-      <LatestNewsSection title="Latest Alerts" userProfileFilter={profileName} />
+      <LatestNewsSection title="Latest Alerts" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -84,8 +84,59 @@ export default function ProfileView() {
           </Link>
         </div>
 
-        {/* Documents for this profile */}
-        <DocumentTable userProfileFilter={profileName} showControls={true} hideHeading={true} />
+        {/* Documents for this profile categorized by type */}
+        <div className="space-y-12">
+          {/* Lecture Notes Section */}
+          <section>
+            <div className="flex items-center space-x-3 mb-6 border-b border-green-500/20 pb-4">
+              <div className="p-2 bg-green-100 rounded-lg">
+                <BookOpen className="h-5 w-5 text-green-600" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-foreground">Lecture Notes</h2>
+              </div>
+            </div>
+            <DocumentTable 
+              documentTypeFilter="Lecture Notes" 
+              showControls={false} 
+              hideHeading={true} 
+            />
+          </section>
+
+          {/* Research Papers Section */}
+          <section>
+            <div className="flex items-center space-x-3 mb-6 border-b border-blue-500/20 pb-4">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <FileText className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-foreground">Research Papers</h2>
+              </div>
+            </div>
+            <DocumentTable 
+              documentTypeFilter="Research Paper" 
+              showControls={false} 
+              hideHeading={true} 
+            />
+          </section>
+
+          {/* Other Documents Section */}
+          <section>
+            <div className="flex items-center space-x-3 mb-6 border-b border-gray-500/20 pb-4">
+              <div className="p-2 bg-gray-100 rounded-lg">
+                <Layout className="h-5 w-5 text-gray-600" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-foreground">Other Documents</h2>
+              </div>
+            </div>
+            <DocumentTable 
+              documentTypeFilter="Policy Document" 
+              showControls={false} 
+              hideHeading={true} 
+            />
+          </section>
+        </div>
       </div>
     </div>
   );

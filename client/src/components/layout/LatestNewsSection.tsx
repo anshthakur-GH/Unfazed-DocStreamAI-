@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 
 interface LatestNewsSectionProps {
   title?: string;
-  userProfileFilter?: string; // New prop for profile filtering
 }
 
 interface Alert {
@@ -18,18 +17,16 @@ interface Alert {
   createdAt: string;
 }
 
-export const LatestNewsSection = ({ title = "Alerts", userProfileFilter }: LatestNewsSectionProps) => {
+export const LatestNewsSection = ({ title = "Alerts" }: LatestNewsSectionProps) => {
   const [isPaused, setIsPaused] = React.useState(false);
   const [currentAlertIndex, setCurrentAlertIndex] = React.useState(0);
   const navigate = useNavigate();
 
-  // Fetch action-required alerts from the API
+  // Fetch all action-required alerts from the API
   const { data: alertsData, isLoading, error } = useQuery({
-    queryKey: ['action-required-alerts', userProfileFilter], // Include userProfileFilter in queryKey
+    queryKey: ['action-required-alerts'],
     queryFn: async () => {
-      const url = userProfileFilter 
-        ? `/api/alerts/action-required?user_profile=${userProfileFilter}` 
-        : '/api/alerts/action-required';
+      const url = '/api/alerts/action-required';
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`Failed to fetch alerts: ${response.status} ${response.statusText}`);

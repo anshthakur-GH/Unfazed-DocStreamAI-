@@ -1,8 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { FileText, BarChart3 } from "lucide-react";
-import DocStreamAILogo from "@/assets/download.png"; // Import the DocStreamAI logo
-import g20Logo from "@/assets/g20-logo.png";
-import { Button } from "@/components/ui/button";
+import { BarChart3 } from "lucide-react";
 import { KnowledgeModal } from "@/components/common/KnowledgeModal";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -16,12 +13,9 @@ export const Navbar = () => {
     <nav className="bg-card border-b border-border sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-28">
-          {/* Logo */}
+          {/* Logo Section - Images removed as requested */}
           <div className="flex items-center space-x-2">
-            <Link to="/" className="flex items-center">
-              <img src={DocStreamAILogo} alt="DocStreamAI Logo" className="h-12 w-auto object-contain" />
-            </Link>
-            <img src={g20Logo} alt="G20 Logo" className="h-14 w-auto object-contain" />
+
           </div>
 
           {/* Title in the middle */}
