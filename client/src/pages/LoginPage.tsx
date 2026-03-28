@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { departments } from "@/lib/departments";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -30,36 +30,35 @@ import {
 import DocStreamAILogo from "@/assets/download.png";
 import g20Logo from "@/assets/g20-logo.png";
 
-interface LoginPageProps {
-  onLogin: () => void;
-}
+// User-defined types are no longer needed for onLogin
 
-const LoginPage = ({ onLogin }: LoginPageProps) => {
+
+const LoginPage = () => {
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
-  const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
+  const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
+  const { setIsAuthenticated, setUserProfile } = useAuth(); // Get auth functions
   const navigate = useNavigate();
 
-  const handleDepartmentSelect = (departmentPath: string) => {
-    const departmentName = departmentPath.split('/').pop();
-    setSelectedDepartment(departmentName || null);
+  const handleProfileSelect = (value: string) => {
+    setSelectedProfile(value);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedDepartment) {
-      alert("Please select a department.");
+    if (!selectedProfile) {
+      alert("Please select a profile.");
       return;
     }
     if (loginId === "admin" && password === "admin") {
-      onLogin(); 
-      localStorage.setItem('userDepartment', selectedDepartment);
-      navigate(`/departments/${selectedDepartment}`);
+      setIsAuthenticated(true); 
+      setUserProfile(selectedProfile); // Sync profile in context
+      navigate(`/profiles/${selectedProfile}`);
     } else {
       if (loginId && password) {
-        onLogin();
-        localStorage.setItem('userDepartment', selectedDepartment);
-        navigate(`/departments/${selectedDepartment}`);
+        setIsAuthenticated(true);
+        setUserProfile(selectedProfile); // Sync profile in context
+        navigate(`/profiles/${selectedProfile}`);
       } else {
         alert("Invalid Login ID or Password");
       }
@@ -173,21 +172,19 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
           </CardHeader>
           <CardContent className="px-8 pb-8">
             <div className="space-y-4">
-              <label htmlFor="department-select" className="text-xs font-medium text-slate-600 block mb-1">
-                Select Department
+              <label htmlFor="profile-select" className="text-xs font-medium text-slate-600 block mb-1">
+                User Profile
               </label>
-              <Select onValueChange={handleDepartmentSelect}>
-                <SelectTrigger id="department-select" className="w-full bg-[#E2E8F0] border-transparent text-slate-700 h-11 focus:ring-blue-500/20 focus:border-blue-500 shadow-none">
-                  <SelectValue placeholder="Choose your department" />
+              <Select onValueChange={handleProfileSelect}>
+                <SelectTrigger id="profile-select" className="w-full bg-[#E2E8F0] border-transparent text-slate-700 h-11 focus:ring-blue-500/20 focus:border-blue-500 shadow-none">
+                  <SelectValue placeholder="Choose your profile" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectLabel>Departments</SelectLabel>
-                    {departments.map((dept) => (
-                      <SelectItem key={dept.name} value={dept.path}>
-                        {dept.name}
-                      </SelectItem>
-                    ))}
+                    <SelectLabel>Profiles</SelectLabel>
+                    <SelectItem value="Head">Head</SelectItem>
+                    <SelectItem value="Teacher">Teacher</SelectItem>
+                    <SelectItem value="Student">Student</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>

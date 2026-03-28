@@ -153,13 +153,13 @@ const AntiGravityLogin: React.FC = () => {
           
           {/* Department Select */}
           <div className="space-y-2">
-            <label className="text-xs font-medium text-blue-200 uppercase tracking-wider ml-1">Select Department</label>
+            <label className="text-xs font-medium text-blue-200 uppercase tracking-wider ml-1">User Profile</label>
             <div className="relative group">
               <select className="w-full appearance-none bg-black/20 border border-white/10 text-white text-sm rounded-xl px-4 py-3 outline-none transition-all duration-300 focus:bg-white/5 focus:border-blue-400/50 focus:shadow-[inset_0_0_15px_rgba(59,130,246,0.3)] hover:bg-white/5">
-                <option value="" disabled selected hidden className="text-slate-500">Choose your department</option>
-                <option value="cs" className="text-slate-900">Computer Science</option>
-                <option value="math" className="text-slate-900">Mathematics</option>
-                <option value="physics" className="text-slate-900">Physics</option>
+                <option value="" disabled selected hidden className="text-slate-500">Choose your profile</option>
+                <option value="Head" className="text-slate-900">Head</option>
+                <option value="Teacher" className="text-slate-900">Teacher</option>
+                <option value="Student" className="text-slate-900">Student</option>
               </select>
               <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-300/70 pointer-events-none group-focus-within:text-blue-400" />
             </div>

@@ -19,7 +19,7 @@ interface KnowledgeFormData {
   author_name: string;
   title: string;
   content: string;
-  department: string;
+  user_profile: string;
 }
 
 export const KnowledgeModal: React.FC<KnowledgeModalProps> = ({ children, onKnowledgeAdded }) => {
@@ -29,63 +29,47 @@ export const KnowledgeModal: React.FC<KnowledgeModalProps> = ({ children, onKnow
     author_name: '',
     title: '',
     content: '',
-    department: ''
+    user_profile: ''
   });
 
   const { toast } = useToast();
-  const { userDepartment } = useAuth();
+  const { userProfile } = useAuth();
   const location = useLocation();
 
-  const departments = [
-    'Engineering',
-    'Maintenance', 
-    'Procurement',
-    'HR',
-    'Legal',
-    'Board',
-    'Finance',
-    'Operations',
-    'Admin'
-  ];
+  const profiles = ['Head', 'Teacher', 'Student'];
 
-  // Department mapping for URL to display names
-  const departmentDisplayNames: { [key: string]: string } = {
-    engineering: "Engineering",
-    finance: "Finance",
-    hr: "HR",
-    operations: "Operations",
-    "legal-department": "Legal",
-    procurement: "Procurement",
-    "excecutive-director": "Board",
-    admin: "Admin",
-    maintenance: "Maintenance"
+  // Profile mapping for URL to display names
+  const profileDisplayNames: { [key: string]: string } = {
+    head: "Head",
+    teacher: "Teacher",
+    student: "Student"
   };
 
-  // Function to get current department from URL or user department
-  const getCurrentDepartment = (): string => {
-    // First, try to get department from current URL (if on department page)
-    const pathMatch = location.pathname.match(/\/departments\/([^\/]+)/);
+  // Function to get current profile from URL or user profile
+  const getCurrentProfile = (): string => {
+    // First, try to get profile from current URL (if on profile page)
+    const pathMatch = location.pathname.match(/\/profiles\/([^\/]+)/);
     if (pathMatch) {
-      const urlDepartment = pathMatch[1].toLowerCase();
-      return departmentDisplayNames[urlDepartment] || '';
+      const urlProfile = pathMatch[1].toLowerCase();
+      return profileDisplayNames[urlProfile] || '';
     }
     
-    // Fallback to user's assigned department
-    return userDepartment || '';
+    // Fallback to user's assigned profile
+    return userProfile || '';
   };
 
-  // Auto-select department when modal opens
+  // Auto-select profile when modal opens
   useEffect(() => {
     if (isOpen) {
-      const currentDept = getCurrentDepartment();
-      if (currentDept && departments.includes(currentDept)) {
+      const currentProf = getCurrentProfile();
+      if (currentProf && profiles.includes(currentProf)) {
         setFormData(prev => ({
           ...prev,
-          department: currentDept
+          user_profile: currentProf
         }));
       }
     }
-  }, [isOpen, location.pathname, userDepartment]);
+  }, [isOpen, location.pathname, userProfile]);
 
   const handleInputChange = (field: keyof KnowledgeFormData, value: string) => {
     setFormData(prev => ({
@@ -118,7 +102,7 @@ export const KnowledgeModal: React.FC<KnowledgeModalProps> = ({ children, onKnow
           author_name: formData.author_name.trim(),
           title: formData.title.trim(),
           content: formData.content.trim(),
-          department: formData.department || null
+          user_profile: formData.user_profile || null
         }),
       });
 
@@ -140,7 +124,7 @@ export const KnowledgeModal: React.FC<KnowledgeModalProps> = ({ children, onKnow
         author_name: '',
         title: '',
         content: '',
-        department: ''
+        user_profile: ''
       });
 
       setIsOpen(false);
@@ -170,7 +154,7 @@ export const KnowledgeModal: React.FC<KnowledgeModalProps> = ({ children, onKnow
         author_name: '',
         title: '',
         content: '',
-        department: ''
+        user_profile: ''
       });
     }
   };
@@ -211,11 +195,11 @@ export const KnowledgeModal: React.FC<KnowledgeModalProps> = ({ children, onKnow
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="department" className="text-sm font-medium">
-                Department
+              <Label htmlFor="user_profile" className="text-sm font-medium">
+                User Profile
               </Label>
               <div className="flex items-center h-10 w-full rounded-md border border-input bg-muted px-3 py-2 text-sm">
-                {formData.department || 'No department selected'}
+                {formData.user_profile || 'No profile selected'}
               </div>
             </div>
           </div>

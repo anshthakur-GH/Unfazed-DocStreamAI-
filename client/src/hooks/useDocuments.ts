@@ -6,7 +6,7 @@ export const documentKeys = {
   all: ['documents'] as const,
   lists: () => [...documentKeys.all, 'list'] as const,
   list: (filters: Record<string, any>) => [...documentKeys.lists(), filters] as const,
-  listByDept: (department: string, filters: Record<string, any>) => [...documentKeys.lists(), 'department', department, filters] as const,
+  listByProfile: (profile: string, filters: Record<string, any>) => [...documentKeys.lists(), 'profile', profile, filters] as const,
   details: () => [...documentKeys.all, 'detail'] as const,
   detail: (id: string) => [...documentKeys.details(), id] as const,
   recent: () => [...documentKeys.all, 'recent'] as const,
@@ -21,59 +21,60 @@ export const useDocuments = (params: {
   skip?: number;
   sort?: 'asc' | 'desc';
   document_type?: string;
+  user_profile?: string; // Add user_profile parameter
   search?: string;
-  urgency_sort?: string; // Add urgency_sort parameter
+  urgency_sort?: string;
 } = {}) => {
   return useQuery({
     queryKey: documentKeys.list(params),
     queryFn: () => apiService.getDocuments(params),
-    staleTime: 30000, // 30 seconds
+    staleTime: 30000,
   });
 };
 
-// Get documents by department with filters
-export const useDocumentsByDepartment = (
-  department: string,
+// Get documents by profile with filters
+export const useDocumentsByProfile = (
+  profile: string,
   params: {
     limit?: number;
     skip?: number;
     sort?: 'asc' | 'desc';
     document_type?: string;
     search?: string;
-    urgency_sort?: string; // Add urgency_sort parameter
+    urgency_sort?: string;
   } = {}
 ) => {
   return useQuery({
-    queryKey: documentKeys.listByDept(department, params),
-    queryFn: () => apiService.getDocumentsByDepartment(department, params),
-    enabled: !!department,
+    queryKey: documentKeys.listByProfile(profile, params),
+    queryFn: () => apiService.getDocumentsByProfile(profile, params),
+    enabled: !!profile,
     staleTime: 30000,
   });
 };
 
-// Unified documents list hook (with optional department)
+// Unified documents list hook (with optional profile)
 export const useDocumentsList = (
   options: (
     {
-      department?: string;
+      user_profile?: string;
       limit?: number;
       skip?: number;
       sort?: 'asc' | 'desc';
       search?: string;
-      urgency_sort?: string; // Add urgency_sort parameter
+      urgency_sort?: string;
     }
   ) = {}
 ) => {
-  const { department, ...params } = options;
-  const queryKey = department
-    ? documentKeys.listByDept(department, params)
+  const { user_profile, ...params } = options;
+  const queryKey = user_profile
+    ? documentKeys.listByProfile(user_profile, params)
     : documentKeys.list(params);
 
   return useQuery({
     queryKey,
     queryFn: () =>
-      department
-        ? apiService.getDocumentsByDepartment(department, params)
+      user_profile
+        ? apiService.getDocumentsByProfile(user_profile, params)
         : apiService.getDocuments(params),
     staleTime: 30000,
   });

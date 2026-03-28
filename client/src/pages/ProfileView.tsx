@@ -9,39 +9,16 @@ import { useSearch } from "@/contexts/SearchContext"; // Import useSearch hook
 import { useDebounce } from "@/hooks/useDebounce"; // Import useDebounce hook
 import { useState, useEffect } from "react"; // Import useState and useEffect
 
-const departmentDisplayNames: { [key: string]: string } = {
-  engineering: "Engineering",
-  finance: "Finance",
-  hr: "Human Resources",
-  operations: "Operations",
-  "legal-department": "Legal",
-  procurement: "Procurement",
-  "excecutive-director": "Excecutive Director",
-  admin: "Admin", // Assuming 'admin' is also a department
-};
-
-function toTitleCase(value: string) {
-  return value
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-}
-
-export default function DepartmentView() {
-  const { department } = useParams();
+export default function ProfileView() {
+  const { profile } = useParams();
   const { searchTerm, setSearchTerm } = useSearch(); // Use the search context
   const [currentSearchInput, setCurrentSearchInput] = useState(searchTerm); // Local state for input
   const debouncedSearchTerm = useDebounce(currentSearchInput, 300); // Debounce search input
   
-  if (!department) return <Navigate to="/404" replace />;
+  if (!profile) return <Navigate to="/404" replace />;
 
-  const rawDepartmentName = department.toLowerCase();
-  const departmentName = departmentDisplayNames[rawDepartmentName] || toTitleCase(department);
-  console.log("Department Name for filter:", departmentName); // Add this line
+  const profileName = profile.charAt(0).toUpperCase() + profile.slice(1);
   const { data: stats, isLoading } = useDataStats();
-
-  // Resolve count from backend stats (dynamic)
-  const deptCount = stats?.departments?.find((d) => String(d._id).toLowerCase() === departmentName.toLowerCase())?.count ?? 0;
 
   // Update search term when debounced value changes (real-time search)
   useEffect(() => {
@@ -64,13 +41,13 @@ export default function DepartmentView() {
 
   return (
     <div className="min-h-screen bg-background">
-      <LatestNewsSection title="Latest Alerts" departmentFilter={departmentName} />
+      <LatestNewsSection title="Latest Alerts" userProfileFilter={profileName} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">{departmentName}</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">{profileName} View</h1>
           <p className="text-muted-foreground">
-            {isLoading ? "Loading statistics..." : `${deptCount} document${deptCount === 1 ? "" : "s"} found`}
+            {isLoading ? "Loading..." : "Access restricted to " + profileName + " profile"}
           </p>
         </div>
 
@@ -79,7 +56,7 @@ export default function DepartmentView() {
           <div className="flex w-full max-w-sm items-center space-x-2 relative">
             <Input 
               type="text" 
-              placeholder="Search documents in real-time..."
+              placeholder="Search documents..."
               value={currentSearchInput}
               onChange={(e) => setCurrentSearchInput(e.target.value)}
               className="bg-card border-cyan-400 text-foreground focus:ring-primary focus:border-cyan-500 pr-8"
@@ -96,7 +73,7 @@ export default function DepartmentView() {
             )}
           </div>
           
-          <Link to={`/departments/${department}/knowledge`}>
+          <Link to={`/profiles/${profile}/knowledge`}>
             <Button 
               variant="outline"
               className="flex items-center space-x-2 whitespace-nowrap"
@@ -107,8 +84,8 @@ export default function DepartmentView() {
           </Link>
         </div>
 
-        {/* Documents for this department */}
-        <DocumentTable departmentFilter={departmentName} showControls={true} hideHeading={true} />
+        {/* Documents for this profile */}
+        <DocumentTable userProfileFilter={profileName} showControls={true} hideHeading={true} />
       </div>
     </div>
   );
