@@ -24,7 +24,7 @@ export const Navbar = () => {
           {/* Title in the middle */}
           <div className="absolute inset-x-0 text-center pointer-events-none flex flex-col items-center justify-center h-full">
             <h1 className="text-3xl font-black tracking-tighter text-slate-900 uppercase" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
-              Unfazed AI AI
+              Unfazed AI
             </h1>
           </div>
 
