@@ -3,26 +3,47 @@ const API_BASE_URL = 'http://localhost:4000/api';
 export interface Document {
   _id: string;
   document_title: string;
-  document_type: string;
-  departments_tagged: string[];
+  document_type: "Research Paper" | "Lecture Notes" | "Policy Document" | "Other";
+  uploaded_by: string;
+  upload_timestamp: string;
+  user_id: string;
+  user_profile: "Head" | "Teacher" | "Student";
+  research_domain: string | null;
+  subject_tags: string[];
+  course_code: string | null;
+  academic_year: string | null;
+  authors: string[];
+  date_published: string | null;
+  date_received: string;
+  funding_source: string | null;
   summary: string;
   keywords: string[];
-  content: string;
-  images: string[];
+  urgency_level: "High" | "Medium" | "Low";
+  google_drive_link: string | null;
+  webViewLink: string | null;
   createdAt: string;
   updatedAt: string;
-  webViewLink?: string;
-  UrgencyLevel?: string; // Changed to match database casing
 }
 
 export interface DocumentCreateData {
   document_title: string;
-  document_type: string;
-  departments_tagged?: string[];
-  summary?: string;
+  document_type: "Research Paper" | "Lecture Notes" | "Policy Document" | "Other";
+  uploaded_by: string;
+  user_id: string;
+  user_profile: "Head" | "Teacher" | "Student";
+  research_domain?: string | null;
+  subject_tags?: string[];
+  course_code?: string | null;
+  academic_year?: string | null;
+  authors?: string[];
+  date_published?: string | null;
+  date_received?: string;
+  funding_source?: string | null;
+  summary: string;
   keywords?: string[];
-  content?: string;
-  images?: string[];
+  urgency_level: "High" | "Medium" | "Low";
+  google_drive_link?: string | null;
+  webViewLink?: string | null;
 }
 
 export interface DocumentUpdateData extends Partial<DocumentCreateData> {}
@@ -45,7 +66,7 @@ export interface ApiResponse<T> {
 export interface StatsResponse {
   total: number;
   documentTypes: Array<{ _id: string; count: number }>;
-  departments: Array<{ _id: string; count: number }>;
+  profiles: Array<{ _id: string; count: number }>;
 }
 
 export interface HealthResponse {
@@ -116,8 +137,10 @@ class ApiService {
     skip?: number;
     sort?: 'asc' | 'desc';
     document_type?: string;
+    user_profile?: string;
+    urgency_level?: string;
     search?: string;
-    urgency_sort?: string; // Add urgency_sort to API params
+    urgency_sort?: string;
   } = {}): Promise<ApiResponse<Document[]>> {
     const searchParams = new URLSearchParams();
     
@@ -125,6 +148,8 @@ class ApiService {
     if (params.skip) searchParams.append('skip', params.skip.toString());
     if (params.sort) searchParams.append('sort', params.sort);
     if (params.document_type) searchParams.append('document_type', params.document_type);
+    if (params.user_profile) searchParams.append('user_profile', params.user_profile);
+    if (params.urgency_level) searchParams.append('urgency_level', params.urgency_level);
     if (params.search) searchParams.append('search', params.search);
     if (params.urgency_sort) searchParams.append('urgency_sort', params.urgency_sort); // Append urgency_sort
 
@@ -154,29 +179,19 @@ class ApiService {
     }>(`/data/${id}/related?limit=${limit}`);
   }
 
-  // Get documents by department with filtering and pagination
-  async getDocumentsByDepartment(
-    department: string,
+  // Get documents by profile with filtering and pagination
+  async getDocumentsByProfile(
+    profile: string,
     params: {
       limit?: number;
       skip?: number;
       sort?: 'asc' | 'desc';
       document_type?: string;
       search?: string;
-      urgency_sort?: string; // Add urgency_sort to API params
+      urgency_sort?: string;
     } = {}
   ): Promise<ApiResponse<Document[]>> {
-    const searchParams = new URLSearchParams();
-    if (params.limit) searchParams.append('limit', params.limit.toString());
-    if (params.skip) searchParams.append('skip', params.skip.toString());
-    if (params.sort) searchParams.append('sort', params.sort);
-    if (params.document_type) searchParams.append('document_type', params.document_type);
-    if (params.search) searchParams.append('search', params.search);
-    if (params.urgency_sort) searchParams.append('urgency_sort', params.urgency_sort); // Append urgency_sort
-
-    const queryString = searchParams.toString();
-    const endpoint = `/data/department/${encodeURIComponent(department)}${queryString ? `?${queryString}` : ''}`;
-    return this.request<ApiResponse<Document[]>>(endpoint);
+    return this.getDocuments({ ...params, user_profile: profile });
   }
 
   // Create new document

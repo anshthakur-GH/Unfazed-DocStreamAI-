@@ -12,6 +12,7 @@ export const Navbar = () => {
   return (
     <nav className="bg-white/70 backdrop-blur-3xl border-b border-white/60 shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<<<<<<< HEAD
         <div className="flex items-center justify-between h-28 relative">
 
           {/* Branding on the left */}
@@ -19,6 +20,12 @@ export const Navbar = () => {
             <span className="text-2xl font-black tracking-tighter text-blue-600" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
               DocStream <span className="text-slate-900">AI</span>
             </span>
+=======
+        <div className="flex items-center justify-between h-28">
+          {/* Logo Section - Images removed as requested */}
+          <div className="flex items-center space-x-2">
+
+>>>>>>> d37c9d43293122daf4f5c2819b40669957f939f7
           </div>
 
           {/* Title in the middle */}

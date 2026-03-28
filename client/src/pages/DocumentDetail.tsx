@@ -64,12 +64,16 @@ const highlightDatesInText = (text: string) => {
 };
 
 const documentTypeColors = {
-  Report: "bg-blue-100 text-blue-800",
-  Policy: "bg-green-100 text-green-800",
-  Technical: "bg-purple-100 text-purple-800",
-  Strategy: "bg-orange-100 text-orange-800",
-  Manual: "bg-gray-100 text-gray-800",
-  Legal: "bg-red-100 text-red-800", // Added Legal document type
+  "Research Paper": "bg-blue-100 text-blue-800",
+  "Lecture Notes": "bg-green-100 text-green-800",
+  "Policy Document": "bg-purple-100 text-purple-800",
+  Other: "bg-gray-100 text-gray-800",
+};
+
+const urgencyLevelColors = {
+  High: "bg-red-100 text-red-800",
+  Medium: "bg-yellow-100 text-yellow-800",
+  Low: "bg-green-100 text-green-800",
 };
 
 export default function DocumentDetail() {
@@ -89,12 +93,7 @@ export default function DocumentDetail() {
     );
   }
 
-  if (error || !document) {
-    return <Navigate to="/404" replace />;
-  }
-
-  const firstDepartment = document.departments_tagged?.[0];
-  const departmentPath = firstDepartment ? `/departments/${firstDepartment.toLowerCase().replace(/\s+/g, '-')}` : "/";
+  if (error || !document) return <Navigate to="/404" replace />;
 
   const handleDownloadPdf = () => {
     if (documentRef.current) {
@@ -105,50 +104,31 @@ export default function DocumentDetail() {
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Breadcrumbs */}
         <div className="mb-6">
           <Breadcrumb>
             <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link to="/">Home</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
+              <BreadcrumbItem><BreadcrumbLink asChild><Link to="/">Home</Link></BreadcrumbLink></BreadcrumbItem>
               <BreadcrumbSeparator />
-              {firstDepartment && (
-                <>
-                  <BreadcrumbItem>
-                    <BreadcrumbLink asChild>
-                      <Link to={departmentPath}>{firstDepartment}</Link>
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator />
-                </>
-              )}
-              <BreadcrumbItem>
-                <BreadcrumbPage>{document.document_title}</BreadcrumbPage>
-              </BreadcrumbItem>
+              <BreadcrumbItem><BreadcrumbPage>{document.document_title}</BreadcrumbPage></BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
         </div>
 
-        {/* Header */}
         <div className="flex items-start justify-between mb-8">
           <div className="flex-1">
             <div className="flex items-center space-x-4 mb-4">
               <Button variant="outline" size="sm" asChild>
-                <Link to="/">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back
-                </Link>
+                <Link to="/"><ArrowLeft className="h-4 w-4 mr-2" />Back</Link>
               </Button>
-              <Badge 
-                className={documentTypeColors[document.document_type as keyof typeof documentTypeColors] || "bg-gray-100 text-gray-800"}
-              >
+              <Badge className={documentTypeColors[document.document_type] || "bg-gray-100 text-gray-800"}>
                 {document.document_type}
+              </Badge>
+              <Badge className={urgencyLevelColors[document.urgency_level] || "bg-gray-100 text-gray-800"}>
+                {document.urgency_level}
               </Badge>
             </div>
             
+<<<<<<< HEAD
             <h1 className="text-4xl font-black text-slate-900 mb-4 tracking-tighter" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
               {document.document_title}
             </h1>
@@ -165,11 +145,24 @@ export default function DocumentDetail() {
               <div className="flex items-center space-x-2 bg-slate-100/50 px-3 py-1.5 rounded-full border border-slate-200">
                 <Clock className="h-4 w-4 text-blue-600" />
                 <span className="font-medium">Modified {safeFormatDate(document.updatedAt || document.createdAt || document._id)}</span>
+=======
+            <h1 className="text-3xl font-bold text-foreground mb-4">{document.document_title}</h1>
+            
+            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+              <div className="flex items-center space-x-2 border border-black/10 p-1.5 rounded-md">
+                <Calendar className="h-4 w-4" />
+                <span>Uploaded {safeFormatDate(document.upload_timestamp)}</span>
+              </div>
+              <div className="flex items-center space-x-2 border border-black/10 p-1.5 rounded-md">
+                <Users className="h-4 w-4" />
+                <span>By {document.uploaded_by} ({document.user_profile})</span>
+>>>>>>> d37c9d43293122daf4f5c2819b40669957f939f7
               </div>
             </div>
           </div>
 
           <div className="flex items-center space-x-3">
+<<<<<<< HEAD
             {document.webViewLink && (
               <a 
                 href={document.webViewLink} 
@@ -189,13 +182,27 @@ export default function DocumentDetail() {
                 <Edit className="h-4 w-4 mr-2" />
                 Edit
               </Link>
+=======
+            {(document.webViewLink || document.google_drive_link) && (
+              <a href={document.webViewLink || document.google_drive_link || "#"} target="_blank" rel="noopener noreferrer" 
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium border border-input bg-orange-500 text-white hover:bg-orange-600 h-9 px-3">
+                <ExternalLink className="h-4 w-4 mr-2" />
+                View Original
+              </a>
+            )}
+            <Button variant="outline" size="sm" className="bg-green-500 text-white hover:bg-green-600" onClick={handleDownloadPdf}>
+              <Download className="h-4 w-4 mr-2" />Download
+            </Button>
+            <Button size="sm" asChild className="bg-[#008285] text-white hover:bg-[#008285]/90">
+              <Link to={`/documents/${document._id}/edit`}><Edit className="h-4 w-4 mr-2" />Edit</Link>
+>>>>>>> d37c9d43293122daf4f5c2819b40669957f939f7
             </Button>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Main Content */}
           <div className="lg:col-span-3">
+<<<<<<< HEAD
             <Card className="bg-white/80 backdrop-blur-3xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden">
               <CardContent className="p-8 md:p-12" ref={documentRef}>
                 <div className="prose prose-gray max-w-none">
@@ -206,13 +213,52 @@ export default function DocumentDetail() {
                   ) : (
                     <p className="text-muted-foreground italic">No content available for this document.</p>
                   )}
+=======
+            <Card>
+              <CardContent className="p-8" ref={documentRef}>
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-xl font-semibold mb-3">Summary</h3>
+                    <p className="text-foreground leading-relaxed">{document.summary}</p>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-sm font-medium text-muted-foreground mb-2">Subject Tags</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {document.subject_tags?.map(tag => (
+                        <Badge key={tag} variant="outline" className="bg-cyan-50">{tag}</Badge>
+                      ))}
+                    </div>
+                  </div>
+
+                  <Separator />
+                  
+                  <div className="grid grid-cols-2 gap-6">
+                    <div>
+                      <h4 className="text-sm font-medium text-muted-foreground mb-1">Research Domain</h4>
+                      <p>{document.research_domain || "N/A"}</p>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-medium text-muted-foreground mb-1">Academic Year</h4>
+                      <p>{document.academic_year || "N/A"}</p>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-medium text-muted-foreground mb-1">Course Code</h4>
+                      <p>{document.course_code || "N/A"}</p>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-medium text-muted-foreground mb-1">Funding Source</h4>
+                      <p>{document.funding_source || "N/A"}</p>
+                    </div>
+                  </div>
+>>>>>>> d37c9d43293122daf4f5c2819b40669957f939f7
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Sidebar */}
           <div className="lg:col-span-1">
+<<<<<<< HEAD
             <Card className="bg-white/70 backdrop-blur-2xl border-slate-200 shadow-lg shadow-slate-200/30 rounded-2xl overflow-hidden">
               <CardHeader className="border-b border-slate-100">
                 <h3 className="font-semibold text-foreground flex items-center">
@@ -220,70 +266,40 @@ export default function DocumentDetail() {
                   Document Info
                 </h3>
               </CardHeader>
+=======
+            <Card>
+              <CardHeader><h3 className="font-semibold flex items-center"><FileText className="h-5 w-5 mr-2" />Information</h3></CardHeader>
+>>>>>>> d37c9d43293122daf4f5c2819b40669957f939f7
               <CardContent className="space-y-4">
                 <div>
                   <label className="text-sm font-medium text-muted-foreground">Type</label>
-                  <p className="text-sm text-foreground">{document.document_type}</p>
+                  <p className="text-sm">{document.document_type}</p>
                 </div>
-                
                 <Separator />
-                
                 <div>
-                  <label className="text-sm font-medium text-muted-foreground">Document ID</label>
-                  <p className="text-sm text-foreground font-mono">{document._id}</p>
-                </div>
-                
-                <Separator />
-                
-                <div>
-                  <label className="text-sm font-medium text-muted-foreground">Departments</label>
-                  <div className="flex flex-wrap gap-1 mt-1">
-                    {document.departments_tagged && document.departments_tagged.length > 0 ? (
-                      document.departments_tagged.map((dept, index) => (
-                        <Badge key={index} variant="outline" className="text-xs">
-                          {dept}
-                        </Badge>
-                      ))
-                    ) : (
-                      <span className="text-xs text-muted-foreground">No departments tagged</span>
-                    )}
+                  <label className="text-sm font-medium text-muted-foreground">Authors</label>
+                  <div className="space-y-1 mt-1">
+                    {document.authors?.map(author => (<p key={author} className="text-sm italic">{author}</p>)) || <p className="text-sm">N/A</p>}
                   </div>
                 </div>
-                
                 <Separator />
-                
                 <div>
                   <label className="text-sm font-medium text-muted-foreground">Keywords</label>
                   <div className="flex flex-wrap gap-1 mt-1">
-                    {document.keywords && document.keywords.length > 0 ? (
-                      document.keywords.map((keyword, index) => (
-                        <Badge key={index} variant="secondary" className="text-xs">
-                          {keyword}
-                        </Badge>
-                      ))
-                    ) : (
-                      <span className="text-xs text-muted-foreground">No keywords</span>
-                    )}
+                    {document.keywords?.map(kw => (<Badge key={kw} variant="secondary" className="text-xs">{kw}</Badge>))}
                   </div>
                 </div>
-                
                 <Separator />
-                
                 <div>
-                  <label className="text-sm font-medium text-muted-foreground">Images</label>
-                  <p className="text-sm text-foreground">
-                    {document.images && document.images.length > 0 
-                      ? `${document.images.length} image(s)` 
-                      : 'No images'
-                    }
-                  </p>
+                  <label className="text-sm font-medium text-muted-foreground">Date Published</label>
+                  <p className="text-sm">{document.date_published ? safeFormatDate(document.date_published) : "N/A"}</p>
                 </div>
               </CardContent>
             </Card>
-
           </div>
         </div>
 
+<<<<<<< HEAD
         {/* Related Documents Section - Full Width */}
         <Card className="mt-8 bg-white/70 backdrop-blur-2xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden">
           <CardHeader className="border-b border-slate-100">
@@ -352,31 +368,60 @@ export default function DocumentDetail() {
                         </div>
                         <span className="text-sm text-muted-foreground">
                           {safeFormatDate(relatedDoc.createdAt)}
+=======
+        {/* Relevant Research Papers Section - Only for Lecture Notes */}
+        {document.document_type === 'Lecture Notes' && relatedDocuments && relatedDocuments.data.length > 0 && (
+          <div className="mt-12">
+            <div className="flex items-center space-x-3 mb-6 border-b border-blue-500/20 pb-4">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <FileText className="h-6 w-6 text-blue-600" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-foreground">Relevant Research Papers</h2>
+                <p className="text-sm text-muted-foreground">Expand your knowledge with these related publications</p>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {relatedDocuments.data.map((relatedDoc: any) => (
+                <Card key={relatedDoc._id} className="group hover:border-blue-400/50 hover:shadow-lg transition-all duration-300 border-cyan-100">
+                  <CardContent className="p-6">
+                    <div className="flex flex-col h-full">
+                      <div className="flex items-center justify-between mb-3">
+                        <Badge variant="secondary" className="bg-blue-100 text-blue-800 text-[10px] font-semibold border-none">
+                          RESEARCH PAPER
+                        </Badge>
+                        <span className="text-[10px] text-muted-foreground font-medium flex items-center">
+                          <Calendar className="h-3 w-3 mr-1 opacity-70" />
+                          {safeFormatDate(relatedDoc.upload_timestamp, 'MMM dd, yyyy')}
+>>>>>>> d37c9d43293122daf4f5c2819b40669957f939f7
                         </span>
                       </div>
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12">
-                <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-lg text-muted-foreground mb-2">No related documents found</p>
-                <p className="text-sm text-muted-foreground">
-                  Documents are related based on type, departments, and keywords
-                </p>
-              </div>
-            )}
-            
-            {relatedDocuments && relatedDocuments.count > 5 && (
-              <div className="text-center pt-6 border-t mt-6">
-                <p className="text-muted-foreground">
-                  Showing 5 of {relatedDocuments.count} related documents
-                </p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                      <Link to={`/documents/${relatedDoc._id}`} className="group-hover:text-blue-600 transition-colors mb-3">
+                        <h4 className="font-bold text-lg line-clamp-1 text-foreground leading-tight">{relatedDoc.document_title}</h4>
+                      </Link>
+                      <p className="text-sm text-muted-foreground line-clamp-2 mb-5 flex-grow italic">
+                        {relatedDoc.summary}
+                      </p>
+                      <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100">
+                        <div className="text-xs font-medium text-slate-500 truncate max-w-[150px] flex items-center">
+                          <Users className="h-3 w-3 mr-1.5 opacity-50" />
+                          {relatedDoc.authors?.length > 0 ? relatedDoc.authors[0] : 'Unknown Author'}
+                          {relatedDoc.authors?.length > 1 && ` +${relatedDoc.authors.length - 1}`}
+                        </div>
+                        <Button variant="ghost" size="sm" asChild className="h-8 px-3 text-blue-600 hover:text-blue-700 hover:bg-blue-50 font-semibold group-hover:translate-x-1 transition-transform">
+                          <Link to={`/documents/${relatedDoc._id}`}>
+                            Details <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
+                          </Link>
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

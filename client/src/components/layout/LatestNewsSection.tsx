@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 
 interface LatestNewsSectionProps {
   title?: string;
-  departmentFilter?: string; // New prop for department filtering
 }
 
 interface Alert {
@@ -18,18 +17,16 @@ interface Alert {
   createdAt: string;
 }
 
-export const LatestNewsSection = ({ title = "Alerts", departmentFilter }: LatestNewsSectionProps) => {
+export const LatestNewsSection = ({ title = "Alerts" }: LatestNewsSectionProps) => {
   const [isPaused, setIsPaused] = React.useState(false);
   const [currentAlertIndex, setCurrentAlertIndex] = React.useState(0);
   const navigate = useNavigate();
 
-  // Fetch action-required alerts from the API
+  // Fetch all action-required alerts from the API
   const { data: alertsData, isLoading, error } = useQuery({
-    queryKey: ['action-required-alerts', departmentFilter], // Include departmentFilter in queryKey
+    queryKey: ['action-required-alerts'],
     queryFn: async () => {
-      const url = departmentFilter 
-        ? `/api/alerts/action-required?department=${departmentFilter}` 
-        : '/api/alerts/action-required';
+      const url = '/api/alerts/action-required';
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`Failed to fetch alerts: ${response.status} ${response.statusText}`);

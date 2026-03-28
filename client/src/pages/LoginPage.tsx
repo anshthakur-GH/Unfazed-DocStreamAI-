@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+<<<<<<< HEAD
+=======
+import { useAuth } from "@/contexts/AuthContext";
+>>>>>>> d37c9d43293122daf4f5c2819b40669957f939f7
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { User as UserIcon, BookOpen, Cpu, ShieldCheck, Zap } from "lucide-react";
 import { Variants } from "framer-motion";
 
+<<<<<<< HEAD
 interface LoginPageProps {
   onLogin?: () => void;
 }
@@ -34,6 +39,39 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
       transition: {
         staggerChildren: 0.15,
         delayChildren: 0.2
+=======
+// User-defined types are no longer needed for onLogin
+
+
+const LoginPage = () => {
+  const [loginId, setLoginId] = useState("");
+  const [password, setPassword] = useState("");
+  const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
+  const { setIsAuthenticated, setUserProfile } = useAuth(); // Get auth functions
+  const navigate = useNavigate();
+
+  const handleProfileSelect = (value: string) => {
+    setSelectedProfile(value);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedProfile) {
+      alert("Please select a profile.");
+      return;
+    }
+    if (loginId === "admin" && password === "admin") {
+      setIsAuthenticated(true); 
+      setUserProfile(selectedProfile); // Sync profile in context
+      navigate(`/profiles/${selectedProfile}`);
+    } else {
+      if (loginId && password) {
+        setIsAuthenticated(true);
+        setUserProfile(selectedProfile); // Sync profile in context
+        navigate(`/profiles/${selectedProfile}`);
+      } else {
+        alert("Invalid Login ID or Password");
+>>>>>>> d37c9d43293122daf4f5c2819b40669957f939f7
       }
     }
   };
@@ -77,6 +115,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
             </p>
           </motion.div>
 
+<<<<<<< HEAD
           <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="flex items-start gap-4 text-left p-6 bg-white/40 backdrop-blur-xl rounded-2xl border border-white/60 shadow-xl shadow-blue-900/5 group hover:bg-white/60 transition-all">
               <div className="bg-blue-600 p-3 rounded-xl shadow-lg shadow-blue-600/20 group-hover:scale-110 transition-transform">
@@ -88,6 +127,45 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
                   Every research paper, lecture, and policy connected in real-time within your institutional node.
                 </p>
               </div>
+=======
+          {/* Right Header Icons */}
+          <div className="flex items-center gap-4 text-slate-500 pb-4">
+            <button aria-label="User Profile" className="hover:text-slate-800 transition-colors">
+              <User className="w-6 h-6" />
+            </button>
+            <button aria-label="Help" className="hover:text-slate-800 transition-colors">
+              <HelpCircle className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Login Card */}
+      <div className="relative z-10 w-full max-w-md mx-auto mt-16 p-4">
+        <Card className="w-full bg-white/95 backdrop-blur-sm shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-slate-200/60 rounded-xl overflow-hidden">
+          <CardHeader className="text-center pt-8 pb-4">
+            <CardTitle className="text-2xl font-bold text-slate-900 tracking-tight">Welcome to DocStreamAI</CardTitle>
+            <p className="text-sm text-slate-500 mt-1">Sign in to your account</p>
+          </CardHeader>
+          <CardContent className="px-8 pb-8">
+            <div className="space-y-4">
+              <label htmlFor="profile-select" className="text-xs font-medium text-slate-600 block mb-1">
+                User Profile
+              </label>
+              <Select onValueChange={handleProfileSelect}>
+                <SelectTrigger id="profile-select" className="w-full bg-[#E2E8F0] border-transparent text-slate-700 h-11 focus:ring-blue-500/20 focus:border-blue-500 shadow-none">
+                  <SelectValue placeholder="Choose your profile" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Profiles</SelectLabel>
+                    <SelectItem value="Head">Head</SelectItem>
+                    <SelectItem value="Teacher">Teacher</SelectItem>
+                    <SelectItem value="Student">Student</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+>>>>>>> d37c9d43293122daf4f5c2819b40669957f939f7
             </div>
 
             <div className="flex items-start gap-4 text-left p-6 bg-white/40 backdrop-blur-xl rounded-2xl border border-white/60 shadow-xl shadow-blue-900/5 group hover:bg-white/60 transition-all">
