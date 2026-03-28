@@ -16,14 +16,14 @@ export const Navbar = () => {
 
           {/* Branding on the left */}
           <div className="flex items-center space-x-2 w-48">
-            <span className="text-2xl font-black tracking-tighter text-blue-600" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
+            <span className="text-2xl font-black tracking-tighter text-blue-600">
               DocStream <span className="text-slate-900">AI</span>
             </span>
           </div>
 
           {/* Title in the middle */}
           <div className="absolute inset-x-0 text-center pointer-events-none flex flex-col items-center justify-center h-full">
-            <h1 className="text-3xl font-black tracking-tighter text-slate-900 uppercase" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
+            <h1 className="text-3xl font-black tracking-tighter text-slate-900 uppercase">
               Unfazed AI
             </h1>
           </div>

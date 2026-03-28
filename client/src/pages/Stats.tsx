@@ -22,7 +22,7 @@ const Stats = () => {
         <div className="mb-10">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl font-black text-slate-900 tracking-tighter" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
+              <h1 className="text-4xl font-black text-slate-900 tracking-tighter">
                 SYSTEM STATISTICS
               </h1>
               <p className="text-slate-500 mt-2 font-medium tracking-wide">

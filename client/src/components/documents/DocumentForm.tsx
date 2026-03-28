@@ -186,8 +186,8 @@ export const DocumentForm = ({ mode }: DocumentFormProps) => {
             <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
             Back to Documents
           </Button>
-          <h1 className="text-4xl font-black text-slate-900 tracking-tighter" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
-            {mode === 'create' ? 'PROVISION NEW ASSET' : 'CALIBRATE ASSET'}
+          <h1 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">
+            {mode === 'create' ? 'Provision New Document' : 'Update Intelligence Node'}
           </h1>
           <p className="text-slate-500 mt-2 font-medium tracking-wide">
             {mode === 'create' 

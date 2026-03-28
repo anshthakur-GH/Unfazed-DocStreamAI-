@@ -45,8 +45,8 @@ export default function ProfileView() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-black text-slate-900 mb-2 tracking-tighter" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
-            {profileName.toUpperCase()} Node
+          <h1 className="text-4xl font-black text-slate-900 mb-2 tracking-tighter uppercase">
+            {profileName} Node
           </h1>
           <p className="text-slate-500 font-medium tracking-wide">
             {isLoading ? "Synchronizing node statistics..." : `${stats?.total || 0} institutional documents specialized for the ${profileName} profile.`}

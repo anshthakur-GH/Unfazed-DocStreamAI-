@@ -31,17 +31,25 @@ export class ErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return (
-        <div style={{ padding: "40px", color: "red", backgroundColor: "white", fontFamily: "monospace" }}>
-          <h1 style={{ fontSize: "24px" }}>Something went wrong.</h1>
-          <h2 style={{ fontSize: "18px", marginTop: "20px" }}>{this.state.error?.message}</h2>
-          <pre style={{ marginTop: "20px", whiteSpace: "pre-wrap", overflowX: "auto", padding: "10px", background: "#f0f0f0" }}>
+        <div className="p-10 text-red-600 bg-white font-mono border-t-4 border-red-600 shadow-2xl m-8 rounded-xl overflow-hidden">
+          <h1 className="text-3xl font-black mb-4 uppercase tracking-tighter">Node Fatal Error</h1>
+          <h2 className="text-xl font-bold mb-6 text-slate-700">{this.state.error?.message}</h2>
+          <pre className="mt-6 text-xs whitespace-pre-wrap overflow-x-auto p-6 bg-slate-50 border border-slate-200 rounded-lg text-slate-500 shadow-inner max-h-[40vh]">
             {this.state.error?.stack}
           </pre>
           {this.state.errorInfo && (
-            <pre style={{ marginTop: "20px", whiteSpace: "pre-wrap", overflowX: "auto", padding: "10px", background: "#f0f0f0" }}>
+            <pre className="mt-6 text-xs whitespace-pre-wrap overflow-x-auto p-6 bg-slate-50 border border-slate-200 rounded-lg text-slate-500 shadow-inner max-h-[40vh]">
               {this.state.errorInfo.componentStack}
             </pre>
           )}
+          <div className="mt-8 flex justify-end">
+             <button 
+               onClick={() => window.location.reload()} 
+               className="px-6 py-2 bg-slate-900 text-white font-bold uppercase tracking-widest text-xs rounded-lg hover:bg-slate-800 transition-all active:scale-95"
+             >
+               Attempt Re-Synchronization
+             </button>
+          </div>
         </div>
       );
     }

@@ -156,7 +156,7 @@ export default function KnowledgePage() {
                 Back to {profileName}
               </Button>
             </Link>
-            <h1 className="text-4xl font-black text-slate-900 tracking-tighter flex items-center gap-3" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
+            <h1 className="text-4xl font-black text-slate-900 tracking-tighter flex items-center gap-3">
               <BookOpen className="h-9 w-9 text-blue-600" />
               KNOWLEDGE SHARED
             </h1>

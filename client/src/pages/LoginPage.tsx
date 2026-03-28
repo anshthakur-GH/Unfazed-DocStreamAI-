@@ -60,7 +60,7 @@ export default function LoginPage() {
     <div className="relative min-h-screen bg-background text-foreground font-sans overflow-hidden flex flex-col items-center justify-center py-20 px-6">
       {/* Absolute Background Watermark */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden z-0">
-        <h1 className="text-[25vw] font-black tracking-tighter text-slate-900/[0.03] select-none" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
+        <h1 className="text-[25vw] font-black tracking-tighter text-slate-900/[0.03] select-none">
           Unfazed AI
         </h1>
       </div>
@@ -74,7 +74,7 @@ export default function LoginPage() {
         {/* Left Side: Branding & Value Props */}
         <div className="flex-1 space-y-12 text-center lg:text-left">
           <motion.div variants={itemVariants} className="space-y-4">
-            <h1 className="text-6xl md:text-8xl font-black text-slate-900 tracking-tighter leading-none" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
+            <h1 className="text-6xl md:text-8xl font-black text-slate-900 tracking-tighter leading-none">
               Unfazed AI<br />
               <span className="text-blue-600">CORE HUB</span>
             </h1>
@@ -138,7 +138,7 @@ export default function LoginPage() {
         <motion.div variants={itemVariants} className="w-full max-w-md">
           <Card className="bg-white/70 backdrop-blur-3xl shadow-2xl shadow-blue-900/15 border border-white/80 rounded-3xl overflow-hidden">
             <CardHeader className="pt-10 pb-4 px-8 border-b border-slate-100 text-center">
-              <CardTitle className="text-3xl font-black text-slate-900 tracking-tighter" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
+              <CardTitle className="text-3xl font-black text-slate-900 tracking-tighter">
                 ENTER THE STREAM
               </CardTitle>
               <p className="text-slate-500 font-medium tracking-wide mt-2">Provision your institutional node.</p>
@@ -154,9 +154,9 @@ export default function LoginPage() {
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Institutional Profile</label>
+                  <label htmlFor="profile-select" className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Institutional Profile</label>
                   <Select onValueChange={handleProfileSelect}>
-                    <SelectTrigger className="w-full h-14 bg-slate-50/50 border-slate-200 text-slate-900 focus:ring-blue-500/50 focus:bg-white shadow-none rounded-xl font-medium text-base transition-all">
+                    <SelectTrigger id="profile-select" aria-label="Select Institutional Profile" className="w-full h-14 bg-slate-50/50 border-slate-200 text-slate-900 focus:ring-blue-500/50 focus:bg-white shadow-none rounded-xl font-medium text-base transition-all">
                       <SelectValue placeholder="Select Profile Node" />
                     </SelectTrigger>
                     <SelectContent>
@@ -171,10 +171,11 @@ export default function LoginPage() {
                 </div>
 
                 <div>
-                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Identity Code</label>
+                  <label htmlFor="identity-code" className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Identity Code</label>
                   <div className="relative group">
                     <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
                     <Input
+                      id="identity-code"
                       type="text"
                       placeholder="Username"
                       value={loginId}
@@ -186,8 +187,9 @@ export default function LoginPage() {
                 </div>
 
                 <div>
-                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Security Token</label>
+                  <label htmlFor="security-token" className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Security Token</label>
                   <Input
+                    id="security-token"
                     type="password"
                     placeholder="Password"
                     value={password}

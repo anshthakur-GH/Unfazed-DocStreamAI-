@@ -115,13 +115,13 @@ export const LatestNewsSection = ({ title = "Alerts", userProfileFilter }: Lates
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          <button onClick={handlePrev} className="p-1 rounded-full hover:bg-slate-200 text-slate-400 hover:text-slate-900 transition-colors">
+          <button onClick={handlePrev} aria-label="Previous Alert" className="p-1 rounded-full hover:bg-slate-200 text-slate-400 hover:text-slate-900 transition-colors">
             <ChevronLeft className="h-5 w-5" />
           </button>
-          <button onClick={togglePause} className="p-1 rounded-full hover:bg-slate-200 text-slate-400 hover:text-slate-900 transition-colors">
+          <button onClick={togglePause} aria-label={isPaused ? "Play" : "Pause"} className="p-1 rounded-full hover:bg-slate-200 text-slate-400 hover:text-slate-900 transition-colors">
             {isPaused ? <Play className="h-5 w-5" /> : <Pause className="h-5 w-5" />}
           </button>
-          <button onClick={handleNext} className="p-1 rounded-full hover:bg-slate-200 text-slate-400 hover:text-slate-900 transition-colors">
+          <button onClick={handleNext} aria-label="Next Alert" className="p-1 rounded-full hover:bg-slate-200 text-slate-400 hover:text-slate-900 transition-colors">
             <ChevronRight className="h-5 w-5" />
           </button>
         </div>

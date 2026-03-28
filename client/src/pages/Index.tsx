@@ -9,8 +9,8 @@ const Index = () => {
 
       {/* Persistent Subtle Dashboard Watermark */}
       <div className="fixed inset-0 pointer-events-none flex items-center justify-center -z-10">
-        <h1 className="text-[25vw] font-black tracking-tighter text-slate-900/5 select-none" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
-          Unfazed AI
+        <h1 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">
+          UNFAZED AI
         </h1>
       </div>
 

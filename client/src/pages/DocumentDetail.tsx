@@ -128,7 +128,7 @@ export default function DocumentDetail() {
               </Badge>
             </div>
             
-            <h1 className="text-4xl font-black text-slate-900 mb-4 tracking-tighter" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
+            <h1 className="text-4xl font-black text-slate-900 mb-2 tracking-tighter leading-none">
               {document.document_title}
             </h1>
             

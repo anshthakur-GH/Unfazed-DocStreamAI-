@@ -20,6 +20,7 @@ export interface Document {
   keywords: string[];
   urgency_level: "High" | "Medium" | "Low";
   google_drive_link: string | null;
+  content?: string;
   createdAt: string;
   updatedAt: string;
 }
