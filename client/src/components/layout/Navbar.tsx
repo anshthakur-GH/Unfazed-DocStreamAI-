@@ -15,32 +15,31 @@ export const Navbar = () => {
         <div className="flex items-center justify-between h-28">
           {/* Logo Section - Images removed as requested */}
           <div className="flex items-center space-x-2">
-
           </div>
 
           {/* Title in the middle */}
           <div className="absolute inset-x-0 text-center pointer-events-none flex flex-col items-center justify-center h-full">
-            <h1 className="text-2xl font-extrabold text-foreground">Unfazed DocStreamAI</h1>
-          </div>
+          <h1 className="text-2xl font-extrabold text-foreground">Unfazed DocStreamAI</h1>
+        </div>
 
-          {/* Actions (right) */}
-          <div className="flex items-center space-x-3">
-            {isAuthenticated && <KnowledgeModal />}
+        {/* Actions (right) */}
+        <div className="flex items-center space-x-3">
+          {isAuthenticated && <KnowledgeModal />}
 
-            <Link
-              to="/stats"
-              className={`px-3 py-2 rounded-md text-sm font-bold transition-colors ${isActive("/stats")
-                ? "text-primary bg-primary/10"
-                : "text-foreground hover:text-foreground hover:bg-muted/80"
-                }`}
-            >
-              <BarChart3 className="h-4 w-4 mr-1 inline" />
-              Stats
-            </Link>
+          <Link
+            to="/stats"
+            className={`px-3 py-2 rounded-md text-sm font-bold transition-colors ${isActive("/stats")
+              ? "text-primary bg-primary/10"
+              : "text-foreground hover:text-foreground hover:bg-muted/80"
+              }`}
+          >
+            <BarChart3 className="h-4 w-4 mr-1 inline" />
+            Stats
+          </Link>
 
-          </div>
         </div>
       </div>
-    </nav>
+    </div>
+    </nav >
   );
 };
