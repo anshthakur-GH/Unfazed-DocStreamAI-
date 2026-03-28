@@ -31,7 +31,8 @@ const DocumentSchema = new mongoose.Schema(
       enum: ["High", "Medium", "Low"],
       required: true 
     },
-    google_drive_link: { type: String, default: null }
+    google_drive_link: { type: String, default: null },
+    webViewLink: { type: String, default: null }
   },
   {
     timestamps: true,
