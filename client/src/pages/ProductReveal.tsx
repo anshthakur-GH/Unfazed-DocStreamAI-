@@ -92,7 +92,7 @@ export default function ProductReveal() {
             onClick={() => navigate('/login')}
             className="pointer-events-auto bg-blue-600 text-white px-12 py-5 rounded-full font-bold uppercase tracking-widest hover:bg-blue-500 transition-all shadow-xl shadow-blue-600/20 active:scale-95"
           >
-            Enter DocStreamAI
+            Enter Unfazed AI
           </button>
         </motion.div>
 

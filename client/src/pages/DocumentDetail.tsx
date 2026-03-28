@@ -64,12 +64,16 @@ const highlightDatesInText = (text: string) => {
 };
 
 const documentTypeColors = {
-  Report: "bg-blue-100 text-blue-800",
-  Policy: "bg-green-100 text-green-800",
-  Technical: "bg-purple-100 text-purple-800",
-  Strategy: "bg-orange-100 text-orange-800",
-  Manual: "bg-gray-100 text-gray-800",
-  Legal: "bg-red-100 text-red-800", // Added Legal document type
+  "Research Paper": "bg-blue-100 text-blue-800",
+  "Lecture Notes": "bg-green-100 text-green-800",
+  "Policy Document": "bg-purple-100 text-purple-800",
+  Other: "bg-gray-100 text-gray-800",
+};
+
+const urgencyLevelColors = {
+  High: "bg-red-100 text-red-800",
+  Medium: "bg-yellow-100 text-yellow-800",
+  Low: "bg-green-100 text-green-800",
 };
 
 export default function DocumentDetail() {
@@ -89,12 +93,7 @@ export default function DocumentDetail() {
     );
   }
 
-  if (error || !document) {
-    return <Navigate to="/404" replace />;
-  }
-
-  const firstDepartment = document.departments_tagged?.[0];
-  const departmentPath = firstDepartment ? `/departments/${firstDepartment.toLowerCase().replace(/\s+/g, '-')}` : "/";
+  if (error || !document) return <Navigate to="/404" replace />;
 
   const handleDownloadPdf = () => {
     if (documentRef.current) {
@@ -105,47 +104,27 @@ export default function DocumentDetail() {
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Breadcrumbs */}
         <div className="mb-6">
           <Breadcrumb>
             <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link to="/">Home</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
+              <BreadcrumbItem><BreadcrumbLink asChild><Link to="/">Home</Link></BreadcrumbLink></BreadcrumbItem>
               <BreadcrumbSeparator />
-              {firstDepartment && (
-                <>
-                  <BreadcrumbItem>
-                    <BreadcrumbLink asChild>
-                      <Link to={departmentPath}>{firstDepartment}</Link>
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator />
-                </>
-              )}
-              <BreadcrumbItem>
-                <BreadcrumbPage>{document.document_title}</BreadcrumbPage>
-              </BreadcrumbItem>
+              <BreadcrumbItem><BreadcrumbPage>{document.document_title}</BreadcrumbPage></BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
         </div>
 
-        {/* Header */}
         <div className="flex items-start justify-between mb-8">
           <div className="flex-1">
             <div className="flex items-center space-x-4 mb-4">
               <Button variant="outline" size="sm" asChild>
-                <Link to="/">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back
-                </Link>
+                <Link to="/"><ArrowLeft className="h-4 w-4 mr-2" />Back</Link>
               </Button>
-              <Badge 
-                className={documentTypeColors[document.document_type as keyof typeof documentTypeColors] || "bg-gray-100 text-gray-800"}
-              >
+              <Badge className={documentTypeColors[document.document_type] || "bg-gray-100 text-gray-800"}>
                 {document.document_type}
+              </Badge>
+              <Badge className={urgencyLevelColors[document.urgency_level] || "bg-gray-100 text-gray-800"}>
+                {document.urgency_level}
               </Badge>
             </div>
             
@@ -157,22 +136,22 @@ export default function DocumentDetail() {
               {highlightDatesInText(document.summary || 'No summary available')}
             </p>
             
-            <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500">
+            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
               <div className="flex items-center space-x-2 bg-slate-100/50 px-3 py-1.5 rounded-full border border-slate-200">
                 <Calendar className="h-4 w-4 text-blue-600" />
-                <span className="font-medium">Created {safeFormatDate(document.createdAt || document._id)}</span>
+                <span className="font-medium">Uploaded {safeFormatDate(document.upload_timestamp || document.createdAt)}</span>
               </div>
               <div className="flex items-center space-x-2 bg-slate-100/50 px-3 py-1.5 rounded-full border border-slate-200">
-                <Clock className="h-4 w-4 text-blue-600" />
-                <span className="font-medium">Modified {safeFormatDate(document.updatedAt || document.createdAt || document._id)}</span>
+                <Users className="h-4 w-4 text-blue-600" />
+                <span className="font-medium">By {document.uploaded_by} ({document.user_profile})</span>
               </div>
             </div>
           </div>
 
           <div className="flex items-center space-x-3">
-            {document.webViewLink && (
+            {document.google_drive_link && (
               <a 
-                href={document.webViewLink} 
+                href={document.google_drive_link} 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-bold tracking-widest uppercase transition-all shadow-lg bg-orange-500 text-white hover:bg-orange-600 h-10 px-4 shadow-orange-500/20"
@@ -194,24 +173,56 @@ export default function DocumentDetail() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Main Content */}
           <div className="lg:col-span-3">
-            <Card className="bg-white/80 backdrop-blur-3xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden">
+            <Card className="bg-white/80 backdrop-blur-3xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden mb-8">
               <CardContent className="p-8 md:p-12" ref={documentRef}>
-                <div className="prose prose-gray max-w-none">
-                  {document.content ? (
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                      {document.content}
-                    </ReactMarkdown>
-                  ) : (
-                    <p className="text-muted-foreground italic">No content available for this document.</p>
-                  )}
+                <div className="space-y-8">
+                  <div className="prose prose-gray max-w-none">
+                    {document.content ? (
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {document.content}
+                      </ReactMarkdown>
+                    ) : (
+                      <p className="text-slate-700 leading-relaxed">{document.summary}</p>
+                    )}
+                  </div>
+
+                  <Separator className="bg-slate-100" />
+                  
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Research Domain</h4>
+                      <p className="text-slate-900 font-medium">{document.research_domain || "N/A"}</p>
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Academic Year</h4>
+                      <p className="text-slate-900 font-medium">{document.academic_year || "N/A"}</p>
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Course Code</h4>
+                      <p className="text-slate-900 font-medium">{document.course_code || "N/A"}</p>
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Funding Source</h4>
+                      <p className="text-slate-900 font-medium">{document.funding_source || "N/A"}</p>
+                    </div>
+                  </div>
+
+                  <Separator className="bg-slate-100" />
+
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Subject Tags</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {document.subject_tags?.map(tag => (
+                        <Badge key={tag} variant="outline" className="bg-cyan-50/50 border-cyan-100 text-cyan-700">{tag}</Badge>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Sidebar */}
           <div className="lg:col-span-1">
             <Card className="bg-white/70 backdrop-blur-2xl border-slate-200 shadow-lg shadow-slate-200/30 rounded-2xl overflow-hidden">
               <CardHeader className="border-b border-slate-100">
@@ -223,67 +234,31 @@ export default function DocumentDetail() {
               <CardContent className="space-y-4">
                 <div>
                   <label className="text-sm font-medium text-muted-foreground">Type</label>
-                  <p className="text-sm text-foreground">{document.document_type}</p>
+                  <p className="text-sm">{document.document_type}</p>
                 </div>
-                
                 <Separator />
-                
                 <div>
-                  <label className="text-sm font-medium text-muted-foreground">Document ID</label>
-                  <p className="text-sm text-foreground font-mono">{document._id}</p>
-                </div>
-                
-                <Separator />
-                
-                <div>
-                  <label className="text-sm font-medium text-muted-foreground">Departments</label>
-                  <div className="flex flex-wrap gap-1 mt-1">
-                    {document.departments_tagged && document.departments_tagged.length > 0 ? (
-                      document.departments_tagged.map((dept, index) => (
-                        <Badge key={index} variant="outline" className="text-xs">
-                          {dept}
-                        </Badge>
-                      ))
-                    ) : (
-                      <span className="text-xs text-muted-foreground">No departments tagged</span>
-                    )}
+                  <label className="text-sm font-medium text-muted-foreground">Authors</label>
+                  <div className="space-y-1 mt-1">
+                    {document.authors?.map(author => (<p key={author} className="text-sm italic">{author}</p>)) || <p className="text-sm">N/A</p>}
                   </div>
                 </div>
-                
                 <Separator />
-                
                 <div>
                   <label className="text-sm font-medium text-muted-foreground">Keywords</label>
                   <div className="flex flex-wrap gap-1 mt-1">
-                    {document.keywords && document.keywords.length > 0 ? (
-                      document.keywords.map((keyword, index) => (
-                        <Badge key={index} variant="secondary" className="text-xs">
-                          {keyword}
-                        </Badge>
-                      ))
-                    ) : (
-                      <span className="text-xs text-muted-foreground">No keywords</span>
-                    )}
+                    {document.keywords?.map(kw => (<Badge key={kw} variant="secondary" className="text-xs">{kw}</Badge>))}
                   </div>
                 </div>
-                
                 <Separator />
-                
                 <div>
-                  <label className="text-sm font-medium text-muted-foreground">Images</label>
-                  <p className="text-sm text-foreground">
-                    {document.images && document.images.length > 0 
-                      ? `${document.images.length} image(s)` 
-                      : 'No images'
-                    }
-                  </p>
+                  <label className="text-sm font-medium text-muted-foreground">Date Published</label>
+                  <p className="text-sm">{document.date_published ? safeFormatDate(document.date_published) : "N/A"}</p>
                 </div>
               </CardContent>
             </Card>
-
           </div>
         </div>
-
         {/* Related Documents Section - Full Width */}
         <Card className="mt-8 bg-white/70 backdrop-blur-2xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden">
           <CardHeader className="border-b border-slate-100">
@@ -317,16 +292,16 @@ export default function DocumentDetail() {
                         >
                           {relatedDoc.document_type}
                         </Badge>
-                        {relatedDoc.UrgencyLevel && (
+                        {relatedDoc.urgency_level && (
                           <Badge 
                             variant="outline" 
                             className={`text-xs px-2 py-0 border-none transition-all ${
-                              relatedDoc.UrgencyLevel === 'High' ? 'bg-red-100 text-red-800' :
-                              relatedDoc.UrgencyLevel === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                              relatedDoc.urgency_level === 'High' ? 'bg-red-100 text-red-800' :
+                              relatedDoc.urgency_level === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
                               'bg-green-100 text-green-800'
                             }`}
                           >
-                            {relatedDoc.UrgencyLevel}
+                            {relatedDoc.urgency_level}
                           </Badge>
                         )}
                       </div>
@@ -339,14 +314,14 @@ export default function DocumentDetail() {
                       
                       <div className="flex items-center justify-between mt-auto">
                         <div className="flex flex-wrap gap-1">
-                          {relatedDoc.departments_tagged?.slice(0, 2).map((dept, index) => (
+                          {relatedDoc.subject_tags?.slice(0, 2).map((tag, index) => (
                             <Badge key={index} variant="secondary" className="text-xs">
-                              {dept}
+                              {tag}
                             </Badge>
                           ))}
-                          {relatedDoc.departments_tagged && relatedDoc.departments_tagged.length > 2 && (
+                          {relatedDoc.subject_tags && relatedDoc.subject_tags.length > 2 && (
                             <Badge variant="secondary" className="text-xs">
-                              +{relatedDoc.departments_tagged.length - 2}
+                              +{relatedDoc.subject_tags.length - 2}
                             </Badge>
                           )}
                         </div>
@@ -363,15 +338,7 @@ export default function DocumentDetail() {
                 <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                 <p className="text-lg text-muted-foreground mb-2">No related documents found</p>
                 <p className="text-sm text-muted-foreground">
-                  Documents are related based on type, departments, and keywords
-                </p>
-              </div>
-            )}
-            
-            {relatedDocuments && relatedDocuments.count > 5 && (
-              <div className="text-center pt-6 border-t mt-6">
-                <p className="text-muted-foreground">
-                  Showing 5 of {relatedDocuments.count} related documents
+                  Documents are related based on type, subject tags, and keywords
                 </p>
               </div>
             )}

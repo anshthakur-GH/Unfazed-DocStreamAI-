@@ -9,27 +9,28 @@ import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import DocumentDetail from "./pages/DocumentDetail";
-import DepartmentView from "./pages/DepartmentView";
+import ProfileView from "./pages/ProfileView";
 import KnowledgePage from "./pages/KnowledgePage";
 import Stats from "./pages/Stats";
 import { DocumentForm } from "./components/documents/DocumentForm";
 import { Navbar } from "./components/layout/Navbar";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import LoginPage from "./pages/LoginPage"; // Import the new LoginPage component
+import Unauthorized from "./pages/Unauthorized"; // Import the new Unauthorized component
 
 const queryClient = new QueryClient();
 
 // ProtectedRoute component to guard routes
 const ProtectedRouteWrapper = () => {
-  const { department } = useParams(); // Get department from URL
-  const { isAuthenticated, userDepartment } = useAuth();
+  const { profile } = useParams(); // Get profile from URL
+  const { isAuthenticated, userProfile } = useAuth();
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  // If accessing a departmental route, check if the user belongs to that department
-  if (department && userDepartment !== department) {
+  // If accessing a profile route, check if the user belongs to that profile
+  if (profile && userProfile !== profile) {
     return <Navigate to="/unauthorized" replace />; // Redirect to an unauthorized page
   }
 
@@ -38,13 +39,7 @@ const ProtectedRouteWrapper = () => {
 
 // Login wrapper component to handle login
 const LoginWrapper = () => {
-  const { setIsAuthenticated } = useAuth();
-
-  const handleLogin = () => {
-    setIsAuthenticated(true);
-  };
-
-  return <LoginPage onLogin={handleLogin} />;
+  return <LoginPage />;
 };
 
 const App = () => {
@@ -55,16 +50,14 @@ const App = () => {
           <SearchProvider>
             <Toaster />
             <Sonner />
-            <ErrorBoundary>
-              <BrowserRouter>
-                <Routes>
-                  <Route path="/login" element={<LoginWrapper />} /> {/* Login route with onLogin prop */}
-                  <Route path="/unauthorized" element={<NotFound />} /> {/* Unauthorized access page */}
-                  <Route path="/" element={<Navigate to="/login" replace />} /> {/* Redirect root to majestic login */}
-                  
-                  <Route element={<ProtectedRouteWrapper />}>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/login" element={<LoginWrapper />} /> {/* Login route with onLogin prop */}
+                <Route path="/unauthorized" element={<Unauthorized />} /> {/* Unauthorized access page */}
+                
+                <Route element={<ProtectedRouteWrapper />}>
                   {/* Protected Routes */}
-                  <Route path="/dashboard" element={<Index />} />
+                  <Route path="/" element={<Index />} />
                   <Route path="/documents/:id" element={
                     <div className="min-h-screen bg-background">
                       <Navbar />
@@ -83,13 +76,13 @@ const App = () => {
                       <DocumentForm mode="create" />
                     </div>
                   } />
-                  <Route path="/departments/:department" element={
+                  <Route path="/profiles/:profile" element={
                     <div className="min-h-screen bg-background">
                       <Navbar />
-                      <DepartmentView />
+                      <ProfileView />
                     </div>
                   } />
-                  <Route path="/departments/:department/knowledge" element={
+                  <Route path="/profiles/:profile/knowledge" element={
                     <div className="min-h-screen bg-background">
                       <Navbar />
                       <KnowledgePage />
@@ -107,7 +100,6 @@ const App = () => {
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
-          </ErrorBoundary>
         </SearchProvider>
       </AuthProvider>
       </TooltipProvider>

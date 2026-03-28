@@ -16,9 +16,9 @@ const KnowledgeSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    department: {
+    user_profile: {
       type: String,
-      enum: ['Engineering', 'Maintenance', 'Procurement', 'HR', 'Legal', 'Board', 'Finance', 'Operations', 'Admin'],
+      enum: ["Head", "Teacher", "Student"],
       default: null
     },
     tags: {
@@ -47,7 +47,7 @@ const KnowledgeSchema = new mongoose.Schema(
 
 // Indexes for better query performance
 KnowledgeSchema.index({ createdAt: -1 }); // For recent knowledge entries
-KnowledgeSchema.index({ department: 1 }); // For department filtering
+KnowledgeSchema.index({ user_profile: 1 }); // For profile filtering
 KnowledgeSchema.index({ is_active: 1 }); // For active entries
 
 // Text search index
@@ -71,17 +71,17 @@ KnowledgeSchema.virtual('formattedDate').get(function () {
 });
 
 // Static methods
-KnowledgeSchema.statics.findRecent = function (limit = 10, department = null) {
+KnowledgeSchema.statics.findRecent = function (limit = 10, user_profile = null) {
   const query = { is_active: true };
-  if (department) {
-    query.department = department;
+  if (user_profile) {
+    query.user_profile = user_profile;
   }
   return this.find(query).sort({ createdAt: -1 }).limit(limit);
 };
 
-KnowledgeSchema.statics.findByDepartment = function (department, limit = 20) {
+KnowledgeSchema.statics.findByProfile = function (user_profile, limit = 20) {
   return this.find({ 
-    department: department, 
+    user_profile: user_profile, 
     is_active: true 
   }).sort({ createdAt: -1 }).limit(limit);
 };

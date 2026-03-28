@@ -3,8 +3,8 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 interface AuthContextType {
   isAuthenticated: boolean;
   setIsAuthenticated: (value: boolean) => void;
-  userDepartment: string | null;
-  setUserDepartment: (department: string | null) => void;
+  userProfile: string | null;
+  setUserProfile: (profile: string | null) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,20 +23,20 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userDepartment, setUserDepartment] = useState<string | null>(
-    localStorage.getItem('userDepartment')
+  const [userProfile, setUserProfile] = useState<string | null>(
+    localStorage.getItem('userProfile')
   );
 
   const value = {
     isAuthenticated,
     setIsAuthenticated,
-    userDepartment,
-    setUserDepartment: (department: string | null) => {
-      setUserDepartment(department);
-      if (department) {
-        localStorage.setItem('userDepartment', department);
+    userProfile,
+    setUserProfile: (profile: string | null) => {
+      setUserProfile(profile);
+      if (profile) {
+        localStorage.setItem('userProfile', profile);
       } else {
-        localStorage.removeItem('userDepartment');
+        localStorage.removeItem('userProfile');
       }
     }
   };

@@ -1,30 +1,39 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { User as UserIcon, BookOpen, Cpu, ShieldCheck, Zap } from "lucide-react";
-import { Variants } from "framer-motion";
 
-interface LoginPageProps {
-  onLogin?: () => void;
-}
-
-export default function LoginPage({ onLogin }: LoginPageProps) {
+export default function LoginPage() {
+  const [loginId, setLoginId] = useState("");
+  const [password, setPassword] = useState("");
+  const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
+  const { setIsAuthenticated, setUserProfile } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+
+  const handleProfileSelect = (value: string) => {
+    setSelectedProfile(value);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) {
-      alert("Please enter a valid institutional email.");
+    if (!selectedProfile) {
+      alert("Please select a profile.");
       return;
     }
-    if (onLogin) onLogin();
-    localStorage.setItem("userEmail", email);
-    localStorage.setItem("userDepartment", "Engineering");
-    navigate("/dashboard");
+    
+    // Simple mock authentication
+    if ((loginId === "admin" && password === "admin") || (loginId && password)) {
+      setIsAuthenticated(true);
+      setUserProfile(selectedProfile);
+      navigate(`/profiles/${selectedProfile}`);
+    } else {
+      alert("Invalid Login ID or Password");
+    }
   };
 
   const containerVariants: Variants = {
@@ -38,19 +47,17 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
     }
   };
 
-
   const itemVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } as any
+      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
     }
   };
 
   return (
     <div className="relative min-h-screen bg-background text-foreground font-sans overflow-hidden flex flex-col items-center justify-center py-20 px-6">
-
       {/* Absolute Background Watermark */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden z-0">
         <h1 className="text-[25vw] font-black tracking-tighter text-slate-900/[0.03] select-none" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
@@ -64,7 +71,6 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
         animate="visible"
         className="relative z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16 lg:gap-24"
       >
-
         {/* Left Side: Branding & Value Props */}
         <div className="flex-1 space-y-12 text-center lg:text-left">
           <motion.div variants={itemVariants} className="space-y-4">
@@ -85,7 +91,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
               <div>
                 <h3 className="text-lg font-bold text-slate-900">CONTEXT-AWARE</h3>
                 <p className="text-sm text-slate-500 mt-1 leading-relaxed">
-                  Every research paper, lecture, and policy connected in real-time within your institutional node.
+                  Every research paper and policy connected in real-time within your institutional node.
                 </p>
               </div>
             </div>
@@ -121,7 +127,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
               <div>
                 <h3 className="text-lg font-bold text-slate-900">DYNAMIC INDEXING</h3>
                 <p className="text-sm text-slate-500 mt-1 leading-relaxed">
-                  Automatically categorized departmental intelligence with instant semantic retrieval.
+                  Automatically categorized intelligence with instant semantic retrieval.
                 </p>
               </div>
             </div>
@@ -137,29 +143,58 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
               </CardTitle>
               <p className="text-slate-500 font-medium tracking-wide mt-2">Provision your institutional node.</p>
             </CardHeader>
-            <CardContent className="px-8 pb-12 pt-10">
+            <CardContent className="px-8 pb-12 pt-10 text-left">
               <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 mb-8">
                 <p className="text-xs text-blue-700 font-bold tracking-widest uppercase mb-1 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
                   Node Status: Online
                 </p>
-                <p className="text-xs text-blue-600/70 font-medium">DocStreamAI is currently facilitating 2,400+ concurrent research nodes.</p>
+                <p className="text-xs text-blue-600/70 font-medium">Unfazed AI is currently facilitating 2,400+ concurrent nodes.</p>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Institutional Identity</label>
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Institutional Profile</label>
+                  <Select onValueChange={handleProfileSelect}>
+                    <SelectTrigger className="w-full h-14 bg-slate-50/50 border-slate-200 text-slate-900 focus:ring-blue-500/50 focus:bg-white shadow-none rounded-xl font-medium text-base transition-all">
+                      <SelectValue placeholder="Select Profile Node" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Nodes</SelectLabel>
+                        <SelectItem value="Head">Head</SelectItem>
+                        <SelectItem value="Teacher">Teacher</SelectItem>
+                        <SelectItem value="Student">Student</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Identity Code</label>
                   <div className="relative group">
                     <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
                     <Input
-                      type="email"
-                      placeholder="email@university.edu"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      type="text"
+                      placeholder="Username"
+                      value={loginId}
+                      onChange={(e) => setLoginId(e.target.value)}
                       required
                       className="pl-12 h-14 bg-slate-50/50 border-slate-200 text-slate-900 placeholder:text-slate-400 focus:ring-blue-500/50 focus:bg-white shadow-none rounded-xl font-medium text-base transition-all"
                     />
                   </div>
+                </div>
+
+                <div>
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Security Token</label>
+                  <Input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="h-14 bg-slate-50/50 border-slate-200 text-slate-900 placeholder:text-slate-400 focus:ring-blue-500/50 focus:bg-white shadow-none rounded-xl font-medium text-base transition-all"
+                  />
                 </div>
 
                 <div className="pt-4">
@@ -175,7 +210,6 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
             </CardContent>
           </Card>
         </motion.div>
-
       </motion.div>
 
       {/* Subtle Bottom Accent */}

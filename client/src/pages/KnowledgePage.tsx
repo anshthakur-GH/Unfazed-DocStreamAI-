@@ -13,7 +13,7 @@ interface KnowledgeEntry {
   author_name: string;
   title: string;
   content: string;
-  department?: string;
+  user_profile?: string;
   createdAt: string;
   formattedDate?: string;
 }
@@ -38,7 +38,7 @@ function toTitleCase(value: string) {
 }
 
 export default function KnowledgePage() {
-  const { department } = useParams();
+  const { profile } = useParams();
   const [knowledgeEntries, setKnowledgeEntries] = useState<KnowledgeEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -47,10 +47,9 @@ export default function KnowledgePage() {
   const debouncedSearchTerm = useDebounce(currentSearchInput, 300);
   const { toast } = useToast();
 
-  if (!department) return <Navigate to="/404" replace />;
+  if (!profile) return <Navigate to="/404" replace />;
 
-  const rawDepartmentName = department.toLowerCase();
-  const departmentName = departmentDisplayNames[rawDepartmentName] || toTitleCase(department);
+  const profileName = profile.charAt(0).toUpperCase() + profile.slice(1);
 
   const fetchKnowledge = async (showRefreshLoader = false, search = '') => {
     try {
@@ -60,9 +59,9 @@ export default function KnowledgePage() {
         setIsLoading(true);
       }
 
-      let url = `/api/knowledge/department/${encodeURIComponent(departmentName)}?limit=50`;
+      let url = `/api/knowledge/profile/${encodeURIComponent(profileName)}?limit=50`;
       if (search) {
-        url = `/api/knowledge?department=${encodeURIComponent(departmentName)}&search=${encodeURIComponent(search)}&limit=50`;
+        url = `/api/knowledge?user_profile=${encodeURIComponent(profileName)}&search=${encodeURIComponent(search)}&limit=50`;
       }
 
       const response = await fetch(url);
@@ -88,7 +87,7 @@ export default function KnowledgePage() {
 
   useEffect(() => {
     fetchKnowledge(false, searchTerm);
-  }, [departmentName, searchTerm]);
+  }, [profileName, searchTerm]);
 
   // Update search term when debounced value changes (real-time search)
   useEffect(() => {
@@ -151,10 +150,10 @@ export default function KnowledgePage() {
         {/* Header */}
         <div className="mb-10">
           <div className="flex items-center gap-6 mb-6">
-            <Link to={`/departments/${department}`}>
+            <Link to={`/profiles/${profile}`}>
               <Button variant="outline" size="sm" className="bg-white/70 backdrop-blur-md border-slate-200 text-slate-900 hover:bg-white font-bold tracking-widest uppercase shadow-lg shadow-slate-200/50 rounded-xl h-10 px-5 active:scale-95 group">
                 <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
-                Back to {departmentName}
+                Back to {profileName}
               </Button>
             </Link>
             <h1 className="text-4xl font-black text-slate-900 tracking-tighter flex items-center gap-3" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
@@ -163,7 +162,7 @@ export default function KnowledgePage() {
             </h1>
           </div>
           <p className="text-slate-500 font-medium tracking-wide">
-            {knowledgeEntries.length} institutional intelligence records found for the {departmentName} department node.
+            {knowledgeEntries.length} institutional intelligence records found for the {profileName} profile node.
           </p>
         </div>
 
@@ -211,8 +210,8 @@ export default function KnowledgePage() {
             </h3>
             <p className="text-muted-foreground mb-6">
               {searchTerm 
-                ? `No knowledge entries match "${searchTerm}" in the ${departmentName} department.`
-                : `Be the first to share knowledge for the ${departmentName} department!`
+                ? `No knowledge entries match "${searchTerm}" for the ${profileName} profile.`
+                : `Be the first to share knowledge for the ${profileName} profile!`
               }
             </p>
             {searchTerm && (
@@ -226,7 +225,7 @@ export default function KnowledgePage() {
             {searchTerm && (
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                 <p className="text-blue-800">
-                  Showing results for "<strong>{searchTerm}</strong>" in {departmentName}
+                  Showing results for "<strong>{searchTerm}</strong>" for {profileName}
                 </p>
               </div>
             )}
