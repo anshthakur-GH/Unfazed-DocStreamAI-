@@ -21,6 +21,7 @@ export interface Document {
   urgency_level: "High" | "Medium" | "Low";
   google_drive_link: string | null;
   webViewLink: string | null;
+  content?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -66,7 +67,7 @@ export interface ApiResponse<T> {
 export interface StatsResponse {
   total: number;
   documentTypes: Array<{ _id: string; count: number }>;
-  profiles: Array<{ _id: string; count: number }>;
+  userProfiles: Array<{ _id: string; count: number }>;
 }
 
 export interface HealthResponse {
@@ -224,7 +225,12 @@ class ApiService {
 
   // Get data statistics
   async getDataStats(): Promise<StatsResponse> {
-    return this.request<StatsResponse>('/stats/data');
+    const response = await this.request<any>('/stats/data');
+    return {
+      total: response.total,
+      documentTypes: response.documentTypes,
+      userProfiles: response.userProfiles || response.departments || [], // Map departments to userProfiles for compatibility
+    };
   }
 
   // Get WebSocket connection stats

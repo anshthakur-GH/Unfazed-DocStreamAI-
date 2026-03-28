@@ -10,33 +10,39 @@ export const Navbar = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="bg-card border-b border-border sticky top-0 z-50 shadow-sm">
+    <nav className="bg-white/70 backdrop-blur-3xl border-b border-white/60 shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-28">
-          {/* Logo Section - Images removed as requested */}
-          <div className="flex items-center space-x-2">
+        <div className="flex items-center justify-between h-28 relative">
+
+          {/* Branding on the left */}
+          <div className="flex items-center space-x-2 w-48">
+            <span className="text-2xl font-black tracking-tighter text-blue-600">
+              DocStream <span className="text-slate-900">AI</span>
+            </span>
           </div>
 
           {/* Title in the middle */}
           <div className="absolute inset-x-0 text-center pointer-events-none flex flex-col items-center justify-center h-full">
-          <h1 className="text-2xl font-extrabold text-foreground">Unfazed DocStreamAI</h1>
-        </div>
+            <h1 className="text-3xl font-black tracking-tighter text-slate-900 uppercase">
+              Unfazed AI
+            </h1>
+          </div>
 
-        {/* Actions (right) */}
-        <div className="flex items-center space-x-3">
-          {isAuthenticated && <KnowledgeModal />}
+          {/* Actions (right) */}
+          <div className="flex items-center space-x-3 z-10">
+            {isAuthenticated && <KnowledgeModal />}
 
-          <Link
-            to="/stats"
-            className={`px-3 py-2 rounded-md text-sm font-bold transition-colors ${isActive("/stats")
-              ? "text-primary bg-primary/10"
-              : "text-foreground hover:text-foreground hover:bg-muted/80"
-              }`}
-          >
-            <BarChart3 className="h-4 w-4 mr-1 inline" />
-            Stats
-          </Link>
-
+            <Link
+              to="/stats"
+              className={`px-4 py-2 rounded-lg text-sm font-bold tracking-widest uppercase transition-all flex items-center shadow-lg ${isActive("/stats")
+                ? "text-white bg-blue-600 shadow-blue-600/20"
+                : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                }`}
+            >
+              <BarChart3 className="h-4 w-4 mr-2" />
+              Stats
+            </Link>
+          </div>
         </div>
       </div>
     </div>

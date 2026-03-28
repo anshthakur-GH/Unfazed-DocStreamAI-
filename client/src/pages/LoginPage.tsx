@@ -1,43 +1,18 @@
-import React, { useState, useRef } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import React, { useState } from "react";
+import { motion, Variants } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { 
-  User, 
-  Key, 
-  Network, 
-  Activity, 
-  FileText, 
-  Settings, 
-  HelpCircle, 
-  Dna, 
-  BookOpen, 
-  Hexagon 
-} from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { User as UserIcon, BookOpen, Cpu, ShieldCheck, Zap } from "lucide-react";
 
-import DocStreamAILogo from "@/assets/download.png";
-import g20Logo from "@/assets/g20-logo.png";
-
-// User-defined types are no longer needed for onLogin
-
-
-const LoginPage = () => {
+export default function LoginPage() {
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
   const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
-  const { setIsAuthenticated, setUserProfile } = useAuth(); // Get auth functions
+  const { setIsAuthenticated, setUserProfile } = useAuth();
   const navigate = useNavigate();
 
   const handleProfileSelect = (value: string) => {
@@ -50,202 +25,197 @@ const LoginPage = () => {
       alert("Please select a profile.");
       return;
     }
-    if (loginId === "admin" && password === "admin") {
-      setIsAuthenticated(true); 
-      setUserProfile(selectedProfile); // Sync profile in context
+    
+    // Simple mock authentication
+    if ((loginId === "admin" && password === "admin") || (loginId && password)) {
+      setIsAuthenticated(true);
+      setUserProfile(selectedProfile);
       navigate(`/profiles/${selectedProfile}`);
     } else {
-      if (loginId && password) {
-        setIsAuthenticated(true);
-        setUserProfile(selectedProfile); // Sync profile in context
-        navigate(`/profiles/${selectedProfile}`);
-      } else {
-        alert("Invalid Login ID or Password");
+      alert("Invalid Login ID or Password");
+    }
+  };
+
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.2
       }
     }
   };
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  
-  const smoothMouseX = useSpring(mouseX, { damping: 50, stiffness: 400 });
-  const smoothMouseY = useSpring(mouseY, { damping: 50, stiffness: 400 });
-
-  const layer1X = useTransform(smoothMouseX, [-0.5, 0.5], [30, -30]);
-  const layer1Y = useTransform(smoothMouseY, [-0.5, 0.5], [30, -30]);
-  
-  const layer2X = useTransform(smoothMouseX, [-0.5, 0.5], [60, -60]);
-  const layer2Y = useTransform(smoothMouseY, [-0.5, 0.5], [60, -60]);
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    mouseX.set((e.clientX - rect.left) / rect.width - 0.5);
-    mouseY.set((e.clientY - rect.top) / rect.height - 0.5);
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+    }
   };
 
   return (
-    <div ref={containerRef} onMouseMove={handleMouseMove} className="min-h-screen bg-white relative overflow-hidden font-sans text-slate-800">
-      
-      {/* Background Graphic elements mimicking the faint code & floating icons */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        {/* Faint Text bg at bottom center */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] opacity-[0.03] select-none text-[8px] leading-tight text-center whitespace-pre-wrap font-mono [mask-image:linear-gradient(to_bottom,transparent,black)]">
-          {Array(80).fill("function initializeNodes(config) {\n  const system = new GraphSystem(config);\n  system.connect([...nodes]);\n  return system.compile();\n}\n\n").join("")}
-        </div>
-
-        {/* Floating Icons Background */}
-        <div className="absolute w-full h-full opacity-60 text-slate-400">
-          <motion.div style={{ x: layer1X, y: layer1Y }} className="absolute inset-0">
-            <motion.div animate={{ y: [0, -15, 0], rotate: [-12, -5, -12] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} className="absolute top-[25%] left-[10%]">
-              <Hexagon className="w-10 h-10" />
-            </motion.div>
-            <motion.div animate={{ y: [0, 20, 0], rotate: [45, 55, 45] }} transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }} className="absolute top-[65%] left-[18%]">
-              <Dna className="w-12 h-12" />
-            </motion.div>
-            <motion.div animate={{ y: [0, -10, 0], rotate: [-6, 6, -6] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }} className="absolute top-[45%] left-[22%]">
-              <BookOpen className="w-8 h-8" />
-            </motion.div>
-            <motion.div animate={{ y: [0, 8, 0], rotate: [0, 10, 0] }} transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1.5 }} className="absolute top-[30%] left-[25%] opacity-40">
-              <BookOpen className="w-5 h-5" />
-            </motion.div>
-            <motion.div animate={{ y: [0, 15, 0], rotate: [0, 20, 0] }} transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }} className="absolute top-[35%] left-[32%]">
-              <Hexagon className="w-12 h-12" />
-            </motion.div>
-            <motion.div animate={{ y: [0, -20, 0], rotate: [0, -15, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 2 }} className="absolute bottom-[10%] left-[28%]">
-              <Network className="w-14 h-14" />
-            </motion.div>
-          </motion.div>
-
-          <motion.div style={{ x: layer2X, y: layer2Y }} className="absolute inset-0">
-             <motion.div animate={{ y: [0, -12, 0], rotate: [-12, 0, -12] }} transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1.5 }} className="absolute top-[25%] right-[22%]">
-              <BookOpen className="w-8 h-8" />
-            </motion.div>
-            <motion.div animate={{ y: [0, 18, 0], rotate: [12, 25, 12] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.5 }} className="absolute top-[20%] right-[10%]">
-              <Network className="w-12 h-12" />
-            </motion.div>
-            <motion.div animate={{ y: [0, -25, 0], rotate: [-45, -30, -45] }} transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }} className="absolute top-[50%] right-[15%]">
-              <Dna className="w-14 h-14" />
-            </motion.div>
-            <motion.div animate={{ y: [0, 15, 0], rotate: [0, 10, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 2.5 }} className="absolute bottom-[25%] right-[20%]">
-              <Hexagon className="w-8 h-8" />
-            </motion.div>
-            <motion.div animate={{ y: [0, -15, 0], rotate: [45, 55, 45] }} transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }} className="absolute bottom-[10%] right-[12%]">
-              <Network className="w-14 h-14" />
-            </motion.div>
-          </motion.div>
-        </div>
+    <div className="relative min-h-screen bg-background text-foreground font-sans overflow-hidden flex flex-col items-center justify-center py-20 px-6">
+      {/* Absolute Background Watermark */}
+      <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden z-0">
+        <h1 className="text-[25vw] font-black tracking-tighter text-slate-900/[0.03] select-none">
+          Unfazed AI
+        </h1>
       </div>
 
-      {/* Header aligned with Screenshot design */}
-      <header className="relative z-20 w-full bg-white shadow-sm border-b border-slate-100 flex flex-col pt-3 px-6 h-28 rounded-b-xl mx-auto max-w-full">
-        <div className="flex items-center justify-between w-full h-full relative">
-          {/* Left Logos removed as requested */}
-          <div className="w-16"></div>
-
-          {/* Center Titles */}
-          <div className="absolute left-1/2 -translate-x-1/2 h-full flex flex-col justify-center items-center top-0">
-            <h1 className="text-xl md:text-2xl font-medium tracking-[0.2em] text-slate-800 uppercase">
-              Unfazed DocStreamAI
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="relative z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16 lg:gap-24"
+      >
+        {/* Left Side: Branding & Value Props */}
+        <div className="flex-1 space-y-12 text-center lg:text-left">
+          <motion.div variants={itemVariants} className="space-y-4">
+            <h1 className="text-6xl md:text-8xl font-black text-slate-900 tracking-tighter leading-none">
+              Unfazed AI<br />
+              <span className="text-blue-600">CORE HUB</span>
             </h1>
-          </div>
+            <p className="text-2xl md:text-3xl text-slate-500 font-light tracking-wide max-w-2xl mx-auto lg:mx-0">
+              Intelligence, unburdened.
+            </p>
+          </motion.div>
 
-          {/* Right Header Icons */}
-          <div className="flex items-center gap-4 text-slate-500 pb-4">
-            <button aria-label="User Profile" className="hover:text-slate-800 transition-colors">
-              <User className="w-6 h-6" />
-            </button>
-            <button aria-label="Help" className="hover:text-slate-800 transition-colors">
-              <HelpCircle className="w-6 h-6" />
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Login Card */}
-      <div className="relative z-10 w-full max-w-md mx-auto mt-16 p-4">
-        <Card className="w-full bg-white/95 backdrop-blur-sm shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-slate-200/60 rounded-xl overflow-hidden">
-          <CardHeader className="text-center pt-8 pb-4">
-            <CardTitle className="text-2xl font-bold text-slate-900 tracking-tight">Welcome to DocStreamAI</CardTitle>
-            <p className="text-sm text-slate-500 mt-1">Sign in to your account</p>
-          </CardHeader>
-          <CardContent className="px-8 pb-8">
-            <div className="space-y-4">
-              <label htmlFor="profile-select" className="text-xs font-medium text-slate-600 block mb-1">
-                User Profile
-              </label>
-              <Select onValueChange={handleProfileSelect}>
-                <SelectTrigger id="profile-select" className="w-full bg-[#E2E8F0] border-transparent text-slate-700 h-11 focus:ring-blue-500/20 focus:border-blue-500 shadow-none">
-                  <SelectValue placeholder="Choose your profile" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Profiles</SelectLabel>
-                    <SelectItem value="Head">Head</SelectItem>
-                    <SelectItem value="Teacher">Teacher</SelectItem>
-                    <SelectItem value="Student">Student</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+          <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="flex items-start gap-4 text-left p-6 bg-white/40 backdrop-blur-xl rounded-2xl border border-white/60 shadow-xl shadow-blue-900/5 group hover:bg-white/60 transition-all">
+              <div className="bg-blue-600 p-3 rounded-xl shadow-lg shadow-blue-600/20 group-hover:scale-110 transition-transform">
+                <Zap className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-slate-900">CONTEXT-AWARE</h3>
+                <p className="text-sm text-slate-500 mt-1 leading-relaxed">
+                  Every research paper and policy connected in real-time within your institutional node.
+                </p>
+              </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+            <div className="flex items-start gap-4 text-left p-6 bg-white/40 backdrop-blur-xl rounded-2xl border border-white/60 shadow-xl shadow-blue-900/5 group hover:bg-white/60 transition-all">
+              <div className="bg-blue-600 p-3 rounded-xl shadow-lg shadow-blue-600/20 group-hover:scale-110 transition-transform">
+                <Cpu className="h-6 w-6 text-white" />
+              </div>
               <div>
-                <label htmlFor="loginId" className="text-xs font-medium text-slate-600 block mb-1">
-                  Login ID
-                </label>
-                <div className="relative">
-                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                  <Input
-                    id="loginId"
-                    type="text"
-                    placeholder="Enter your Login ID"
-                    value={loginId}
-                    onChange={(e) => setLoginId(e.target.value)}
-                    required
-                    className="pl-10 h-11 bg-[#E2E8F0] border-transparent text-slate-800 placeholder:text-slate-500 focus:ring-blue-500/20 focus:border-blue-500 shadow-none"
-                  />
-                </div>
+                <h3 className="text-lg font-bold text-slate-900">FLUID LOGIC</h3>
+                <p className="text-sm text-slate-500 mt-1 leading-relaxed">
+                  Proprietary liquid-cooled neural processing ensuring zero-latency extraction and analysis.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4 text-left p-6 bg-white/40 backdrop-blur-xl rounded-2xl border border-white/60 shadow-xl shadow-blue-900/5 group hover:bg-white/60 transition-all">
+              <div className="bg-blue-600 p-3 rounded-xl shadow-lg shadow-blue-600/20 group-hover:scale-110 transition-transform">
+                <ShieldCheck className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-slate-900">SECURE TUNNEL</h3>
+                <p className="text-sm text-slate-500 mt-1 leading-relaxed">
+                  Military-grade encryption for all data flow, ensuring your research stays private.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4 text-left p-6 bg-white/40 backdrop-blur-xl rounded-2xl border border-white/60 shadow-xl shadow-blue-900/5 group hover:bg-white/60 transition-all">
+              <div className="bg-blue-600 p-3 rounded-xl shadow-lg shadow-blue-600/20 group-hover:scale-110 transition-transform">
+                <BookOpen className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-slate-900">DYNAMIC INDEXING</h3>
+                <p className="text-sm text-slate-500 mt-1 leading-relaxed">
+                  Automatically categorized intelligence with instant semantic retrieval.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Right Side: Access Card */}
+        <motion.div variants={itemVariants} className="w-full max-w-md">
+          <Card className="bg-white/70 backdrop-blur-3xl shadow-2xl shadow-blue-900/15 border border-white/80 rounded-3xl overflow-hidden">
+            <CardHeader className="pt-10 pb-4 px-8 border-b border-slate-100 text-center">
+              <CardTitle className="text-3xl font-black text-slate-900 tracking-tighter">
+                ENTER THE STREAM
+              </CardTitle>
+              <p className="text-slate-500 font-medium tracking-wide mt-2">Provision your institutional node.</p>
+            </CardHeader>
+            <CardContent className="px-8 pb-12 pt-10 text-left">
+              <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 mb-8">
+                <p className="text-xs text-blue-700 font-bold tracking-widest uppercase mb-1 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
+                  Node Status: Online
+                </p>
+                <p className="text-xs text-blue-600/70 font-medium">Unfazed AI is currently facilitating 2,400+ concurrent nodes.</p>
               </div>
 
-              <div>
-                <label htmlFor="password" className="text-xs font-medium text-slate-600 block mb-1">
-                  Password
-                </label>
-                <div className="relative">
-                  <Key className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <label htmlFor="profile-select" className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Institutional Profile</label>
+                  <Select onValueChange={handleProfileSelect}>
+                    <SelectTrigger id="profile-select" aria-label="Select Institutional Profile" className="w-full h-14 bg-slate-50/50 border-slate-200 text-slate-900 focus:ring-blue-500/50 focus:bg-white shadow-none rounded-xl font-medium text-base transition-all">
+                      <SelectValue placeholder="Select Profile Node" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Nodes</SelectLabel>
+                        <SelectItem value="Head">Head</SelectItem>
+                        <SelectItem value="Teacher">Teacher</SelectItem>
+                        <SelectItem value="Student">Student</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <label htmlFor="identity-code" className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Identity Code</label>
+                  <div className="relative group">
+                    <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
+                    <Input
+                      id="identity-code"
+                      type="text"
+                      placeholder="Username"
+                      value={loginId}
+                      onChange={(e) => setLoginId(e.target.value)}
+                      required
+                      className="pl-12 h-14 bg-slate-50/50 border-slate-200 text-slate-900 placeholder:text-slate-400 focus:ring-blue-500/50 focus:bg-white shadow-none rounded-xl font-medium text-base transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="security-token" className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Security Token</label>
                   <Input
-                    id="password"
+                    id="security-token"
                     type="password"
-                    placeholder="Enter your password"
+                    placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="pl-10 h-11 bg-[#E2E8F0] border-transparent text-slate-800 placeholder:text-slate-500 focus:ring-blue-500/20 focus:border-blue-500 shadow-none"
+                    className="h-14 bg-slate-50/50 border-slate-200 text-slate-900 placeholder:text-slate-400 focus:ring-blue-500/50 focus:bg-white shadow-none rounded-xl font-medium text-base transition-all"
                   />
                 </div>
-              </div>
 
-              <div className="pt-2">
-                <Button type="submit" className="w-full h-11 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-md shadow-sm transition-colors text-sm">
-                  Login
-                </Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
+                <div className="pt-4">
+                  <Button type="submit" className="w-full h-14 bg-blue-600 hover:bg-blue-500 text-white font-black tracking-[0.2em] uppercase rounded-xl shadow-xl shadow-blue-600/30 transition-all hover:scale-[1.02] active:scale-[0.98] group relative overflow-hidden">
+                    <span className="relative z-10">Initialize Node</span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[100%] group-hover:animate-[shimmer_2s_infinite]" />
+                  </Button>
+                  <p className="text-[10px] text-slate-400 text-center mt-6 font-medium tracking-wide">
+                    By entering, you agree to the Institutional Data Governance Protocol.
+                  </p>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </motion.div>
 
-      {/* Floating Status Box */}
-      <div className="absolute bottom-6 right-6 z-20 bg-white/90 backdrop-blur-sm border border-slate-200/80 px-4 py-2 rounded-lg shadow-sm text-right">
-        <div className="text-sm font-semibold text-slate-800">DocStreamAI</div>
-        <div className="text-xs text-slate-500">
-          Node Status: <span className="text-teal-500 font-medium">Online</span> | 3 Nodes
-        </div>
-      </div>
+      {/* Subtle Bottom Accent */}
+      <div className="fixed bottom-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 via-cyan-400 to-blue-600 opacity-20" />
     </div>
   );
-};
-
-export default LoginPage;
+}

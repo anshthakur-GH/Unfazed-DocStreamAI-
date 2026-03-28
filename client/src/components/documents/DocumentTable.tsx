@@ -10,10 +10,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { 
-  FileText, 
-  Calendar, 
-  Eye, 
+import {
+  FileText,
+  Calendar,
+  Eye,
   RefreshCw,
   Plus,
   Trash2,
@@ -45,7 +45,10 @@ const urgencyLevelColors = {
 
 interface DocumentTableProps {
   userProfileFilter?: string;
+<<<<<<< HEAD
   documentTypeFilter?: string;
+=======
+>>>>>>> origin/all-updates-unfazed-ai
   showControls?: boolean;
   sortOrderProp?: 'asc' | 'desc';
   onSortChange?: (value: 'asc' | 'desc') => void;
@@ -54,7 +57,10 @@ interface DocumentTableProps {
 
 export const DocumentTable = ({ 
   userProfileFilter,
+<<<<<<< HEAD
   documentTypeFilter,
+=======
+>>>>>>> origin/all-updates-unfazed-ai
   showControls = true,
   sortOrderProp,
   onSortChange,
@@ -66,7 +72,7 @@ export const DocumentTable = ({
   const [urgencySort, setUrgencySort] = useState<string | undefined>(undefined);
 
   const sortOrder = sortOrderProp ?? sortOrderState;
-  
+
   const { toast } = useToast();
   const deleteDocumentMutation = useDeleteDocument();
   const queryClient = useQueryClient();
@@ -79,7 +85,10 @@ export const DocumentTable = ({
     search: searchTerm || undefined,
     urgency_sort: urgencySort,
     user_profile: userProfileFilter,
+<<<<<<< HEAD
     document_type: documentTypeFilter,
+=======
+>>>>>>> origin/all-updates-unfazed-ai
   };
 
   const { data, isLoading, error, refetch } = useDocumentsList(queryParams);
@@ -108,6 +117,7 @@ export const DocumentTable = ({
     else setSortOrderState(value);
   };
 
+<<<<<<< HEAD
   if (error) {
     return (
       <div className="bg-destructive/10 border border-destructive rounded-lg p-6 text-center">
@@ -118,6 +128,24 @@ export const DocumentTable = ({
           <RefreshCw className="h-4 w-4 mr-2" />
           Try Again
         </Button>
+=======
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        {!hideHeading && (
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-semibold text-foreground">
+                {userProfileFilter ? `${userProfileFilter} Documents` : "Latest documents"}
+              </h1>
+              <p className="text-muted-foreground">Loading documents...</p>
+            </div>
+          </div>
+        )}
+        <div className="bg-card rounded-lg border shadow-sm p-8 text-center">
+          <RefreshCw className="h-8 w-8 text-muted-foreground mx-auto mb-4 animate-spin" />
+        </div>
+>>>>>>> origin/all-updates-unfazed-ai
       </div>
     );
   }
@@ -153,6 +181,7 @@ export const DocumentTable = ({
             <p className="text-muted-foreground">{pagination?.total || 0} documents found</p>
           </div>
           <div className="flex items-center space-x-3">
+<<<<<<< HEAD
             <Button size="sm" onClick={handleRefresh} disabled={isLoading || isSpinning}
               className={`bg-green-500 hover:bg-green-600 text-white border border-cyan-500 ${isLoading || isSpinning ? 'opacity-70 cursor-not-allowed' : ''}`}>
               <RefreshCw className={`h-4 w-4 mr-2 ${isSpinning ? 'animate-spin' : ''}`} />
@@ -161,6 +190,35 @@ export const DocumentTable = ({
             <Button size="sm" asChild className="bg-cyan-500 hover:bg-cyan-600 text-white border border-cyan-500">
                <Link to="/documents/new"><Plus className="h-4 w-4 mr-2" />Add Document</Link>
             </Button>
+=======
+            <Button
+              size="sm"
+              onClick={handleRefresh}
+              disabled={isLoading || isSpinning}
+              className={`bg-green-500 hover:bg-green-600 text-white border border-cyan-500 ${isLoading || isSpinning ? 'opacity-70 cursor-not-allowed' : ''}`}
+            >
+              <RefreshCw
+                className={`h-4 w-4 mr-2 ${isSpinning ? 'animate-spin' : ''}`}
+              />
+              Refresh
+            </Button>
+
+            <Button
+              size="sm"
+              onClick={() => {
+                const url = 'https://n8n.unfazed-ai.online/form-test/723abf57-4dcb-4dbe-9e6d-dffac7ed5442';
+                window.open(url, '_blank');
+              }}
+              className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/20 transition-all"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Publish Document
+            </Button>
+            
+            <Button size="sm" asChild className="bg-cyan-500 hover:bg-cyan-600 text-white border border-cyan-500">
+               <Link to="/documents/new"><Plus className="h-4 w-4 mr-2" />Add Document</Link>
+            </Button>
+>>>>>>> origin/all-updates-unfazed-ai
           </div>
         </div>
       )}
@@ -189,7 +247,11 @@ export const DocumentTable = ({
         </div>
       )}
 
+<<<<<<< HEAD
       <div className="bg-card rounded-lg border border-cyan-400 shadow-sm overflow-hidden">
+=======
+      <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/50 overflow-hidden">
+>>>>>>> origin/all-updates-unfazed-ai
         <Table>
           <TableHeader>
             <TableRow className="bg-muted border-border">
@@ -222,12 +284,24 @@ export const DocumentTable = ({
                   </Link>
                 </TableCell>
                 <TableCell>
+<<<<<<< HEAD
                   <Badge className={documentTypeColors[doc.document_type] || "bg-gray-100 text-gray-800"}>{doc.document_type}</Badge>
+=======
+                  <Badge className={documentTypeColors[doc.document_type as keyof typeof documentTypeColors] || "bg-gray-100 text-gray-800"}>
+                    {doc.document_type}
+                  </Badge>
+>>>>>>> origin/all-updates-unfazed-ai
                 </TableCell>
                 <TableCell className="text-sm italic text-muted-foreground">{doc.authors?.length > 0 ? doc.authors.join(", ") : "Unknown"}</TableCell>
                 <TableCell className="text-sm">{doc.research_domain || "N/A"}</TableCell>
                 <TableCell>
+<<<<<<< HEAD
                   <Badge className={urgencyLevelColors[doc.urgency_level] || "bg-gray-100 text-gray-800"}>{doc.urgency_level}</Badge>
+=======
+                  <Badge className={urgencyLevelColors[doc.urgency_level as keyof typeof urgencyLevelColors] || "bg-gray-100 text-gray-800"}>
+                    {doc.urgency_level || "N/A"}
+                  </Badge>
+>>>>>>> origin/all-updates-unfazed-ai
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center space-x-2">

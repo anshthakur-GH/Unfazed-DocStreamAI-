@@ -6,8 +6,17 @@ import { BookOpen, FileText, Layout } from "lucide-react";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="relative min-h-screen bg-background text-foreground font-sans overflow-hidden">
+
+      {/* Persistent Subtle Dashboard Watermark */}
+      <div className="fixed inset-0 pointer-events-none flex items-center justify-center -z-10">
+        <h1 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">
+          UNFAZED AI
+        </h1>
+      </div>
+
       <Navbar />
+<<<<<<< HEAD
       <LatestNewsSection />
       <HeroSection />
       
@@ -53,6 +62,14 @@ const Index = () => {
           </div>
           <DocumentTable documentTypeFilter="Policy Document" hideHeading={true} showControls={false} />
         </section>
+=======
+      <div className="relative z-10 w-full h-full pb-12">
+        <HeroSection />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+          <LatestNewsSection />
+          <DocumentTable />
+        </div>
+>>>>>>> origin/all-updates-unfazed-ai
       </div>
     </div>
   );

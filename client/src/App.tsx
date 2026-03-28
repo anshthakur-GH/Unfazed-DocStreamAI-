@@ -14,6 +14,7 @@ import KnowledgePage from "./pages/KnowledgePage";
 import Stats from "./pages/Stats";
 import { DocumentForm } from "./components/documents/DocumentForm";
 import { Navbar } from "./components/layout/Navbar";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import LoginPage from "./pages/LoginPage"; // Import the new LoginPage component
 import Unauthorized from "./pages/Unauthorized"; // Import the new Unauthorized component
 
@@ -55,50 +56,50 @@ const App = () => {
                 <Route path="/unauthorized" element={<Unauthorized />} /> {/* Unauthorized access page */}
                 
                 <Route element={<ProtectedRouteWrapper />}>
-                {/* Protected Routes */}
-                <Route path="/" element={<Index />} />
-                <Route path="/documents/:id" element={
-                  <div className="min-h-screen bg-background">
-                    <Navbar />
-                    <DocumentDetail />
-                  </div>
-                } />
-                <Route path="/documents/:id/edit" element={
-                  <div className="min-h-screen bg-background">
-                    <Navbar />
-                    <DocumentForm mode="edit" />
-                  </div>
-                } />
-                <Route path="/documents/new" element={
-                  <div className="min-h-screen bg-background">
-                    <Navbar />
-                    <DocumentForm mode="create" />
-                  </div>
-                } />
-                <Route path="/profiles/:profile" element={
-                  <div className="min-h-screen bg-background">
-                    <Navbar />
-                    <ProfileView />
-                  </div>
-                } />
-                <Route path="/profiles/:profile/knowledge" element={
-                  <div className="min-h-screen bg-background">
-                    <Navbar />
-                    <KnowledgePage />
-                  </div>
-                } />
-                <Route path="/stats" element={
-                  <div className="min-h-screen bg-background">
-                    <Navbar />
-                    <Stats />
-                  </div>
-                } />
-              </Route>
-              
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
+                  {/* Protected Routes */}
+                  <Route path="/" element={<Index />} />
+                  <Route path="/documents/:id" element={
+                    <div className="min-h-screen bg-background">
+                      <Navbar />
+                      <DocumentDetail />
+                    </div>
+                  } />
+                  <Route path="/documents/:id/edit" element={
+                    <div className="min-h-screen bg-background">
+                      <Navbar />
+                      <DocumentForm mode="edit" />
+                    </div>
+                  } />
+                  <Route path="/documents/new" element={
+                    <div className="min-h-screen bg-background">
+                      <Navbar />
+                      <DocumentForm mode="create" />
+                    </div>
+                  } />
+                  <Route path="/profiles/:profile" element={
+                    <div className="min-h-screen bg-background">
+                      <Navbar />
+                      <ProfileView />
+                    </div>
+                  } />
+                  <Route path="/profiles/:profile/knowledge" element={
+                    <div className="min-h-screen bg-background">
+                      <Navbar />
+                      <KnowledgePage />
+                    </div>
+                  } />
+                  <Route path="/stats" element={
+                    <div className="min-h-screen bg-background">
+                      <Navbar />
+                      <Stats />
+                    </div>
+                  } />
+                </Route>
+                
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
         </SearchProvider>
       </AuthProvider>
       </TooltipProvider>

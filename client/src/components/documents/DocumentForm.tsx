@@ -32,7 +32,10 @@ const documentSchema = z.object({
   keywords: z.array(z.string()).optional(),
   urgency_level: z.enum(["High", "Medium", "Low"]),
   google_drive_link: z.string().url("Must be a valid URL").optional().nullable().or(z.literal("")),
+<<<<<<< HEAD
   webViewLink: z.string().url("Must be a valid URL").optional().nullable().or(z.literal("")),
+=======
+>>>>>>> origin/all-updates-unfazed-ai
 });
 
 type DocumentFormData = z.infer<typeof documentSchema>;
@@ -111,7 +114,10 @@ export const DocumentForm = ({ mode }: DocumentFormProps) => {
         date_published: data.date_published ?? null,
         funding_source: data.funding_source ?? null,
         google_drive_link: data.google_drive_link ?? null,
+<<<<<<< HEAD
         webViewLink: data.webViewLink ?? null,
+=======
+>>>>>>> origin/all-updates-unfazed-ai
       };
 
       if (mode === 'create') {
@@ -179,20 +185,47 @@ export const DocumentForm = ({ mode }: DocumentFormProps) => {
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<<<<<<< HEAD
         <div className="mb-6">
           <Button variant="ghost" onClick={() => navigate("/")} className="mb-4">
             <ArrowLeft className="h-4 w-4 mr-2" />
+=======
+        <div className="mb-10">
+          <Button
+            variant="ghost"
+            onClick={() => navigate("/")}
+            className="mb-6 bg-white/70 backdrop-blur-md border-slate-200 text-slate-900 hover:bg-white font-bold tracking-widest uppercase shadow-lg shadow-slate-200/50 rounded-xl h-10 px-5 active:scale-95 group"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+>>>>>>> origin/all-updates-unfazed-ai
             Back to Documents
           </Button>
-          <h1 className="text-3xl font-bold text-foreground">
-            {mode === 'create' ? 'Create New Document' : 'Edit Document'}
+          <h1 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">
+            {mode === 'create' ? 'Provision New Document' : 'Update Intelligence Node'}
           </h1>
+<<<<<<< HEAD
+=======
+          <p className="text-slate-500 mt-2 font-medium tracking-wide">
+            {mode === 'create' 
+              ? 'Initialize a new institutional document within the Unfazed AI node.'
+              : 'Modify the existing documentation parameters and intelligence mappings.'
+            }
+          </p>
+>>>>>>> origin/all-updates-unfazed-ai
         </div>
-
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+<<<<<<< HEAD
           <Card>
             <CardHeader>
               <CardTitle>Core Information</CardTitle>
+=======
+          <Card className="bg-white/80 backdrop-blur-3xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden">
+            <CardHeader className="border-b border-slate-50">
+              <CardTitle className="text-lg font-bold text-slate-900">Core Information</CardTitle>
+              <CardDescription className="text-slate-500">
+                Provide the essential details for your document.
+              </CardDescription>
+>>>>>>> origin/all-updates-unfazed-ai
             </CardHeader>
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2 col-span-2">
@@ -245,6 +278,7 @@ export const DocumentForm = ({ mode }: DocumentFormProps) => {
             </CardContent>
           </Card>
 
+<<<<<<< HEAD
           <Card>
             <CardHeader><CardTitle>Content & Summary</CardTitle></CardHeader>
             <CardContent className="space-y-4">
@@ -261,13 +295,63 @@ export const DocumentForm = ({ mode }: DocumentFormProps) => {
                 <Label htmlFor="webViewLink">Web View Link</Label>
                 <Input id="webViewLink" {...register("webViewLink")} placeholder="https://..." />
                 {errors.webViewLink && <p className="text-xs text-destructive">{errors.webViewLink.message}</p>}
+=======
+          <Card className="bg-white/80 backdrop-blur-3xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden">
+            <CardHeader className="border-b border-slate-50">
+              <CardTitle className="text-lg font-bold text-slate-900">Academic Details</CardTitle>
+              <CardDescription className="text-slate-500">
+                Specify research domains and academic metadata.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="research_domain">Research Domain</Label>
+                <Input id="research_domain" {...register("research_domain")} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="course_code">Course Code</Label>
+                <Input id="course_code" {...register("course_code")} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="academic_year">Academic Year</Label>
+                <Input id="academic_year" {...register("academic_year")} placeholder="e.g., 2023-24" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="date_published">Date Published</Label>
+                <Input id="date_published" type="date" {...register("date_published")} />
+>>>>>>> origin/all-updates-unfazed-ai
               </div>
             </CardContent>
           </Card>
 
+<<<<<<< HEAD
           <Card>
             <CardHeader><CardTitle>Tags, Keywords & Authors</CardTitle></CardHeader>
             <CardContent className="space-y-6">
+=======
+          <Card className="bg-white/80 backdrop-blur-3xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden">
+            <CardHeader className="border-b border-slate-50">
+              <CardTitle className="text-lg font-bold text-slate-900">Content & Intelligence</CardTitle>
+              <CardDescription className="text-slate-500">
+                Summarize the document and provide access links.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="summary">Summary *</Label>
+                <Textarea id="summary" {...register("summary")} rows={4} className="bg-slate-50/50 border-slate-200 focus:bg-white transition-all rounded-xl" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="google_drive_link">Institutional Resource Link</Label>
+                <Input id="google_drive_link" {...register("google_drive_link")} placeholder="https://drive.google.com/..." className="bg-slate-50/50 border-slate-200 focus:bg-white transition-all rounded-xl" />
+                {errors.google_drive_link && <p className="text-xs text-destructive">{errors.google_drive_link.message}</p>}
+              </div>
+            </CardContent>
+            <CardHeader className="border-t border-slate-50">
+              <CardTitle className="text-lg font-bold text-slate-900">Tags, Keywords & Authors</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+>>>>>>> origin/all-updates-unfazed-ai
               <div>
                 <Label>Authors</Label>
                 <div className="flex gap-2 mt-2">
@@ -286,6 +370,14 @@ export const DocumentForm = ({ mode }: DocumentFormProps) => {
                 <div className="flex gap-2 mt-2">
                   <Input value={newTag} onChange={(e) => setNewTag(e.target.value)} placeholder="Add tag" />
                   <Button type="button" onClick={addTag} size="sm"><Plus className="h-4 w-4" /></Button>
+<<<<<<< HEAD
+=======
+                </div>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {subjectTags.map((t) => (
+                    <Badge key={t} variant="outline" className="bg-cyan-50">{t} <X className="h-3 w-3 ml-1 cursor-pointer" onClick={() => setSubjectTags(subjectTags.filter(x => x !== t))} /></Badge>
+                  ))}
+>>>>>>> origin/all-updates-unfazed-ai
                 </div>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {subjectTags.map((t) => (
@@ -322,10 +414,35 @@ export const DocumentForm = ({ mode }: DocumentFormProps) => {
             </CardContent>
           </Card>
 
+<<<<<<< HEAD
           <div className="flex justify-end space-x-4">
             <Button type="button" variant="outline" onClick={() => navigate("/")}>Cancel</Button>
             <Button type="submit" disabled={createMutation.isPending || updateMutation.isPending}>
               {mode === 'create' ? 'Create' : 'Update'} Document
+=======
+          <div className="flex justify-end space-x-4 pt-6">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => navigate("/")}
+              className="bg-white/70 backdrop-blur-md border-slate-200 text-slate-900 hover:bg-white font-bold tracking-widest uppercase shadow-lg shadow-slate-200/50 rounded-xl h-12 px-8 active:scale-95"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              disabled={createMutation.isPending || updateMutation.isPending}
+              className="bg-blue-600 text-white hover:bg-blue-700 font-bold tracking-widest uppercase shadow-lg shadow-blue-600/20 rounded-xl h-12 px-10 active:scale-95"
+            >
+              {createMutation.isPending || updateMutation.isPending ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  {mode === 'create' ? 'Initializing...' : 'Calibrating...'}
+                </>
+              ) : (
+                mode === 'create' ? 'Finalize Provision' : 'Commit Changes'
+              )}
+>>>>>>> origin/all-updates-unfazed-ai
             </Button>
           </div>
         </form>

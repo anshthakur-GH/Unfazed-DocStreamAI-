@@ -148,6 +148,7 @@ export default function KnowledgePage() {
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
+<<<<<<< HEAD
         <div className="mb-8">
           <div className="flex items-center gap-4 mb-4">
             <Link to={`/profiles/${profile}`}>
@@ -159,31 +160,46 @@ export default function KnowledgePage() {
             <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
               <BookOpen className="h-8 w-8" />
               Knowledge Shared - {profileName}
+=======
+        <div className="mb-10">
+          <div className="flex items-center gap-6 mb-6">
+            <Link to={`/profiles/${profile}`}>
+              <Button variant="outline" size="sm" className="bg-white/70 backdrop-blur-md border-slate-200 text-slate-900 hover:bg-white font-bold tracking-widest uppercase shadow-lg shadow-slate-200/50 rounded-xl h-10 px-5 active:scale-95 group">
+                <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+                Back to {profileName}
+              </Button>
+            </Link>
+            <h1 className="text-4xl font-black text-slate-900 tracking-tighter flex items-center gap-3">
+              <BookOpen className="h-9 w-9 text-blue-600" />
+              KNOWLEDGE SHARED
+>>>>>>> origin/all-updates-unfazed-ai
             </h1>
           </div>
-          <p className="text-muted-foreground">
-            {knowledgeEntries.length} knowledge entr{knowledgeEntries.length === 1 ? 'y' : 'ies'} found
+          <p className="text-slate-500 font-medium tracking-wide">
+            {knowledgeEntries.length} institutional intelligence records found for the {profileName} profile node.
           </p>
         </div>
 
         {/* Search and Controls */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center space-x-2 relative">
+        <div className="flex items-center justify-between mb-10">
+          <div className="flex items-center space-x-2 relative group w-full max-w-md">
+            <div className="absolute inset-0 bg-blue-600/5 blur-2xl rounded-xl opacity-0 group-focus-within:opacity-100 transition-opacity -z-10" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
             <Input 
               type="text" 
-              placeholder="Search knowledge entries in real-time..."
+              placeholder="Query departmental wisdom..."
               value={currentSearchInput}
               onChange={(e) => setCurrentSearchInput(e.target.value)}
-              className="w-80 bg-card border-cyan-400 text-foreground focus:ring-primary focus:border-cyan-500 pr-8"
+              className="pl-12 bg-white/80 backdrop-blur-xl border-slate-200 text-slate-900 placeholder:text-slate-400 focus:ring-blue-500/50 shadow-lg shadow-blue-900/5 rounded-xl h-12 text-base"
             />
             {currentSearchInput && (
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={clearSearch}
-                className="absolute right-2 h-6 w-6 p-0 hover:bg-muted"
+                className="absolute right-3 h-8 w-8 p-0 hover:bg-slate-100 text-slate-400"
               >
-                <X className="h-3 w-3" />
+                <X className="h-4 w-4" />
               </Button>
             )}
           </div>
@@ -192,10 +208,10 @@ export default function KnowledgePage() {
             variant="outline"
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className="flex items-center gap-2"
+            className="bg-white/70 backdrop-blur-md border-slate-200 text-slate-900 hover:bg-white font-bold tracking-widest uppercase shadow-lg shadow-slate-200/50 rounded-xl h-11 px-6 active:scale-95"
           >
-            <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-            Refresh
+            <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+            Sync Knowledge
           </Button>
         </div>
 

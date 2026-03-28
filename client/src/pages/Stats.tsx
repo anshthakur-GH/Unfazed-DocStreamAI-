@@ -19,90 +19,93 @@ const Stats = () => {
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
+        <div className="mb-10">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-foreground">System Statistics</h1>
-              <p className="text-muted-foreground mt-2">
-                Overview of your document management system
+              <h1 className="text-4xl font-black text-slate-900 tracking-tighter">
+                SYSTEM STATISTICS
+              </h1>
+              <p className="text-slate-500 mt-2 font-medium tracking-wide">
+                Real-time overview of your institutional document node.
               </p>
             </div>
             <Button
               variant="outline"
               onClick={handleRefresh}
               disabled={isLoading}
+              className="bg-white/70 backdrop-blur-md border-slate-200 text-slate-900 hover:bg-white font-bold tracking-widest uppercase shadow-lg shadow-slate-200/50 transition-all rounded-xl h-11 px-6 active:scale-95"
             >
               <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-              Refresh
+              Refresh Node
             </Button>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {/* Total Documents */}
-          <Card>
+          <Card className="bg-white/80 backdrop-blur-2xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden transition-all hover:shadow-2xl hover:shadow-blue-900/5 group">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Documents</CardTitle>
-              <FileText className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-xs font-bold uppercase tracking-widest text-slate-500">Total Documents</CardTitle>
+              <FileText className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-transform" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-3xl font-black text-slate-900 tracking-tighter">
                 {statsLoading ? "..." : stats?.total || 0}
               </div>
-              <p className="text-xs text-muted-foreground">
-                All documents in the system
+              <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider mt-1">
+                Synchronized Documents
               </p>
             </CardContent>
           </Card>
 
           {/* Database Status */}
-          <Card>
+          <Card className="bg-white/80 backdrop-blur-2xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden transition-all hover:shadow-2xl hover:shadow-blue-900/5 group">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Database Status</CardTitle>
-              <Database className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-xs font-bold uppercase tracking-widest text-slate-500">Node Status</CardTitle>
+              <Database className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-transform" />
             </CardHeader>
             <CardContent>
               <div className="flex items-center space-x-2">
                 <Badge 
                   variant={health?.database === 'connected' ? 'default' : 'destructive'}
-                  className="text-xs"
+                  className={`text-[10px] font-black uppercase tracking-widest px-2 py-0 h-5 border-none ${health?.database === 'connected' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}
                 >
                   {healthLoading ? "..." : health?.database || "Unknown"}
                 </Badge>
               </div>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider mt-1">
                 {health?.database === 'connected' ? 'All systems operational' : 'Connection issue'}
               </p>
             </CardContent>
           </Card>
 
           {/* Connected Clients */}
-          <Card>
+          <Card className="bg-white/80 backdrop-blur-2xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden transition-all hover:shadow-2xl hover:shadow-blue-900/5 group">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Connections</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-xs font-bold uppercase tracking-widest text-slate-500">Active Nodes</CardTitle>
+              <Users className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-transform" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-3xl font-black text-slate-900 tracking-tighter">
                 {connectionsLoading ? "..." : connections?.connectedClients || 0}
               </div>
-              <p className="text-xs text-muted-foreground">
-                Currently connected users
+              <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider mt-1">
+                Parallel Connections
               </p>
             </CardContent>
           </Card>
 
           {/* Server Uptime */}
-          <Card>
+          <Card className="bg-white/80 backdrop-blur-2xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden transition-all hover:shadow-2xl hover:shadow-blue-900/5 group">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Server Uptime</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-xs font-bold uppercase tracking-widest text-slate-500">System Uptime</CardTitle>
+              <TrendingUp className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-transform" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-3xl font-black text-slate-900 tracking-tighter">
                 {healthLoading ? "..." : health?.uptime ? `${Math.floor(health.uptime / 3600)}h` : "0h"}
               </div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider mt-1">
                 {safeFormatDate(health?.timestamp, 'MMM dd, HH:mm', 'Unknown')}
               </p>
             </CardContent>
@@ -148,7 +151,11 @@ const Stats = () => {
             <CardHeader>
               <CardTitle>Profile Distribution</CardTitle>
               <CardDescription>
+<<<<<<< HEAD
                 Documents tagged by user profile
+=======
+                Documents tagged by institutional profile
+>>>>>>> origin/all-updates-unfazed-ai
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -161,12 +168,21 @@ const Stats = () => {
                     </div>
                   ))}
                 </div>
+<<<<<<< HEAD
               ) : stats?.profiles && stats.profiles.length > 0 ? (
                 <div className="space-y-3">
                   {stats.profiles.map((prof) => (
                     <div key={prof._id} className="flex items-center justify-between">
                       <span className="text-sm font-medium">{prof._id}</span>
                       <Badge variant="outline">{prof.count}</Badge>
+=======
+              ) : stats?.userProfiles && stats.userProfiles.length > 0 ? (
+                <div className="space-y-3">
+                  {stats.userProfiles.map((profile) => (
+                    <div key={profile._id} className="flex items-center justify-between">
+                      <span className="text-sm font-medium">{profile._id}</span>
+                      <Badge variant="outline">{profile.count}</Badge>
+>>>>>>> origin/all-updates-unfazed-ai
                     </div>
                   ))}
                 </div>

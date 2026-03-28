@@ -75,12 +75,13 @@ export const LatestNewsSection = ({ title = "Alerts" }: LatestNewsSectionProps) 
   };
 
   return (
-    <div className="bg-cyan-500 text-white py-2 shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+    <div className="bg-white/40 backdrop-blur-md text-slate-900 py-3 border-y border-slate-200 shadow-sm relative overflow-hidden">
+      <div className="absolute inset-0 bg-blue-50/30 -z-10" />
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <span className="font-bold uppercase text-lg">{title}</span>
+          <span className="font-black uppercase text-sm tracking-widest text-blue-600">{title}</span>
           {/* Separator Line */}
-          <div className="h-6 border-r border-white/50"></div>
+          <div className="h-6 border-r border-slate-300"></div>
           <div className="relative flex-1 group">
             {isLoading ? (
               <span className="block text-sm">Loading alerts...</span>
@@ -111,13 +112,13 @@ export const LatestNewsSection = ({ title = "Alerts" }: LatestNewsSectionProps) 
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          <button onClick={handlePrev} className="p-1 rounded-full hover:bg-white/20">
+          <button onClick={handlePrev} aria-label="Previous Alert" className="p-1 rounded-full hover:bg-slate-200 text-slate-400 hover:text-slate-900 transition-colors">
             <ChevronLeft className="h-5 w-5" />
           </button>
-          <button onClick={togglePause} className="p-1 rounded-full hover:bg-white/20">
+          <button onClick={togglePause} aria-label={isPaused ? "Play" : "Pause"} className="p-1 rounded-full hover:bg-slate-200 text-slate-400 hover:text-slate-900 transition-colors">
             {isPaused ? <Play className="h-5 w-5" /> : <Pause className="h-5 w-5" />}
           </button>
-          <button onClick={handleNext} className="p-1 rounded-full hover:bg-white/20">
+          <button onClick={handleNext} aria-label="Next Alert" className="p-1 rounded-full hover:bg-slate-200 text-slate-400 hover:text-slate-900 transition-colors">
             <ChevronRight className="h-5 w-5" />
           </button>
         </div>
