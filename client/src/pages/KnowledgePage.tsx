@@ -123,6 +123,7 @@ export default function KnowledgePage() {
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
+<<<<<<< HEAD
         <div className="mb-10">
           <div className="flex items-center gap-6 mb-6">
             <Link to={`/profiles/${profile}`}>
@@ -134,6 +135,33 @@ export default function KnowledgePage() {
             <h1 className="text-4xl font-black text-slate-900 tracking-tighter flex items-center gap-4 uppercase">
               <BookOpen className="h-9 w-9 text-blue-600" />
               KNOWLEDGE SHARED
+=======
+<<<<<<< HEAD
+        <div className="mb-10">
+          <div className="flex items-center gap-6 mb-6">
+            <Link to={`/departments/${department}`}>
+              <Button variant="outline" size="sm" className="bg-white/70 backdrop-blur-md border-slate-200 text-slate-900 hover:bg-white font-bold tracking-widest uppercase shadow-lg shadow-slate-200/50 rounded-xl h-10 px-5 active:scale-95 group">
+                <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+                Back to {departmentName}
+              </Button>
+            </Link>
+            <h1 className="text-4xl font-black text-slate-900 tracking-tighter flex items-center gap-3" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
+              <BookOpen className="h-9 w-9 text-blue-600" />
+              KNOWLEDGE SHARED
+=======
+        <div className="mb-8">
+          <div className="flex items-center gap-4 mb-4">
+            <Link to={`/profiles/${profile}`}>
+              <Button variant="outline" size="sm" className="flex items-center gap-2">
+                <ArrowLeft className="h-4 w-4" />
+                Back to {profileName}
+              </Button>
+            </Link>
+            <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+              <BookOpen className="h-8 w-8" />
+              Knowledge Shared - {profileName}
+>>>>>>> d37c9d43293122daf4f5c2819b40669957f939f7
+>>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
             </h1>
           </div>
           <p className="text-slate-500 font-medium tracking-wide">

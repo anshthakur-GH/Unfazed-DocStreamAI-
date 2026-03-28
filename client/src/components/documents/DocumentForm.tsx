@@ -188,8 +188,13 @@ export const DocumentForm = ({ mode }: DocumentFormProps) => {
             <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
             Back to Documents
           </Button>
+<<<<<<< HEAD
           <h1 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">
             {mode === 'create' ? 'Provision New Document' : 'Update Intelligence Node'}
+=======
+          <h1 className="text-4xl font-black text-slate-900 tracking-tighter uppercase" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
+            {mode === 'create' ? 'PROVISION NEW ASSET' : 'CALIBRATE ASSET'}
+>>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
           </h1>
           <p className="text-slate-500 mt-2 font-medium tracking-wide">
             {mode === 'create' 
@@ -271,7 +276,11 @@ export const DocumentForm = ({ mode }: DocumentFormProps) => {
                 Specify research domains and academic metadata.
               </CardDescription>
             </CardHeader>
+<<<<<<< HEAD
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+=======
+            <CardContent className="space-y-4">
+>>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
               <div className="space-y-2">
                 <Label htmlFor="research_domain">Research Domain</Label>
                 <Input id="research_domain" {...register("research_domain")} className="bg-slate-50/50 border-slate-200 focus:bg-white transition-all rounded-xl" />
@@ -302,6 +311,7 @@ export const DocumentForm = ({ mode }: DocumentFormProps) => {
                 Summarize the document and provide access links.
               </CardDescription>
             </CardHeader>
+<<<<<<< HEAD
             <CardContent className="space-y-6 mt-6">
               <div className="space-y-2">
                 <Label htmlFor="summary">Summary *</Label>
@@ -321,6 +331,8 @@ export const DocumentForm = ({ mode }: DocumentFormProps) => {
             <CardHeader className="border-t border-slate-50">
               <CardTitle className="text-lg font-bold text-slate-900">Tags, Keywords & Authors</CardTitle>
             </CardHeader>
+=======
+>>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
             <CardContent className="space-y-6">
               <div>
                 <Label>Authors</Label>
@@ -363,6 +375,37 @@ export const DocumentForm = ({ mode }: DocumentFormProps) => {
             </CardContent>
           </Card>
 
+<<<<<<< HEAD
+=======
+          <Card className="bg-white/80 backdrop-blur-3xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden">
+            <CardHeader className="border-b border-slate-50">
+              <CardTitle className="text-lg font-bold text-slate-900">Academic Details</CardTitle>
+            </CardHeader>
+            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="research_domain">Research Domain</Label>
+                <Input id="research_domain" {...register("research_domain")} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="course_code">Course Code</Label>
+                <Input id="course_code" {...register("course_code")} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="academic_year">Academic Year</Label>
+                <Input id="academic_year" {...register("academic_year")} placeholder="e.g., 2023-24" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="date_published">Date Published</Label>
+                <Input id="date_published" type="date" {...register("date_published")} />
+              </div>
+              <div className="space-y-2 col-span-2">
+                <Label htmlFor="funding_source">Funding Source</Label>
+                <Input id="funding_source" {...register("funding_source")} />
+              </div>
+            </CardContent>
+          </Card>
+
+>>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
           <div className="flex justify-end space-x-4 pt-6">
             <Button
               type="button"

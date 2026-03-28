@@ -50,6 +50,7 @@ const App = () => {
           <SearchProvider>
             <Toaster />
             <Sonner />
+<<<<<<< HEAD
             <BrowserRouter>
               <Routes>
                 <Route path="/login" element={<LoginWrapper />} /> {/* Login route with onLogin prop */}
@@ -100,6 +101,61 @@ const App = () => {
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
+=======
+            <ErrorBoundary>
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/login" element={<LoginWrapper />} />
+                  <Route path="/unauthorized" element={<Unauthorized />} />
+                  <Route path="/" element={<Navigate to="/login" replace />} />
+                  
+                  <Route element={<ProtectedRouteWrapper />}>
+                    {/* Protected Routes */}
+                    <Route path="/dashboard" element={<Index />} />
+                    <Route path="/documents/:id" element={
+                      <div className="min-h-screen bg-background">
+                        <Navbar />
+                        <DocumentDetail />
+                      </div>
+                    } />
+                    <Route path="/documents/:id/edit" element={
+                      <div className="min-h-screen bg-background">
+                        <Navbar />
+                        <DocumentForm mode="edit" />
+                      </div>
+                    } />
+                    <Route path="/documents/new" element={
+                      <div className="min-h-screen bg-background">
+                        <Navbar />
+                        <DocumentForm mode="create" />
+                      </div>
+                    } />
+                    <Route path="/profiles/:profile" element={
+                      <div className="min-h-screen bg-background">
+                        <Navbar />
+                        <ProfileView />
+                      </div>
+                    } />
+                    <Route path="/profiles/:profile/knowledge" element={
+                      <div className="min-h-screen bg-background">
+                        <Navbar />
+                        <KnowledgePage />
+                      </div>
+                    } />
+                    <Route path="/stats" element={
+                      <div className="min-h-screen bg-background">
+                        <Navbar />
+                        <Stats />
+                      </div>
+                    } />
+                  </Route>
+                  
+                  {/* Catch-all */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </BrowserRouter>
+            </ErrorBoundary>
+>>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
         </SearchProvider>
       </AuthProvider>
       </TooltipProvider>

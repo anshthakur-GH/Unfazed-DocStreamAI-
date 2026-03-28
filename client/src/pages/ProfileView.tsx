@@ -20,19 +20,13 @@ export default function ProfileView() {
   const profileName = profile.charAt(0).toUpperCase() + profile.slice(1);
   const { data: stats, isLoading } = useDataStats();
 
-  // Update search term when debounced value changes (real-time search)
   useEffect(() => {
     setSearchTerm(debouncedSearchTerm);
   }, [debouncedSearchTerm, setSearchTerm]);
 
-  // Sync local input with global search term
   useEffect(() => {
     setCurrentSearchInput(searchTerm);
   }, [searchTerm]);
-
-  const handleSearch = () => {
-    setSearchTerm(currentSearchInput);
-  };
 
   const clearSearch = () => {
     setCurrentSearchInput('');
@@ -41,53 +35,66 @@ export default function ProfileView() {
 
   return (
     <div className="min-h-screen bg-background">
-      <LatestNewsSection title="Latest Alerts" />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <LatestNewsSection title="System Status" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
+<<<<<<< HEAD
         <div className="mb-8">
           <h1 className="text-4xl font-black text-slate-900 mb-2 tracking-tighter uppercase">
             {profileName} Node
           </h1>
           <p className="text-slate-500 font-medium tracking-wide">
             {isLoading ? "Synchronizing node statistics..." : `${stats?.total || 0} total institutional documents available across the Unfazed AI stream.`}
+=======
+        <div className="mb-12">
+          <h1 className="text-6xl font-black text-slate-900 mb-3 tracking-tighter uppercase leading-none">
+            {profileName} <span className="text-blue-600">NODE</span>
+          </h1>
+          <p className="text-slate-500 font-medium tracking-widest uppercase text-xs">
+            {isLoading ? "Synchronizing institutional assets..." : `Access authenticated for ${profileName} profile.`}
+>>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
           </p>
         </div>
 
-        {/* Search Input and Knowledge Button */}
-        <div className="flex items-center space-x-4 mb-8">
-          <div className="flex w-full max-w-md items-center space-x-2 relative group">
-            <div className="absolute inset-0 bg-blue-600/5 blur-2xl rounded-xl opacity-0 group-focus-within:opacity-100 transition-opacity -z-10" />
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
+        {/* Action Bar */}
+        <div className="flex flex-col md:flex-row items-center gap-6 mb-16">
+          <div className="flex w-full max-w-xl items-center relative group">
+            <div className="absolute inset-0 bg-blue-600/5 blur-3xl rounded-3xl opacity-0 group-focus-within:opacity-100 transition-opacity -z-10" />
+            <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
             <Input 
               type="text" 
+<<<<<<< HEAD
               placeholder={`Query ${profileName.toLowerCase()} node...`}
+=======
+              placeholder="Query institutional node..."
+>>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
               value={currentSearchInput}
               onChange={(e) => setCurrentSearchInput(e.target.value)}
-              className="pl-12 bg-white/80 backdrop-blur-xl border-slate-200 text-slate-900 placeholder:text-slate-400 focus:ring-blue-500/50 shadow-lg shadow-blue-900/5 rounded-xl h-12 text-base"
+              className="pl-14 bg-white/70 backdrop-blur-3xl border-slate-200 text-slate-900 placeholder:text-slate-400 focus:ring-blue-500/50 shadow-2xl shadow-blue-900/5 rounded-2xl h-14 text-lg font-medium transition-all"
             />
             {currentSearchInput && (
               <Button
                 variant="ghost"
-                size="sm"
+                size="icon"
                 onClick={clearSearch}
-                className="absolute right-3 h-8 w-8 p-0 hover:bg-slate-100 text-slate-400"
+                className="absolute right-4 h-8 w-8 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-lg"
               >
                 <X className="h-4 w-4" />
               </Button>
             )}
           </div>
           
-          <Link to={`/profiles/${profile}/knowledge`}>
+          <Link to={`/profiles/${profile}/knowledge`} className="w-full md:w-auto">
             <Button 
-              variant="outline"
-              className="bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-600/20 rounded-xl h-12 px-6 flex items-center space-x-2 border-none font-bold tracking-widest uppercase text-xs"
+              className="w-full h-14 bg-slate-900 hover:bg-slate-800 text-white shadow-xl shadow-slate-900/20 rounded-2xl px-8 flex items-center justify-center space-x-3 border-none font-black tracking-widest uppercase text-xs transition-all active:scale-95"
             >
               <BookOpen className="h-4 w-4" />
-              <span>Departmental Wisdom</span>
+              <span>Collective Wisdom</span>
             </Button>
           </Link>
         </div>
 
+<<<<<<< HEAD
         {/* Documents categorized by type (Universal Visibility - No userProfileFilter) */}
         <div className="space-y-12">
           {/* Lecture Notes Section */}
@@ -98,44 +105,83 @@ export default function ProfileView() {
               </div>
               <div>
                 <h2 className="text-xl font-black text-slate-900 tracking-tighter uppercase">Lecture Notes</h2>
+=======
+        {/* Categorized Streams */}
+        <div className="space-y-24">
+          <section>
+            <div className="flex items-center justify-between mb-8 border-b-2 border-slate-100 pb-6">
+              <div className="flex items-center space-x-4">
+                <div className="p-3 bg-blue-600 rounded-2xl shadow-lg shadow-blue-600/20">
+                  <BookOpen className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">Academic Intelligence</h2>
+                  <p className="text-sm text-slate-500 font-medium">Lecture notes and course documentation.</p>
+                </div>
+>>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
               </div>
             </div>
             <DocumentTable 
+              userProfileFilter={profileName}
               documentTypeFilter="Lecture Notes" 
               showControls={false} 
               hideHeading={true} 
             />
           </section>
 
-          {/* Research Papers Section */}
           <section>
+<<<<<<< HEAD
             <div className="flex items-center space-x-3 mb-6 border-b border-blue-500/10 pb-4">
               <div className="p-2 bg-blue-50 rounded-lg">
                 <FileText className="h-5 w-5 text-blue-600" />
               </div>
               <div>
                 <h2 className="text-xl font-black text-slate-900 tracking-tighter uppercase">Research Papers</h2>
+=======
+            <div className="flex items-center justify-between mb-8 border-b-2 border-slate-100 pb-6">
+              <div className="flex items-center space-x-4">
+                <div className="p-3 bg-blue-600 rounded-2xl shadow-lg shadow-blue-600/20">
+                  <FileText className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">Research Papers</h2>
+                  <p className="text-sm text-slate-500 font-medium">Published papers and specialized research data.</p>
+                </div>
+>>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
               </div>
             </div>
             <DocumentTable 
+              userProfileFilter={profileName}
               documentTypeFilter="Research Paper" 
               showControls={false} 
               hideHeading={true} 
             />
           </section>
 
-          {/* Other Documents Section */}
           <section>
+<<<<<<< HEAD
             <div className="flex items-center space-x-3 mb-6 border-b border-blue-500/10 pb-4">
               <div className="p-2 bg-blue-50 rounded-lg">
                 <Layout className="h-5 w-5 text-blue-600" />
               </div>
               <div>
                 <h2 className="text-xl font-black text-slate-900 tracking-tighter uppercase">Other Documents</h2>
+=======
+            <div className="flex items-center justify-between mb-8 border-b-2 border-slate-100 pb-6">
+              <div className="flex items-center space-x-4">
+                <div className="p-3 bg-blue-600 rounded-2xl shadow-lg shadow-blue-600/20">
+                  <Layout className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">Other Assets</h2>
+                  <p className="text-sm text-slate-500 font-medium">Miscellaneous institutional documentation.</p>
+                </div>
+>>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
               </div>
             </div>
             <DocumentTable 
-              documentTypeFilter="Policy Document" 
+              userProfileFilter={profileName}
+              documentTypeFilter="Other" 
               showControls={false} 
               hideHeading={true} 
             />
