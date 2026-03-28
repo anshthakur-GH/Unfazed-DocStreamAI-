@@ -18,25 +18,6 @@ interface KnowledgeEntry {
   formattedDate?: string;
 }
 
-const departmentDisplayNames: { [key: string]: string } = {
-  engineering: "Engineering",
-  finance: "Finance",
-  hr: "Human Resources",
-  operations: "Operations",
-  "legal-department": "Legal",
-  procurement: "Procurement",
-  "excecutive-director": "Executive Director",
-  admin: "Admin",
-  maintenance: "Maintenance"
-};
-
-function toTitleCase(value: string) {
-  return value
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-}
-
 export default function KnowledgePage() {
   const { profile } = useParams();
   const [knowledgeEntries, setKnowledgeEntries] = useState<KnowledgeEntry[]>([]);
@@ -99,10 +80,6 @@ export default function KnowledgePage() {
     setCurrentSearchInput(searchTerm);
   }, [searchTerm]);
 
-  const handleSearch = () => {
-    setSearchTerm(currentSearchInput);
-  };
-
   const handleRefresh = () => {
     fetchKnowledge(true, searchTerm);
   };
@@ -116,25 +93,23 @@ export default function KnowledgePage() {
     return (
       <div className="min-h-screen bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="mb-8">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="h-8 w-8 bg-muted rounded animate-pulse"></div>
-              <div className="h-8 bg-muted rounded w-64 animate-pulse"></div>
+          <div className="mb-10">
+            <div className="flex items-center gap-6 mb-6">
+              <div className="h-10 w-32 bg-slate-100 rounded-xl animate-pulse"></div>
+              <div className="h-10 w-64 bg-slate-100 rounded-xl animate-pulse"></div>
             </div>
-            <div className="h-4 bg-muted rounded w-48 animate-pulse"></div>
+            <div className="h-4 w-48 bg-slate-100 rounded animate-pulse mb-10"></div>
           </div>
           
           <div className="space-y-6">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="bg-muted rounded-lg p-6">
-                  <div className="h-6 bg-muted-foreground/20 rounded w-3/4 mb-3"></div>
-                  <div className="h-4 bg-muted-foreground/20 rounded w-1/2 mb-4"></div>
-                  <div className="space-y-2">
-                    <div className="h-4 bg-muted-foreground/20 rounded w-full"></div>
-                    <div className="h-4 bg-muted-foreground/20 rounded w-5/6"></div>
-                    <div className="h-4 bg-muted-foreground/20 rounded w-4/6"></div>
-                  </div>
+              <div key={i} className="bg-white/50 backdrop-blur-xl border border-slate-200 rounded-2xl p-8 animate-pulse">
+                <div className="h-6 bg-slate-100 rounded w-3/4 mb-4"></div>
+                <div className="h-4 bg-slate-100 rounded w-1/2 mb-6"></div>
+                <div className="space-y-2">
+                  <div className="h-4 bg-slate-100 rounded w-full"></div>
+                  <div className="h-4 bg-slate-100 rounded w-5/6"></div>
+                  <div className="h-4 bg-slate-100 rounded w-4/6"></div>
                 </div>
               </div>
             ))}
@@ -148,31 +123,17 @@ export default function KnowledgePage() {
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-<<<<<<< HEAD
-        <div className="mb-8">
-          <div className="flex items-center gap-4 mb-4">
-            <Link to={`/profiles/${profile}`}>
-              <Button variant="outline" size="sm" className="flex items-center gap-2">
-                <ArrowLeft className="h-4 w-4" />
-                Back to {profileName}
-              </Button>
-            </Link>
-            <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-              <BookOpen className="h-8 w-8" />
-              Knowledge Shared - {profileName}
-=======
         <div className="mb-10">
           <div className="flex items-center gap-6 mb-6">
             <Link to={`/profiles/${profile}`}>
-              <Button variant="outline" size="sm" className="bg-white/70 backdrop-blur-md border-slate-200 text-slate-900 hover:bg-white font-bold tracking-widest uppercase shadow-lg shadow-slate-200/50 rounded-xl h-10 px-5 active:scale-95 group">
+              <Button variant="outline" size="sm" className="bg-white/70 backdrop-blur-md border border-slate-200 text-slate-900 hover:bg-white font-bold tracking-widest uppercase shadow-lg shadow-slate-200/50 rounded-xl h-10 px-5 active:scale-95 group transition-all">
                 <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
                 Back to {profileName}
               </Button>
             </Link>
-            <h1 className="text-4xl font-black text-slate-900 tracking-tighter flex items-center gap-3">
+            <h1 className="text-4xl font-black text-slate-900 tracking-tighter flex items-center gap-4 uppercase">
               <BookOpen className="h-9 w-9 text-blue-600" />
               KNOWLEDGE SHARED
->>>>>>> origin/all-updates-unfazed-ai
             </h1>
           </div>
           <p className="text-slate-500 font-medium tracking-wide">
@@ -181,7 +142,7 @@ export default function KnowledgePage() {
         </div>
 
         {/* Search and Controls */}
-        <div className="flex items-center justify-between mb-10">
+        <div className="flex items-center justify-between mb-10 gap-4">
           <div className="flex items-center space-x-2 relative group w-full max-w-md">
             <div className="absolute inset-0 bg-blue-600/5 blur-2xl rounded-xl opacity-0 group-focus-within:opacity-100 transition-opacity -z-10" />
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
@@ -208,7 +169,7 @@ export default function KnowledgePage() {
             variant="outline"
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className="bg-white/70 backdrop-blur-md border-slate-200 text-slate-900 hover:bg-white font-bold tracking-widest uppercase shadow-lg shadow-slate-200/50 rounded-xl h-11 px-6 active:scale-95"
+            className="bg-white/70 backdrop-blur-md border border-slate-200 text-slate-900 hover:bg-white font-bold tracking-widest uppercase shadow-lg shadow-slate-200/50 rounded-xl h-11 px-6 active:scale-95 transition-all"
           >
             <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
             Sync Knowledge
@@ -217,42 +178,45 @@ export default function KnowledgePage() {
 
         {/* Knowledge Entries */}
         {knowledgeEntries.length === 0 ? (
-          <div className="text-center py-16">
-            <BookOpen className="h-16 w-16 mx-auto mb-4 text-muted-foreground/50" />
-            <h3 className="text-xl font-semibold mb-2">
-              {searchTerm ? 'No matching knowledge found' : 'No knowledge entries yet'}
+          <div className="bg-white/40 backdrop-blur-3xl rounded-3xl border border-dashed border-slate-200 p-20 text-center">
+            <BookOpen className="h-16 w-16 mx-auto mb-6 text-slate-300 opacity-40 shadow-sm" />
+            <h3 className="text-2xl font-black text-slate-900 tracking-tighter uppercase mb-2">
+              {searchTerm ? 'No matching intelligence discovered' : 'No knowledge records found'}
             </h3>
-            <p className="text-muted-foreground mb-6">
+            <p className="text-slate-500 font-medium tracking-wide mb-8">
               {searchTerm 
-                ? `No knowledge entries match "${searchTerm}" for the ${profileName} profile.`
-                : `Be the first to share knowledge for the ${profileName} profile!`
+                ? `The query "${searchTerm}" returned no results within the ${profileName} node.`
+                : `The departmental wisdom library is currently awaiting its first contribution for the ${profileName} profile.`
               }
             </p>
             {searchTerm && (
-              <Button onClick={clearSearch} variant="outline">
-                Clear search and view all
+              <Button onClick={clearSearch} variant="outline" className="rounded-xl font-bold tracking-widest uppercase text-xs h-10 px-6 shadow-md shadow-slate-200/50">
+                Clear query and view all
               </Button>
             )}
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-8">
             {searchTerm && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                <p className="text-blue-800">
-                  Showing results for "<strong>{searchTerm}</strong>" for {profileName}
+              <div className="bg-blue-50/50 backdrop-blur-md border border-blue-100 rounded-2xl p-6 mb-8 text-center">
+                <p className="text-blue-900 font-bold tracking-tight">
+                  Displaying results for <span className="text-blue-600 uppercase">"{searchTerm}"</span> within {profileName} Node
                 </p>
               </div>
             )}
             
-            {knowledgeEntries.map((knowledge) => (
-              <KnowledgeCard key={knowledge._id} knowledge={knowledge} />
-            ))}
+            <div className="space-y-6">
+              {knowledgeEntries.map((knowledge) => (
+                <KnowledgeCard key={knowledge._id} knowledge={knowledge} />
+              ))}
+            </div>
             
             {knowledgeEntries.length >= 50 && (
-              <div className="text-center pt-6">
-                <p className="text-sm text-muted-foreground">
-                  Showing latest 50 entries. Use search to find specific knowledge.
+              <div className="text-center pt-10">
+                <p className="text-xs font-black text-slate-400 uppercase tracking-widest">
+                  End of stream (Latest 50 entries displayed)
                 </p>
+                <p className="text-slate-400 font-medium tracking-wide mt-1">Refine your query to explore deeper knowledge nodes.</p>
               </div>
             )}
           </div>

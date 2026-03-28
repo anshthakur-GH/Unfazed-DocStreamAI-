@@ -27,8 +27,8 @@ import { useDocumentsList, useDeleteDocument } from "@/hooks/useDocuments";
 import { useToast } from "@/hooks/use-toast";
 import { useSearch } from "@/contexts/SearchContext";
 import { safeFormatDate } from "@/lib/utils";
-import { useQueryClient } from "@tanstack/react-query"; // Import useQueryClient
-import { documentKeys } from "@/hooks/useDocuments"; // Import documentKeys
+import { useQueryClient } from "@tanstack/react-query";
+import { documentKeys } from "@/hooks/useDocuments";
 
 const documentTypeColors = {
   "Research Paper": "bg-blue-100 text-blue-800",
@@ -45,10 +45,7 @@ const urgencyLevelColors = {
 
 interface DocumentTableProps {
   userProfileFilter?: string;
-<<<<<<< HEAD
   documentTypeFilter?: string;
-=======
->>>>>>> origin/all-updates-unfazed-ai
   showControls?: boolean;
   sortOrderProp?: 'asc' | 'desc';
   onSortChange?: (value: 'asc' | 'desc') => void;
@@ -57,10 +54,7 @@ interface DocumentTableProps {
 
 export const DocumentTable = ({ 
   userProfileFilter,
-<<<<<<< HEAD
   documentTypeFilter,
-=======
->>>>>>> origin/all-updates-unfazed-ai
   showControls = true,
   sortOrderProp,
   onSortChange,
@@ -78,17 +72,15 @@ export const DocumentTable = ({
   const queryClient = useQueryClient();
   const [isSpinning, setIsSpinning] = useState(false);
 
+  // Note: userProfileFilter is intentionally ignored to support Universal Visibility
   const queryParams = {
     limit: 20,
     skip: currentPage * 20,
     sort: sortOrder,
     search: searchTerm || undefined,
     urgency_sort: urgencySort,
-    user_profile: userProfileFilter,
-<<<<<<< HEAD
+    user_profile: undefined, 
     document_type: documentTypeFilter,
-=======
->>>>>>> origin/all-updates-unfazed-ai
   };
 
   const { data, isLoading, error, refetch } = useDocumentsList(queryParams);
@@ -117,7 +109,6 @@ export const DocumentTable = ({
     else setSortOrderState(value);
   };
 
-<<<<<<< HEAD
   if (error) {
     return (
       <div className="bg-destructive/10 border border-destructive rounded-lg p-6 text-center">
@@ -128,24 +119,27 @@ export const DocumentTable = ({
           <RefreshCw className="h-4 w-4 mr-2" />
           Try Again
         </Button>
-=======
+      </div>
+    );
+  }
+
   if (isLoading) {
     return (
       <div className="space-y-6">
         {!hideHeading && (
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-semibold text-foreground">
-                {userProfileFilter ? `${userProfileFilter} Documents` : "Latest documents"}
+              <h1 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">
+                Synchronizing Nodes
               </h1>
-              <p className="text-muted-foreground">Loading documents...</p>
+              <p className="text-slate-500 font-medium tracking-wide">Retrieving institutional documentation...</p>
             </div>
           </div>
         )}
-        <div className="bg-card rounded-lg border shadow-sm p-8 text-center">
-          <RefreshCw className="h-8 w-8 text-muted-foreground mx-auto mb-4 animate-spin" />
+        <div className="bg-white/80 backdrop-blur-3xl rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/50 p-12 text-center">
+          <RefreshCw className="h-8 w-8 text-blue-600 mx-auto mb-4 animate-spin" />
+          <p className="text-slate-400 font-bold tracking-widest uppercase text-xs">Accessing Stream...</p>
         </div>
->>>>>>> origin/all-updates-unfazed-ai
       </div>
     );
   }
@@ -153,18 +147,16 @@ export const DocumentTable = ({
   const documents = data?.data || [];
   const pagination = data?.pagination;
 
-  if (!isLoading && documents.length === 0) {
+  if (documents.length === 0) {
     return (
-      <div className="bg-card rounded-lg border border-dashed border-cyan-400 p-12 text-center">
-        <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4 opacity-20" />
-        <h3 className="text-xl font-semibold text-foreground">No documents found</h3>
-        <p className="text-muted-foreground mt-2 max-w-sm mx-auto">
-          {userProfileFilter 
-            ? `There are currently no documents assigned to the ${userProfileFilter} profile.`
-            : "The document library is currently empty."}
+      <div className="bg-white/40 backdrop-blur-xl rounded-2xl border border-dashed border-slate-200 p-16 text-center">
+        <FileText className="h-12 w-12 text-slate-300 mx-auto mb-4 opacity-30" />
+        <h3 className="text-xl font-black text-slate-900 tracking-tighter uppercase">No documents found</h3>
+        <p className="text-slate-500 font-medium tracking-wide mt-2 max-w-sm mx-auto">
+          The institutional document library is currently empty or does not match your query.
         </p>
-        <Button size="sm" asChild className="mt-6 bg-cyan-500 hover:bg-cyan-600 text-white">
-          <Link to="/documents/new"><Plus className="h-4 w-4 mr-2" />Add First Document</Link>
+        <Button asChild className="mt-8 bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/20 rounded-xl h-11 px-6">
+          <Link to="/documents/new"><Plus className="h-4 w-4 mr-2" />Initialize First Node</Link>
         </Button>
       </div>
     );
@@ -175,31 +167,19 @@ export const DocumentTable = ({
       {!hideHeading && (
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-semibold text-foreground">
-              {userProfileFilter ? `${userProfileFilter} Documents` : "Latest documents"}
+            <h1 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">
+              Institutional Documents
             </h1>
-            <p className="text-muted-foreground">{pagination?.total || 0} documents found</p>
+            <p className="text-slate-500 font-medium tracking-wide">{pagination?.total || 0} active nodes discovered</p>
           </div>
           <div className="flex items-center space-x-3">
-<<<<<<< HEAD
-            <Button size="sm" onClick={handleRefresh} disabled={isLoading || isSpinning}
-              className={`bg-green-500 hover:bg-green-600 text-white border border-cyan-500 ${isLoading || isSpinning ? 'opacity-70 cursor-not-allowed' : ''}`}>
-              <RefreshCw className={`h-4 w-4 mr-2 ${isSpinning ? 'animate-spin' : ''}`} />
-              Refresh
-            </Button>
-            <Button size="sm" asChild className="bg-cyan-500 hover:bg-cyan-600 text-white border border-cyan-500">
-               <Link to="/documents/new"><Plus className="h-4 w-4 mr-2" />Add Document</Link>
-            </Button>
-=======
             <Button
               size="sm"
               onClick={handleRefresh}
               disabled={isLoading || isSpinning}
-              className={`bg-green-500 hover:bg-green-600 text-white border border-cyan-500 ${isLoading || isSpinning ? 'opacity-70 cursor-not-allowed' : ''}`}
+              className={`bg-white/70 backdrop-blur-md border border-slate-200 text-slate-900 hover:bg-white font-bold tracking-widest uppercase shadow-lg shadow-slate-200/50 rounded-xl h-10 px-5 transition-all active:scale-95 ${isLoading || isSpinning ? 'opacity-70 cursor-not-allowed' : ''}`}
             >
-              <RefreshCw
-                className={`h-4 w-4 mr-2 ${isSpinning ? 'animate-spin' : ''}`}
-              />
+              <RefreshCw className={`h-4 w-4 mr-2 ${isSpinning ? 'animate-spin' : ''}`} />
               Refresh
             </Button>
 
@@ -209,34 +189,29 @@ export const DocumentTable = ({
                 const url = 'https://n8n.unfazed-ai.online/form-test/723abf57-4dcb-4dbe-9e6d-dffac7ed5442';
                 window.open(url, '_blank');
               }}
-              className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/20 transition-all"
+              className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/20 rounded-xl h-10 px-6 font-bold tracking-widest uppercase active:scale-95 transition-all"
             >
               <Plus className="h-4 w-4 mr-2" />
-              Publish Document
+              Publish
             </Button>
-            
-            <Button size="sm" asChild className="bg-cyan-500 hover:bg-cyan-600 text-white border border-cyan-500">
-               <Link to="/documents/new"><Plus className="h-4 w-4 mr-2" />Add Document</Link>
-            </Button>
->>>>>>> origin/all-updates-unfazed-ai
           </div>
         </div>
       )}
 
       {showControls && (
         <div className="flex flex-col sm:flex-row gap-4">
-          <div className="w-full sm:w-32">
+          <div className="w-full sm:w-48">
             <Select value={sortOrder} onValueChange={(value: 'asc' | 'desc') => handleSortOrder(value)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger className="bg-white/80 border-slate-200 rounded-xl h-11"><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="desc">Newest First</SelectItem>
                 <SelectItem value="asc">Oldest First</SelectItem>
               </SelectContent>
             </Select>
           </div>
-          <div className="w-full sm:w-40">
+          <div className="w-full sm:w-56">
             <Select value={urgencySort} onValueChange={(value) => setUrgencySort(value === "all" ? undefined : value)}>
-              <SelectTrigger><SelectValue placeholder="Sort by Urgency" /></SelectTrigger>
+              <SelectTrigger className="bg-white/80 border-slate-200 rounded-xl h-11"><SelectValue placeholder="Sort by Urgency" /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Urgency Levels</SelectItem>
                 <SelectItem value="high_to_low">High to Low</SelectItem>
@@ -247,36 +222,34 @@ export const DocumentTable = ({
         </div>
       )}
 
-<<<<<<< HEAD
-      <div className="bg-card rounded-lg border border-cyan-400 shadow-sm overflow-hidden">
-=======
-      <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/50 overflow-hidden">
->>>>>>> origin/all-updates-unfazed-ai
+      <div className="bg-white/80 backdrop-blur-3xl rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/50 overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow className="bg-muted border-border">
-              <TableHead className="font-semibold text-foreground">Document Title</TableHead>
-              <TableHead className="font-semibold text-foreground">Type</TableHead>
-              <TableHead className="font-semibold text-foreground">Authors</TableHead>
-              <TableHead className="font-semibold text-foreground">Domain</TableHead>
-              <TableHead className="font-semibold text-foreground">Urgency</TableHead>
-              <TableHead className="font-semibold text-foreground">Published</TableHead>
-              <TableHead className="font-semibold text-foreground">Actions</TableHead>
+            <TableRow className="bg-slate-50/50 border-b border-slate-100">
+              <TableHead className="font-black text-slate-400 uppercase tracking-widest text-[10px]">Document Title</TableHead>
+              <TableHead className="font-black text-slate-400 uppercase tracking-widest text-[10px]">Type</TableHead>
+              <TableHead className="font-black text-slate-400 uppercase tracking-widest text-[10px]">Authors</TableHead>
+              <TableHead className="font-black text-slate-400 uppercase tracking-widest text-[10px]">Domain</TableHead>
+              <TableHead className="font-black text-slate-400 uppercase tracking-widest text-[10px]">Urgency</TableHead>
+              <TableHead className="font-black text-slate-400 uppercase tracking-widest text-[10px]">Published</TableHead>
+              <TableHead className="font-black text-slate-400 uppercase tracking-widest text-[10px] text-right pr-6">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {documents.map((doc) => (
-              <TableRow key={doc._id} className="hover:bg-muted/50 transition-colors cursor-pointer border-border">
-                <TableCell className="max-w-md">
-                  <Link to={`/documents/${doc._id}`} className="block hover:text-primary transition-colors">
-                    <div className="flex items-start space-x-3">
-                      <FileText className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                      <div>
-                        <div className="font-medium text-foreground truncate max-w-[300px]">{doc.document_title}</div>
-                        <div className="text-xs text-muted-foreground line-clamp-2 mt-1">{doc.summary}</div>
-                        <div className="flex flex-wrap gap-1 mt-2">
+              <TableRow key={doc._id} className="hover:bg-blue-50/30 transition-colors cursor-pointer border-b border-slate-50 group">
+                <TableCell className="max-w-md py-4">
+                  <Link to={`/documents/${doc._id}`} className="block">
+                    <div className="flex items-start space-x-4">
+                      <div className="p-2 bg-blue-50 rounded-lg text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                        <FileText className="h-5 w-5" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-bold text-slate-900 truncate max-w-[300px] text-base tracking-tight">{doc.document_title}</div>
+                        <div className="text-xs text-slate-500 line-clamp-2 mt-1 font-medium">{doc.summary}</div>
+                        <div className="flex flex-wrap gap-1 mt-3">
                           {doc.subject_tags?.map((tag, i) => (
-                            <Badge key={i} variant="outline" className="text-[10px] py-0 px-1 bg-cyan-50">{tag}</Badge>
+                            <Badge key={i} variant="outline" className="text-[10px] uppercase font-black tracking-widest py-0.5 px-2 bg-white border-slate-200 text-slate-500">{tag}</Badge>
                           ))}
                         </div>
                       </div>
@@ -284,47 +257,39 @@ export const DocumentTable = ({
                   </Link>
                 </TableCell>
                 <TableCell>
-<<<<<<< HEAD
-                  <Badge className={documentTypeColors[doc.document_type] || "bg-gray-100 text-gray-800"}>{doc.document_type}</Badge>
-=======
-                  <Badge className={documentTypeColors[doc.document_type as keyof typeof documentTypeColors] || "bg-gray-100 text-gray-800"}>
+                  <Badge className={`${documentTypeColors[doc.document_type as keyof typeof documentTypeColors] || "bg-gray-100 text-gray-800"} rounded-lg font-bold text-[10px] uppercase tracking-wider px-2 py-0.5 shadow-sm`}>
                     {doc.document_type}
                   </Badge>
->>>>>>> origin/all-updates-unfazed-ai
                 </TableCell>
-                <TableCell className="text-sm italic text-muted-foreground">{doc.authors?.length > 0 ? doc.authors.join(", ") : "Unknown"}</TableCell>
-                <TableCell className="text-sm">{doc.research_domain || "N/A"}</TableCell>
+                <TableCell className="text-sm font-medium text-slate-500 italic truncate max-w-[120px]">{doc.authors?.length > 0 ? doc.authors.join(", ") : "Unknown"}</TableCell>
+                <TableCell className="text-sm font-bold text-slate-600">{doc.research_domain || "N/A"}</TableCell>
                 <TableCell>
-<<<<<<< HEAD
-                  <Badge className={urgencyLevelColors[doc.urgency_level] || "bg-gray-100 text-gray-800"}>{doc.urgency_level}</Badge>
-=======
-                  <Badge className={urgencyLevelColors[doc.urgency_level as keyof typeof urgencyLevelColors] || "bg-gray-100 text-gray-800"}>
+                  <Badge className={`${urgencyLevelColors[doc.urgency_level as keyof typeof urgencyLevelColors] || "bg-gray-100 text-gray-800"} rounded-lg font-bold text-[10px] uppercase tracking-wider px-2 py-0.5 shadow-sm`}>
                     {doc.urgency_level || "N/A"}
                   </Badge>
->>>>>>> origin/all-updates-unfazed-ai
                 </TableCell>
                 <TableCell>
-                  <div className="flex items-center space-x-2">
-                    <Calendar className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm">{doc.date_published ? safeFormatDate(doc.date_published, 'MMM dd, yyyy') : "N/A"}</span>
+                  <div className="flex items-center space-x-2 text-slate-500 font-medium">
+                    <Calendar className="h-4 w-4 opacity-50" />
+                    <span className="text-xs">{doc.date_published ? safeFormatDate(doc.date_published, 'MMM dd, yyyy') : "N/A"}</span>
                   </div>
                 </TableCell>
-                <TableCell>
-                  <div className="flex items-center space-x-2">
+                <TableCell className="text-right pr-6">
+                  <div className="flex items-center justify-end space-x-1 opacity-10 group-hover:opacity-100 transition-opacity">
                     {(doc.webViewLink || doc.google_drive_link) && (
-                      <Button variant="ghost" size="sm" asChild>
+                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg" asChild>
                         <a href={doc.webViewLink || doc.google_drive_link || "#"} target="_blank" rel="noopener noreferrer">
                           <ExternalLink className="h-4 w-4" />
                         </a>
                       </Button>
                     )}
-                    <Button variant="ghost" size="sm" asChild>
+                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg" asChild>
                       <Link to={`/documents/${doc._id}`}><Eye className="h-4 w-4" /></Link>
                     </Button>
-                    <Button variant="ghost" size="sm" asChild>
+                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg" asChild>
                       <Link to={`/documents/${doc._id}/edit`}><Edit className="h-4 w-4" /></Link>
                     </Button>
-                    <Button variant="ghost" size="sm" onClick={() => handleDelete(doc._id, doc.document_title)} disabled={deleteDocumentMutation.isPending}>
+                    <Button variant="ghost" size="sm" onClick={() => handleDelete(doc._id, doc.document_title)} disabled={deleteDocumentMutation.isPending} className="h-8 w-8 p-0 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg">
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -335,14 +300,14 @@ export const DocumentTable = ({
         </Table>
       </div>
 
-      {pagination && pagination.total > 0 && (
-        <div className="flex items-center justify-between">
-          <div className="text-sm text-muted-foreground">
+      {pagination && pagination.total > 20 && (
+        <div className="flex items-center justify-between pt-4">
+          <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">
             Showing {currentPage * 20 + 1} to {Math.min((currentPage + 1) * 20, pagination.total)} of {pagination.total} documents
           </div>
           <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm" onClick={() => setCurrentPage(Math.max(0, currentPage - 1))} disabled={currentPage === 0}>Previous</Button>
-            <Button variant="outline" size="sm" onClick={() => setCurrentPage(currentPage + 1)} disabled={!pagination.hasMore}>Next</Button>
+            <Button variant="outline" size="sm" onClick={() => setCurrentPage(Math.max(0, currentPage - 1))} disabled={currentPage === 0} className="rounded-xl font-bold tracking-widest uppercase text-[10px] h-9 px-4 shadow-sm border-slate-200">Previous</Button>
+            <Button variant="outline" size="sm" onClick={() => setCurrentPage(currentPage + 1)} disabled={!pagination.hasMore} className="rounded-xl font-bold tracking-widest uppercase text-[10px] h-9 px-4 shadow-sm border-slate-200">Next</Button>
           </div>
         </div>
       )}

@@ -2,18 +2,18 @@ import { useParams, Navigate, Link } from "react-router-dom";
 import { useDataStats } from "@/hooks/useDocuments";
 import { DocumentTable } from "@/components/documents/DocumentTable";
 import { LatestNewsSection } from "@/components/layout/LatestNewsSection";
-import { Input } from "@/components/ui/input"; // Import Input component
-import { Button } from "@/components/ui/button"; // Import Button component
-import { Search, BookOpen, X, FileText, Layout } from 'lucide-react'; // Import Search, BookOpen, X, FileText, and Layout icons
-import { useSearch } from "@/contexts/SearchContext"; // Import useSearch hook
-import { useDebounce } from "@/hooks/useDebounce"; // Import useDebounce hook
-import { useState, useEffect } from "react"; // Import useState and useEffect
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Search, BookOpen, X, FileText, Layout } from 'lucide-react';
+import { useSearch } from "@/contexts/SearchContext";
+import { useDebounce } from "@/hooks/useDebounce";
+import { useState, useEffect } from "react";
 
 export default function ProfileView() {
   const { profile } = useParams();
-  const { searchTerm, setSearchTerm } = useSearch(); // Use the search context
-  const [currentSearchInput, setCurrentSearchInput] = useState(searchTerm); // Local state for input
-  const debouncedSearchTerm = useDebounce(currentSearchInput, 300); // Debounce search input
+  const { searchTerm, setSearchTerm } = useSearch();
+  const [currentSearchInput, setCurrentSearchInput] = useState(searchTerm);
+  const debouncedSearchTerm = useDebounce(currentSearchInput, 300);
   
   if (!profile) return <Navigate to="/404" replace />;
 
@@ -41,16 +41,7 @@ export default function ProfileView() {
 
   return (
     <div className="min-h-screen bg-background">
-<<<<<<< HEAD
       <LatestNewsSection title="Latest Alerts" />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">{profileName} View</h1>
-          <p className="text-muted-foreground">
-            {isLoading ? "Loading..." : "Access restricted to " + profileName + " profile"}
-=======
-      <LatestNewsSection title="Latest Alerts" userProfileFilter={profileName} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -58,8 +49,7 @@ export default function ProfileView() {
             {profileName} Node
           </h1>
           <p className="text-slate-500 font-medium tracking-wide">
-            {isLoading ? "Synchronizing node statistics..." : `${stats?.total || 0} institutional documents specialized for the ${profileName} profile.`}
->>>>>>> origin/all-updates-unfazed-ai
+            {isLoading ? "Synchronizing node statistics..." : `${stats?.total || 0} total institutional documents available across the Unfazed AI stream.`}
           </p>
         </div>
 
@@ -70,11 +60,7 @@ export default function ProfileView() {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
             <Input 
               type="text" 
-<<<<<<< HEAD
-              placeholder="Search documents..."
-=======
               placeholder={`Query ${profileName.toLowerCase()} node...`}
->>>>>>> origin/all-updates-unfazed-ai
               value={currentSearchInput}
               onChange={(e) => setCurrentSearchInput(e.target.value)}
               className="pl-12 bg-white/80 backdrop-blur-xl border-slate-200 text-slate-900 placeholder:text-slate-400 focus:ring-blue-500/50 shadow-lg shadow-blue-900/5 rounded-xl h-12 text-base"
@@ -102,17 +88,16 @@ export default function ProfileView() {
           </Link>
         </div>
 
-<<<<<<< HEAD
-        {/* Documents for this profile categorized by type */}
+        {/* Documents categorized by type (Universal Visibility - No userProfileFilter) */}
         <div className="space-y-12">
           {/* Lecture Notes Section */}
           <section>
-            <div className="flex items-center space-x-3 mb-6 border-b border-green-500/20 pb-4">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <BookOpen className="h-5 w-5 text-green-600" />
+            <div className="flex items-center space-x-3 mb-6 border-b border-blue-500/10 pb-4">
+              <div className="p-2 bg-blue-50 rounded-lg">
+                <BookOpen className="h-5 w-5 text-blue-600" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-foreground">Lecture Notes</h2>
+                <h2 className="text-xl font-black text-slate-900 tracking-tighter uppercase">Lecture Notes</h2>
               </div>
             </div>
             <DocumentTable 
@@ -124,12 +109,12 @@ export default function ProfileView() {
 
           {/* Research Papers Section */}
           <section>
-            <div className="flex items-center space-x-3 mb-6 border-b border-blue-500/20 pb-4">
-              <div className="p-2 bg-blue-100 rounded-lg">
+            <div className="flex items-center space-x-3 mb-6 border-b border-blue-500/10 pb-4">
+              <div className="p-2 bg-blue-50 rounded-lg">
                 <FileText className="h-5 w-5 text-blue-600" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-foreground">Research Papers</h2>
+                <h2 className="text-xl font-black text-slate-900 tracking-tighter uppercase">Research Papers</h2>
               </div>
             </div>
             <DocumentTable 
@@ -141,12 +126,12 @@ export default function ProfileView() {
 
           {/* Other Documents Section */}
           <section>
-            <div className="flex items-center space-x-3 mb-6 border-b border-gray-500/20 pb-4">
-              <div className="p-2 bg-gray-100 rounded-lg">
-                <Layout className="h-5 w-5 text-gray-600" />
+            <div className="flex items-center space-x-3 mb-6 border-b border-blue-500/10 pb-4">
+              <div className="p-2 bg-blue-50 rounded-lg">
+                <Layout className="h-5 w-5 text-blue-600" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-foreground">Other Documents</h2>
+                <h2 className="text-xl font-black text-slate-900 tracking-tighter uppercase">Other Documents</h2>
               </div>
             </div>
             <DocumentTable 
@@ -156,10 +141,6 @@ export default function ProfileView() {
             />
           </section>
         </div>
-=======
-        {/* Documents for this profile */}
-        <DocumentTable userProfileFilter={profileName} showControls={true} hideHeading={true} />
->>>>>>> origin/all-updates-unfazed-ai
       </div>
     </div>
   );

@@ -22,8 +22,8 @@ const Stats = () => {
         <div className="mb-10">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl font-black text-slate-900 tracking-tighter">
-                SYSTEM STATISTICS
+              <h1 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">
+                System Statistics
               </h1>
               <p className="text-slate-500 mt-2 font-medium tracking-wide">
                 Real-time overview of your institutional document node.
@@ -114,119 +114,99 @@ const Stats = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Document Types */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Document Types</CardTitle>
-              <CardDescription>
-                Distribution of documents by type
+          <Card className="bg-white/80 backdrop-blur-2xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden">
+            <CardHeader className="border-b border-slate-50">
+              <CardTitle className="text-lg font-black text-slate-900 tracking-tighter uppercase">Document Types</CardTitle>
+              <CardDescription className="text-slate-500 font-medium">
+                Distribution of documents by category
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-6">
               {statsLoading ? (
                 <div className="space-y-3">
                   {[1, 2, 3].map((i) => (
                     <div key={i} className="flex items-center space-x-3">
-                      <div className="h-4 bg-muted rounded animate-pulse w-20"></div>
-                      <div className="h-4 bg-muted rounded animate-pulse w-16"></div>
+                      <div className="h-4 bg-slate-100 rounded animate-pulse w-full"></div>
                     </div>
                   ))}
                 </div>
               ) : stats?.documentTypes && stats.documentTypes.length > 0 ? (
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {stats.documentTypes.map((type) => (
-                    <div key={type._id} className="flex items-center justify-between">
-                      <span className="text-sm font-medium">{type._id}</span>
-                      <Badge variant="secondary">{type.count}</Badge>
+                    <div key={type._id} className="flex items-center justify-between group">
+                      <span className="text-sm font-bold text-slate-600 uppercase tracking-widest text-[10px]">{type._id}</span>
+                      <Badge className="bg-blue-50 text-blue-600 border-none font-black text-[10px] px-2.5 py-1 rounded-lg shadow-sm">{type.count}</Badge>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground">No document types found</p>
+                <p className="text-sm text-slate-400 italic">No document types discovered in node.</p>
               )}
             </CardContent>
           </Card>
 
           {/* Profile Distribution */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Profile Distribution</CardTitle>
-              <CardDescription>
-<<<<<<< HEAD
-                Documents tagged by user profile
-=======
+          <Card className="bg-white/80 backdrop-blur-2xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden">
+            <CardHeader className="border-b border-slate-50">
+              <CardTitle className="text-lg font-black text-slate-900 tracking-tighter uppercase">Institutional Profiles</CardTitle>
+              <CardDescription className="text-slate-500 font-medium">
                 Documents tagged by institutional profile
->>>>>>> origin/all-updates-unfazed-ai
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-6">
               {statsLoading ? (
                 <div className="space-y-3">
                   {[1, 2, 3].map((i) => (
                     <div key={i} className="flex items-center space-x-3">
-                      <div className="h-4 bg-muted rounded animate-pulse w-24"></div>
-                      <div className="h-4 bg-muted rounded animate-pulse w-16"></div>
+                      <div className="h-4 bg-slate-100 rounded animate-pulse w-full"></div>
                     </div>
                   ))}
                 </div>
-<<<<<<< HEAD
-              ) : stats?.profiles && stats.profiles.length > 0 ? (
-                <div className="space-y-3">
-                  {stats.profiles.map((prof) => (
-                    <div key={prof._id} className="flex items-center justify-between">
-                      <span className="text-sm font-medium">{prof._id}</span>
-                      <Badge variant="outline">{prof.count}</Badge>
-=======
               ) : stats?.userProfiles && stats.userProfiles.length > 0 ? (
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {stats.userProfiles.map((profile) => (
-                    <div key={profile._id} className="flex items-center justify-between">
-                      <span className="text-sm font-medium">{profile._id}</span>
-                      <Badge variant="outline">{profile.count}</Badge>
->>>>>>> origin/all-updates-unfazed-ai
+                    <div key={profile._id} className="flex items-center justify-between group">
+                      <span className="text-sm font-bold text-slate-600 uppercase tracking-widest text-[10px]">{profile._id}</span>
+                      <Badge className="bg-cyan-50 text-cyan-600 border-none font-black text-[10px] px-2.5 py-1 rounded-lg shadow-sm">{profile.count}</Badge>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground">No profile data available</p>
+                <p className="text-sm text-slate-400 italic">No institutional profile data available.</p>
               )}
             </CardContent>
           </Card>
         </div>
 
         {/* System Health Details */}
-        <Card className="mt-6">
+        <Card className="mt-6 bg-white/40 backdrop-blur-3xl border-slate-200 shadow-lg shadow-slate-200/20 rounded-2xl overflow-hidden border-dashed">
           <CardHeader>
-            <CardTitle>System Health</CardTitle>
-            <CardDescription>
-              Detailed system status and performance metrics
-            </CardDescription>
+            <CardTitle className="text-xs font-black text-slate-900 uppercase tracking-widest">Advanced Integrity Check</CardTitle>
           </CardHeader>
           <CardContent>
             {healthLoading ? (
               <div className="space-y-4">
-                <div className="h-4 bg-muted rounded animate-pulse w-1/3"></div>
-                <div className="h-4 bg-muted rounded animate-pulse w-1/2"></div>
-                <div className="h-4 bg-muted rounded animate-pulse w-1/4"></div>
+                <div className="h-4 bg-slate-100 rounded animate-pulse w-full"></div>
               </div>
             ) : health ? (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <h4 className="font-medium text-sm text-muted-foreground">Server Status</h4>
-                  <p className="text-lg font-semibold">{health.status}</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="p-4 bg-white/50 rounded-xl border border-white/60">
+                  <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Server Protocol</h4>
+                  <p className="text-lg font-black text-slate-900 tracking-tighter uppercase">{health.status}</p>
                 </div>
-                <div>
-                  <h4 className="font-medium text-sm text-muted-foreground">Database</h4>
-                  <p className="text-lg font-semibold capitalize">{health.database}</p>
+                <div className="p-4 bg-white/50 rounded-xl border border-white/60">
+                  <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Database Stream</h4>
+                  <p className="text-lg font-black text-slate-900 tracking-tighter uppercase">{health.database}</p>
                 </div>
-                <div>
-                  <h4 className="font-medium text-sm text-muted-foreground">Last Updated</h4>
-                  <p className="text-lg font-semibold">
+                <div className="p-4 bg-white/50 rounded-xl border border-white/60">
+                  <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Last Calibration</h4>
+                  <p className="text-lg font-black text-slate-900 tracking-tighter uppercase">
                     {safeFormatDate(health.timestamp, 'HH:mm:ss', 'Invalid Date')}
                   </p>
                 </div>
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">Unable to load system health data</p>
+              <p className="text-sm text-slate-400 text-center py-4">Unable to retrieve system health telemetry.</p>
             )}
           </CardContent>
         </Card>
