@@ -10,10 +10,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { 
-  FileText, 
-  Calendar, 
-  Eye, 
+import {
+  FileText,
+  Calendar,
+  Eye,
   RefreshCw,
   Plus,
   Trash2,
@@ -52,7 +52,7 @@ interface DocumentTableProps {
   hideHeading?: boolean; // New prop to hide the internal heading
 }
 
-export const DocumentTable = ({ 
+export const DocumentTable = ({
   departmentFilter,
   showControls = true,
   sortOrderProp,
@@ -65,7 +65,7 @@ export const DocumentTable = ({
   const [urgencySort, setUrgencySort] = useState<string | undefined>(undefined); // New state for urgency level sorting
 
   const sortOrder = sortOrderProp ?? sortOrderState;
-  
+
   const { toast } = useToast();
   const deleteDocumentMutation = useDeleteDocument();
   const queryClient = useQueryClient(); // Initialize queryClient
@@ -89,7 +89,7 @@ export const DocumentTable = ({
     setIsSpinning(true); // Start spinning
     queryClient.invalidateQueries({ queryKey: documentKeys.all }); // Invalidate all document lists and details
     // Introduce a small delay to ensure the loading state is visible
-    await new Promise(resolve => setTimeout(resolve, 500)); 
+    await new Promise(resolve => setTimeout(resolve, 500));
     await refetch();
     setIsSpinning(false); // Stop spinning after refetch and delay
   };
@@ -182,33 +182,33 @@ export const DocumentTable = ({
               {pagination?.total || 0} documents found
             </p>
           </div>
-          
+
           <div className="flex items-center space-x-3">
-            <Button 
+            <Button
               size="sm"
               onClick={handleRefresh}
               disabled={isLoading || isSpinning}
               className={`bg-green-500 hover:bg-green-600 text-white border border-cyan-500 ${isLoading || isSpinning ? 'opacity-70 cursor-not-allowed' : ''}`}
             >
-              <RefreshCw 
+              <RefreshCw
                 className="h-4 w-4 mr-2 animate-spin"
                 style={{ animationPlayState: isSpinning ? 'running' : 'paused' }}
               />
               Refresh
             </Button>
-            
+
             <Button
               size="sm"
               onClick={() => {
-                const url = 'https://n8n.unfazed-ai.online/form-test/723abf57-4dcb-4dbe-9e6d-dffac7ed5442';
+                const url = 'https://n8n.Unfazed AI-ai.online/form-test/723abf57-4dcb-4dbe-9e6d-dffac7ed5442';
                 window.open(url, '_blank');
               }}
-              className="bg-cyan-500 hover:bg-cyan-600 text-white border border-cyan-500"
+              className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/20 transition-all"
             >
               <Plus className="h-4 w-4 mr-2" />
               Publish Document
             </Button>
-            
+
           </div>
         </div>
       )}
@@ -228,7 +228,7 @@ export const DocumentTable = ({
             </Select>
           </div>
           <div className="w-full sm:w-40">
-            <Select 
+            <Select
               value={urgencySort}
               onValueChange={(value) => setUrgencySort(value === "all" ? undefined : value)}
             >
@@ -246,7 +246,7 @@ export const DocumentTable = ({
       )}
 
       {/* Table */}
-      <div className="bg-card rounded-lg border border-cyan-400 shadow-sm overflow-hidden">
+      <div className="bg-white/80 backdrop-blur-xl rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/50 overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow className="bg-muted border-border">
@@ -260,12 +260,12 @@ export const DocumentTable = ({
           </TableHeader>
           <TableBody>
             {documents.map((doc) => (
-              <TableRow 
-                key={doc._id} 
+              <TableRow
+                key={doc._id}
                 className="hover:bg-muted/50 transition-colors cursor-pointer animate-fade-in border-border"
               >
                 <TableCell className="space-y-1">
-                  <Link 
+                  <Link
                     to={`/documents/${doc._id}`}
                     className="block hover:text-primary transition-colors"
                   >
@@ -283,27 +283,27 @@ export const DocumentTable = ({
                   </Link>
                 </TableCell>
                 <TableCell>
-                  <Badge 
+                  <Badge
                     className={documentTypeColors[doc.document_type as keyof typeof documentTypeColors] || "bg-gray-100 text-gray-800"}
                   >
                     {doc.document_type}
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  <div className="space-y-1">
+                  <div className="flex flex-wrap gap-1">
                     {doc.departments_tagged?.length > 0 ? (
                       doc.departments_tagged.map((dept, index) => (
-                        <Badge key={index} className="text-xs bg-cyan-500 text-white">
+                        <Badge key={index} className="text-[10px] px-2 py-0 h-5 bg-blue-100 text-blue-700 border-none hover:bg-blue-200 transition-colors">
                           {dept}
                         </Badge>
                       ))
                     ) : (
-                      <span className="text-sm text-muted-foreground">No departments</span>
+                      <span className="text-sm text-slate-400">No departments</span>
                     )}
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge 
+                  <Badge
                     className={doc.UrgencyLevel ? urgencyLevelColors[doc.UrgencyLevel as keyof typeof urgencyLevelColors] || "bg-gray-100 text-gray-800" : "bg-gray-100 text-gray-800"}
                   >
                     {doc.UrgencyLevel || "N/A"}
@@ -329,8 +329,8 @@ export const DocumentTable = ({
                         <Edit className="h-4 w-4" />
                       </Link>
                     </Button>
-                    <Button 
-                      variant="ghost" 
+                    <Button
+                      variant="ghost"
                       size="sm"
                       onClick={() => handleDelete(doc._id, doc.document_title)}
                       disabled={deleteDocumentMutation.isPending}

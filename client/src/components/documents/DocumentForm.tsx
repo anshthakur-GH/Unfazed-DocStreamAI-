@@ -158,31 +158,31 @@ export const DocumentForm = ({ mode }: DocumentFormProps) => {
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-6">
+        <div className="mb-10">
           <Button
             variant="ghost"
             onClick={() => navigate("/")}
-            className="mb-4"
+            className="mb-6 bg-white/70 backdrop-blur-md border-slate-200 text-slate-900 hover:bg-white font-bold tracking-widest uppercase shadow-lg shadow-slate-200/50 rounded-xl h-10 px-5 active:scale-95 group"
           >
-            <ArrowLeft className="h-4 w-4 mr-2" />
+            <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
             Back to Documents
           </Button>
-          <h1 className="text-3xl font-bold text-foreground">
-            {mode === 'create' ? 'Create New Document' : 'Edit Document'}
+          <h1 className="text-4xl font-black text-slate-900 tracking-tighter" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
+            {mode === 'create' ? 'PROVISION NEW ASSET' : 'CALIBRATE ASSET'}
           </h1>
-          <p className="text-muted-foreground mt-2">
+          <p className="text-slate-500 mt-2 font-medium tracking-wide">
             {mode === 'create' 
-              ? 'Fill in the details below to create a new document.'
-              : 'Update the document details below.'
+              ? 'Initialize a new institutional document within the DocStreamAI node.'
+              : 'Modify the existing documentation parameters and intelligence mappings.'
             }
           </p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Basic Information</CardTitle>
-              <CardDescription>
+          <Card className="bg-white/80 backdrop-blur-3xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden">
+            <CardHeader className="border-b border-slate-50">
+              <CardTitle className="text-lg font-bold text-slate-900">Basic Information</CardTitle>
+              <CardDescription className="text-slate-500">
                 Provide the essential details for your document.
               </CardDescription>
             </CardHeader>
@@ -231,10 +231,10 @@ export const DocumentForm = ({ mode }: DocumentFormProps) => {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Content</CardTitle>
-              <CardDescription>
+          <Card className="bg-white/80 backdrop-blur-3xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden">
+            <CardHeader className="border-b border-slate-50">
+              <CardTitle className="text-lg font-bold text-slate-900">Content</CardTitle>
+              <CardDescription className="text-slate-500">
                 Add the main content of your document.
               </CardDescription>
             </CardHeader>
@@ -251,10 +251,10 @@ export const DocumentForm = ({ mode }: DocumentFormProps) => {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Organization</CardTitle>
-              <CardDescription>
+          <Card className="bg-white/80 backdrop-blur-3xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden">
+            <CardHeader className="border-b border-slate-50">
+              <CardTitle className="text-lg font-bold text-slate-900">Organization</CardTitle>
+              <CardDescription className="text-slate-500">
                 Tag departments and add keywords to help organize your document.
               </CardDescription>
             </CardHeader>
@@ -315,25 +315,27 @@ export const DocumentForm = ({ mode }: DocumentFormProps) => {
             </CardContent>
           </Card>
 
-          <div className="flex justify-end space-x-4">
+          <div className="flex justify-end space-x-4 pt-6">
             <Button
               type="button"
               variant="outline"
               onClick={() => navigate("/")}
+              className="bg-white/70 backdrop-blur-md border-slate-200 text-slate-900 hover:bg-white font-bold tracking-widest uppercase shadow-lg shadow-slate-200/50 rounded-xl h-12 px-8 active:scale-95"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={createMutation.isPending || updateMutation.isPending}
+              className="bg-blue-600 text-white hover:bg-blue-700 font-bold tracking-widest uppercase shadow-lg shadow-blue-600/20 rounded-xl h-12 px-10 active:scale-95"
             >
               {createMutation.isPending || updateMutation.isPending ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  {mode === 'create' ? 'Creating...' : 'Updating...'}
+                  {mode === 'create' ? 'Initializing...' : 'Calibrating...'}
                 </>
               ) : (
-                mode === 'create' ? 'Create Document' : 'Update Document'
+                mode === 'create' ? 'Finalize Provision' : 'Commit Changes'
               )}
             </Button>
           </div>

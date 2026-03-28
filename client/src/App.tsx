@@ -14,6 +14,7 @@ import KnowledgePage from "./pages/KnowledgePage";
 import Stats from "./pages/Stats";
 import { DocumentForm } from "./components/documents/DocumentForm";
 import { Navbar } from "./components/layout/Navbar";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import LoginPage from "./pages/LoginPage"; // Import the new LoginPage component
 
 const queryClient = new QueryClient();
@@ -54,56 +55,59 @@ const App = () => {
           <SearchProvider>
             <Toaster />
             <Sonner />
-            <BrowserRouter>
-              <Routes>
-                <Route path="/login" element={<LoginWrapper />} /> {/* Login route with onLogin prop */}
-                <Route path="/unauthorized" element={<NotFound />} /> {/* Unauthorized access page */}
+            <ErrorBoundary>
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/login" element={<LoginWrapper />} /> {/* Login route with onLogin prop */}
+                  <Route path="/unauthorized" element={<NotFound />} /> {/* Unauthorized access page */}
+                  <Route path="/" element={<Navigate to="/login" replace />} /> {/* Redirect root to majestic login */}
+                  
+                  <Route element={<ProtectedRouteWrapper />}>
+                  {/* Protected Routes */}
+                  <Route path="/dashboard" element={<Index />} />
+                  <Route path="/documents/:id" element={
+                    <div className="min-h-screen bg-background">
+                      <Navbar />
+                      <DocumentDetail />
+                    </div>
+                  } />
+                  <Route path="/documents/:id/edit" element={
+                    <div className="min-h-screen bg-background">
+                      <Navbar />
+                      <DocumentForm mode="edit" />
+                    </div>
+                  } />
+                  <Route path="/documents/new" element={
+                    <div className="min-h-screen bg-background">
+                      <Navbar />
+                      <DocumentForm mode="create" />
+                    </div>
+                  } />
+                  <Route path="/departments/:department" element={
+                    <div className="min-h-screen bg-background">
+                      <Navbar />
+                      <DepartmentView />
+                    </div>
+                  } />
+                  <Route path="/departments/:department/knowledge" element={
+                    <div className="min-h-screen bg-background">
+                      <Navbar />
+                      <KnowledgePage />
+                    </div>
+                  } />
+                  <Route path="/stats" element={
+                    <div className="min-h-screen bg-background">
+                      <Navbar />
+                      <Stats />
+                    </div>
+                  } />
+                </Route>
                 
-                <Route element={<ProtectedRouteWrapper />}>
-                {/* Protected Routes */}
-                <Route path="/" element={<Index />} />
-                <Route path="/documents/:id" element={
-                  <div className="min-h-screen bg-background">
-                    <Navbar />
-                    <DocumentDetail />
-                  </div>
-                } />
-                <Route path="/documents/:id/edit" element={
-                  <div className="min-h-screen bg-background">
-                    <Navbar />
-                    <DocumentForm mode="edit" />
-                  </div>
-                } />
-                <Route path="/documents/new" element={
-                  <div className="min-h-screen bg-background">
-                    <Navbar />
-                    <DocumentForm mode="create" />
-                  </div>
-                } />
-                <Route path="/departments/:department" element={
-                  <div className="min-h-screen bg-background">
-                    <Navbar />
-                    <DepartmentView />
-                  </div>
-                } />
-                <Route path="/departments/:department/knowledge" element={
-                  <div className="min-h-screen bg-background">
-                    <Navbar />
-                    <KnowledgePage />
-                  </div>
-                } />
-                <Route path="/stats" element={
-                  <div className="min-h-screen bg-background">
-                    <Navbar />
-                    <Stats />
-                  </div>
-                } />
-              </Route>
-              
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </ErrorBoundary>
         </SearchProvider>
       </AuthProvider>
       </TooltipProvider>

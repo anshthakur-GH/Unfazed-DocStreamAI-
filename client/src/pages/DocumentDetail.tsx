@@ -149,22 +149,22 @@ export default function DocumentDetail() {
               </Badge>
             </div>
             
-            <h1 className="text-3xl font-bold text-foreground mb-2 flex items-center">
+            <h1 className="text-4xl font-black text-slate-900 mb-4 tracking-tighter" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
               {document.document_title}
             </h1>
             
-            <p className="text-lg text-black w-full mb-4">
+            <p className="text-lg text-slate-700 w-full mb-6 leading-relaxed">
               {highlightDatesInText(document.summary || 'No summary available')}
             </p>
-
-            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-              <div className="flex items-center space-x-2 border border-black p-1 rounded-md">
-                <Calendar className="h-4 w-4 text-black" />
-                <span className="text-black">Created {safeFormatDate(document.createdAt || document._id)}</span>
+            
+            <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500">
+              <div className="flex items-center space-x-2 bg-slate-100/50 px-3 py-1.5 rounded-full border border-slate-200">
+                <Calendar className="h-4 w-4 text-blue-600" />
+                <span className="font-medium">Created {safeFormatDate(document.createdAt || document._id)}</span>
               </div>
-              <div className="flex items-center space-x-2 border border-black p-1 rounded-md">
-                <Clock className="h-4 w-4 text-black" />
-                <span className="text-black">Modified {safeFormatDate(document.updatedAt || document.createdAt || document._id)}</span>
+              <div className="flex items-center space-x-2 bg-slate-100/50 px-3 py-1.5 rounded-full border border-slate-200">
+                <Clock className="h-4 w-4 text-blue-600" />
+                <span className="font-medium">Modified {safeFormatDate(document.updatedAt || document.createdAt || document._id)}</span>
               </div>
             </div>
           </div>
@@ -175,16 +175,16 @@ export default function DocumentDetail() {
                 href={document.webViewLink} 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-orange-500 text-white hover:bg-orange-600 h-9 px-3"
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-bold tracking-widest uppercase transition-all shadow-lg bg-orange-500 text-white hover:bg-orange-600 h-10 px-4 shadow-orange-500/20"
               >
                 See Original Document
               </a>
             )}
-            <Button variant="outline" size="sm" className="bg-green-500 text-white hover:bg-green-600" onClick={handleDownloadPdf}>
+            <Button variant="outline" size="sm" className="bg-green-500 text-white hover:bg-green-600 font-bold tracking-widest uppercase shadow-lg shadow-green-500/20 h-10 px-4 border-none" onClick={handleDownloadPdf}>
               <Download className="h-4 w-4 mr-2" />
               Download
             </Button>
-            <Button size="sm" asChild className="bg-[#008285] text-white hover:bg-[#008285]/90">
+            <Button size="sm" asChild className="bg-blue-600 text-white hover:bg-blue-700 font-bold tracking-widest uppercase shadow-lg shadow-blue-600/20 h-10 px-4">
               <Link to={`/documents/${document._id}/edit`}>
                 <Edit className="h-4 w-4 mr-2" />
                 Edit
@@ -196,8 +196,8 @@ export default function DocumentDetail() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-3">
-            <Card>
-              <CardContent className="p-8" ref={documentRef}>
+            <Card className="bg-white/80 backdrop-blur-3xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden">
+              <CardContent className="p-8 md:p-12" ref={documentRef}>
                 <div className="prose prose-gray max-w-none">
                   {document.content ? (
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
@@ -213,8 +213,8 @@ export default function DocumentDetail() {
 
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            <Card>
-              <CardHeader>
+            <Card className="bg-white/70 backdrop-blur-2xl border-slate-200 shadow-lg shadow-slate-200/30 rounded-2xl overflow-hidden">
+              <CardHeader className="border-b border-slate-100">
                 <h3 className="font-semibold text-foreground flex items-center">
                   <FileText className="h-5 w-5 mr-2" />
                   Document Info
@@ -285,8 +285,8 @@ export default function DocumentDetail() {
         </div>
 
         {/* Related Documents Section - Full Width */}
-        <Card className="mt-8">
-          <CardHeader>
+        <Card className="mt-8 bg-white/70 backdrop-blur-2xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden">
+          <CardHeader className="border-b border-slate-100">
             <h3 className="text-xl font-semibold text-foreground flex items-center">
               <Users className="h-6 w-6 mr-3" />
               Related Documents
@@ -310,17 +310,17 @@ export default function DocumentDetail() {
                         <ExternalLink className="h-4 w-4 text-muted-foreground ml-2 flex-shrink-0" />
                       </div>
                       
-                      <div className="flex items-center gap-2 mb-3">
+                      <div className="flex flex-wrap items-center gap-2 mb-3">
                         <Badge 
                           variant="outline" 
-                          className={`text-sm ${documentTypeColors[relatedDoc.document_type as keyof typeof documentTypeColors] || "bg-gray-100 text-gray-800"}`}
+                          className={`text-xs px-2 py-0 border-none transition-all ${documentTypeColors[relatedDoc.document_type as keyof typeof documentTypeColors] || "bg-gray-100 text-gray-800"}`}
                         >
                           {relatedDoc.document_type}
                         </Badge>
                         {relatedDoc.UrgencyLevel && (
                           <Badge 
                             variant="outline" 
-                            className={`text-sm ${
+                            className={`text-xs px-2 py-0 border-none transition-all ${
                               relatedDoc.UrgencyLevel === 'High' ? 'bg-red-100 text-red-800' :
                               relatedDoc.UrgencyLevel === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
                               'bg-green-100 text-green-800'

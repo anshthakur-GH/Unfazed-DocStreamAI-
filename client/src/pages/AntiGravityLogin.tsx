@@ -8,7 +8,7 @@ const AntiGravityLogin: React.FC = () => {
   // Mouse tracking for parallax and card tilt
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  
+
   // Smooth spring physics for the tilt
   const springConfig = { damping: 25, stiffness: 200 };
   const smoothMouseX = useSpring(mouseX, springConfig);
@@ -22,11 +22,11 @@ const AntiGravityLogin: React.FC = () => {
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    
+
     // Normalize coordinates between -0.5 and 0.5 relative to the screen center
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
-    
+
     mouseX.set(x);
     mouseY.set(y);
   };
@@ -34,15 +34,15 @@ const AntiGravityLogin: React.FC = () => {
   // Parallax transforms for background particles (moves opposite to mouse)
   const layer1X = useTransform(smoothMouseX, [-0.5, 0.5], [50, -50]);
   const layer1Y = useTransform(smoothMouseY, [-0.5, 0.5], [50, -50]);
-  
+
   const layer2X = useTransform(smoothMouseX, [-0.5, 0.5], [100, -100]);
   const layer2Y = useTransform(smoothMouseY, [-0.5, 0.5], [100, -100]);
-  
+
   const layer3X = useTransform(smoothMouseX, [-0.5, 0.5], [20, -20]);
   const layer3Y = useTransform(smoothMouseY, [-0.5, 0.5], [20, -20]);
 
   return (
-    <div 
+    <div
       ref={containerRef}
       onMouseMove={handleMouseMove}
       className="relative min-h-screen w-full bg-slate-950 flex flex-col items-center justify-center overflow-hidden font-inter text-slate-800"
@@ -70,25 +70,25 @@ const AntiGravityLogin: React.FC = () => {
         {/* Layer 3: Occasional decorative faint particles */}
         <motion.div style={{ x: layer3X, y: layer3Y }} className="absolute inset-0">
           {[...Array(8)].map((_, i) => (
-             <motion.div 
-               key={i}
-               className="absolute rounded-full bg-white/5 blur-sm"
-               style={{
-                 width: Math.random() * 8 + 4 + 'px',
-                 height: Math.random() * 8 + 4 + 'px',
-                 top: Math.random() * 100 + '%',
-                 left: Math.random() * 100 + '%',
-               }}
-               animate={{ 
-                 y: [0, -20, 0],
-                 opacity: [0.1, 0.3, 0.1]
-               }}
-               transition={{ 
-                 duration: Math.random() * 5 + 3,
-                 repeat: Infinity,
-                 ease: "easeInOut"
-               }}
-             />
+            <motion.div
+              key={i}
+              className="absolute rounded-full bg-white/5 blur-sm"
+              style={{
+                width: Math.random() * 8 + 4 + 'px',
+                height: Math.random() * 8 + 4 + 'px',
+                top: Math.random() * 100 + '%',
+                left: Math.random() * 100 + '%',
+              }}
+              animate={{
+                y: [0, -20, 0],
+                opacity: [0.1, 0.3, 0.1]
+              }}
+              transition={{
+                duration: Math.random() * 5 + 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
           ))}
         </motion.div>
       </div>
@@ -98,24 +98,21 @@ const AntiGravityLogin: React.FC = () => {
         <div className="flex items-center justify-between w-full max-w-7xl mx-auto">
           {/* Logo stubs since assets are local/unknown */}
           <div className="flex items-center space-x-4">
-            <div className="w-20 h-8 bg-white/20 rounded backdrop-blur-sm border border-white/20 flex items-center justify-center text-xs text-white uppercase font-bold tracking-widest">
-              G20
-            </div>
-            <div className="w-32 h-8 bg-blue-500/20 rounded backdrop-blur-sm border border-blue-500/30 flex items-center justify-center text-xs text-blue-100 font-bold">
-              DocStreamAI
+            <div className="w-48 h-8 bg-white/5 rounded backdrop-blur-sm border border-white/10 flex items-center justify-center text-[10px] text-white/40 uppercase font-black tracking-[0.3em]">
+              SECURE NODE
             </div>
           </div>
-          
-          <h1 className="text-white text-2xl font-light tracking-[0.2em] font-sans">
-            Unfazed DocStreamAI
+
+          <h1 className="text-white text-2xl font-black tracking-[0.4em] font-sans uppercase">
+            Unfazed AI
           </h1>
-          
+
           <div className="text-white/70 flex items-center space-x-2 text-sm font-light">
             <Network className="w-4 h-4" />
             <span>Stats</span>
           </div>
         </div>
-        
+
         {/* Fading 1px separator */}
         <div className="w-full h-px mt-6 bg-gradient-to-r from-transparent via-white/30 to-transparent max-w-7xl mx-auto" />
       </header>
@@ -132,14 +129,14 @@ const AntiGravityLogin: React.FC = () => {
           transformStyle: "preserve-3d",
         }}
         // Up and down slow oscillation
-        animate={{ 
-          y: [-10, 10, -10] 
+        animate={{
+          y: [-10, 10, -10]
         }}
-        transition={{ 
+        transition={{
           y: {
-            duration: 3, 
-            repeat: Infinity, 
-            ease: "easeInOut" 
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut"
           }
         }}
         className="relative z-10 w-full max-w-[420px] rounded-3xl p-8 backdrop-blur-2xl bg-white/10 border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] flex flex-col items-center mt-12 overflow-visible"
@@ -150,7 +147,7 @@ const AntiGravityLogin: React.FC = () => {
         </div>
 
         <form className="w-full space-y-6" style={{ transform: "translateZ(20px)" }} onSubmit={e => e.preventDefault()}>
-          
+
           {/* Department Select */}
           <div className="space-y-2">
             <label className="text-xs font-medium text-blue-200 uppercase tracking-wider ml-1">Select Department</label>
@@ -168,8 +165,8 @@ const AntiGravityLogin: React.FC = () => {
           {/* Login ID */}
           <div className="space-y-2">
             <label className="text-xs font-medium text-blue-200 uppercase tracking-wider ml-1">Login ID</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               placeholder="Enter your Login ID"
               className="w-full bg-black/20 border border-white/10 text-white placeholder:text-white/30 text-sm rounded-xl px-4 py-3 outline-none transition-all duration-300 focus:bg-white/5 focus:border-blue-400/50 focus:shadow-[inset_0_0_15px_rgba(59,130,246,0.3)] hover:bg-white/5"
             />
@@ -180,8 +177,8 @@ const AntiGravityLogin: React.FC = () => {
             <div className="flex justify-between w-full">
               <label className="text-xs font-medium text-blue-200 uppercase tracking-wider ml-1">Password</label>
             </div>
-            <input 
-              type="password" 
+            <input
+              type="password"
               placeholder="Enter your password"
               className="w-full bg-black/20 border border-white/10 text-white placeholder:text-white/30 text-sm rounded-xl px-4 py-3 outline-none transition-all duration-300 focus:bg-white/5 focus:border-blue-400/50 focus:shadow-[inset_0_0_15px_rgba(59,130,246,0.3)] hover:bg-white/5"
             />
@@ -190,7 +187,7 @@ const AntiGravityLogin: React.FC = () => {
           {/* Magnetic Login Button area */}
           <div className="pt-4 h-20 w-full relative flex items-center justify-center">
             <MagneticButton>
-              <button 
+              <button
                 type="submit"
                 className="w-full max-w-[350px] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-medium rounded-xl px-4 py-3.5 shadow-lg shadow-blue-500/25 transition-all outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-slate-900"
               >
@@ -212,11 +209,11 @@ function MagneticButton({ children }: { children: React.ReactElement }) {
   const handleMouse = (e: React.MouseEvent<HTMLDivElement>) => {
     const { clientX, clientY } = e;
     const { height, width, left, top } = ref.current!.getBoundingClientRect();
-    
+
     // Calculate distance from center of the button
     const middleX = clientX - (left + width / 2);
     const middleY = clientY - (top + height / 2);
-    
+
     // Provide a pull factor (lower implies harder pull)
     // 30px distance logic happens here based on hovering the wrapper
     setPosition({ x: middleX * 0.2, y: middleY * 0.2 });
@@ -227,7 +224,7 @@ function MagneticButton({ children }: { children: React.ReactElement }) {
   };
 
   const { x, y } = position;
-  
+
   return (
     <motion.div
       ref={ref}

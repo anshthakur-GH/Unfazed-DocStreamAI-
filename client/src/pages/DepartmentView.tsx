@@ -68,30 +68,34 @@ export default function DepartmentView() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">{departmentName}</h1>
-          <p className="text-muted-foreground">
-            {isLoading ? "Loading statistics..." : `${deptCount} document${deptCount === 1 ? "" : "s"} found`}
+          <h1 className="text-4xl font-black text-slate-900 mb-2 tracking-tighter" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
+            {departmentName.toUpperCase()} Node
+          </h1>
+          <p className="text-slate-500 font-medium tracking-wide">
+            {isLoading ? "Synchronizing node statistics..." : `${deptCount} institutional document${deptCount === 1 ? "" : "s"} specialized for this department.`}
           </p>
         </div>
 
         {/* Search Input and Knowledge Button */}
-        <div className="flex items-center space-x-4 mb-6">
-          <div className="flex w-full max-w-sm items-center space-x-2 relative">
+        <div className="flex items-center space-x-4 mb-8">
+          <div className="flex w-full max-w-md items-center space-x-2 relative group">
+            <div className="absolute inset-0 bg-blue-600/5 blur-2xl rounded-xl opacity-0 group-focus-within:opacity-100 transition-opacity -z-10" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
             <Input 
               type="text" 
-              placeholder="Search documents in real-time..."
+              placeholder="Query department node..."
               value={currentSearchInput}
               onChange={(e) => setCurrentSearchInput(e.target.value)}
-              className="bg-card border-cyan-400 text-foreground focus:ring-primary focus:border-cyan-500 pr-8"
+              className="pl-12 bg-white/80 backdrop-blur-xl border-slate-200 text-slate-900 placeholder:text-slate-400 focus:ring-blue-500/50 shadow-lg shadow-blue-900/5 rounded-xl h-12 text-base"
             />
             {currentSearchInput && (
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={clearSearch}
-                className="absolute right-2 h-6 w-6 p-0 hover:bg-muted"
+                className="absolute right-3 h-8 w-8 p-0 hover:bg-slate-100 text-slate-400"
               >
-                <X className="h-3 w-3" />
+                <X className="h-4 w-4" />
               </Button>
             )}
           </div>
@@ -99,10 +103,10 @@ export default function DepartmentView() {
           <Link to={`/departments/${department}/knowledge`}>
             <Button 
               variant="outline"
-              className="flex items-center space-x-2 whitespace-nowrap"
+              className="bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-600/20 rounded-xl h-12 px-6 flex items-center space-x-2 border-none font-bold tracking-widest uppercase text-xs"
             >
               <BookOpen className="h-4 w-4" />
-              <span>Latest Knowledge Shared</span>
+              <span>Departmental Wisdom</span>
             </Button>
           </Link>
         </div>
