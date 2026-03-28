@@ -10,12 +10,12 @@ export const HeroSection = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-foreground mb-4">
-            The KMRL Document Automation System
+            The DocStreamAI Document Automation System
           </h1>
           <p className="text-xl text-black mb-8 max-w-2xl mx-auto">
-            Search and manage KMRL documents efficiently
+            Search and manage DocStreamAI documents efficiently
           </p>
-          
+
           {/* Search Bar */}
           <div className="max-w-2xl mx-auto">
             <div className="relative">

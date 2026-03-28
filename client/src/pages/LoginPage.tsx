@@ -57,7 +57,7 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
-      <div 
+      <div
         className="flex-grow flex items-center justify-center p-4"
         style={{
           backgroundImage: 'url(/assets/login.png)',
@@ -68,63 +68,63 @@ const LoginPage = ({ onLogin }: LoginPageProps) => {
       >
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold text-foreground">Welcome to KMRL</CardTitle>
+            <CardTitle className="text-3xl font-bold text-foreground">Welcome to DocStreamAI</CardTitle>
             <p className="text-muted-foreground">Sign in to your account</p>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-                <label htmlFor="department-select" className="text-sm font-medium text-foreground block mb-1">
-                  Select Department
-                </label>
-                <Select onValueChange={handleDepartmentSelect}>
-                  <SelectTrigger id="department-select" className="w-full bg-card border-cyan-400 text-foreground focus:ring-primary focus:border-cyan-500">
-                    <SelectValue placeholder="Choose your department" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Departments</SelectLabel>
-                      {departments.map((dept) => (
-                        <SelectItem key={dept.name} value={dept.path}>
-                          {dept.name}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+              <label htmlFor="department-select" className="text-sm font-medium text-foreground block mb-1">
+                Select Department
+              </label>
+              <Select onValueChange={handleDepartmentSelect}>
+                <SelectTrigger id="department-select" className="w-full bg-card border-cyan-400 text-foreground focus:ring-primary focus:border-cyan-500">
+                  <SelectValue placeholder="Choose your department" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Departments</SelectLabel>
+                    {departments.map((dept) => (
+                      <SelectItem key={dept.name} value={dept.path}>
+                        {dept.name}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
-              <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-                <div>
-                  <label htmlFor="loginId" className="text-sm font-medium text-foreground block mb-1">
-                    Login ID
-                  </label>
-                  <Input
-                    id="loginId"
-                    type="text"
-                    placeholder="Enter your Login ID"
-                    value={loginId}
-                    onChange={(e) => setLoginId(e.target.value)}
-                    required
-                    className="bg-card border-cyan-400 text-foreground focus:ring-primary focus:border-cyan-500"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="password" className="text-sm font-medium text-foreground block mb-1">
-                    Password
-                  </label>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="bg-card border-cyan-400 text-foreground focus:ring-primary focus:border-cyan-500"
-                  />
-                </div>
-                <Button type="submit" className="w-full bg-primary hover:bg-primary-hover text-primary-foreground">
-                  Login
-                </Button>
-              </form>
+            <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+              <div>
+                <label htmlFor="loginId" className="text-sm font-medium text-foreground block mb-1">
+                  Login ID
+                </label>
+                <Input
+                  id="loginId"
+                  type="text"
+                  placeholder="Enter your Login ID"
+                  value={loginId}
+                  onChange={(e) => setLoginId(e.target.value)}
+                  required
+                  className="bg-card border-cyan-400 text-foreground focus:ring-primary focus:border-cyan-500"
+                />
+              </div>
+              <div>
+                <label htmlFor="password" className="text-sm font-medium text-foreground block mb-1">
+                  Password
+                </label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="bg-card border-cyan-400 text-foreground focus:ring-primary focus:border-cyan-500"
+                />
+              </div>
+              <Button type="submit" className="w-full bg-primary hover:bg-primary-hover text-primary-foreground">
+                Login
+              </Button>
+            </form>
           </CardContent>
         </Card>
       </div>

@@ -1,7 +1,7 @@
 const express = require('express');
 const http = require('http');
 const cors = require('cors');
-require('dotenv').config();
+require('dotenv').config({ override: true });
 
 // Import custom modules
 const connectDB = require('./config/database');

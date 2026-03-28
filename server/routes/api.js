@@ -19,15 +19,15 @@ router.get('/health', (req, res) => {
 function buildFilters({ document_type, search }) {
   const filter = {};
   if (document_type) filter.document_type = document_type;
-  
+
   if (search) {
     // Use regex-based search for partial word matching
     const searchTerms = search.trim().split(/\s+/);
     const searchRegexes = searchTerms.map(term => new RegExp(term, 'i'));
-    
+
     // Create OR conditions for each field and each search term
     const orConditions = [];
-    
+
     searchRegexes.forEach(regex => {
       orConditions.push(
         { document_title: { $regex: regex } },
@@ -38,18 +38,18 @@ function buildFilters({ document_type, search }) {
         { SummaryMeta: { $regex: regex } },
         { EmbeddedContent: { $regex: regex } }
       );
-      
+
       // For array fields, use $in with regex for partial matching
       orConditions.push(
         { keywords: { $regex: regex } },
         { departments_tagged: { $regex: regex } }
       );
     });
-    
+
     filter.$or = orConditions;
     filter._searchType = 'regex';
   }
-  
+
   return filter;
 }
 
@@ -339,7 +339,7 @@ router.get('/data/:id/related', async (req, res) => {
   }
 });
 
-// Create new document (supports core + KMRL metadata)
+// Create new document (supports core + DocStreamAI metadata)
 router.post('/createData', async (req, res) => {
   try {
     // Validate required fields
@@ -367,7 +367,7 @@ router.post('/createData', async (req, res) => {
       content = '', // Changed from 'Content' to 'content'
       images = [],
 
-      // KMRL metadata (all optional, nullable in schema)
+      // DocStreamAI metadata (all optional, nullable in schema)
       DocumentType,
       Languages,
       DateReceived,
@@ -558,14 +558,14 @@ router.get('/data/department/:name', async (req, res) => {
 
     // Include both tagged department and optional filters
     const matchStage = buildFilters({ document_type, search });
-    
+
     // Get search type before modifying matchStage
     const searchType = matchStage._searchType;
     delete matchStage._searchType;
-    
+
     // Add department filter - combine with existing search if present
     const deptFilter = { departments_tagged: { $regex: new RegExp(name, 'i') } };
-    
+
     if (matchStage.$or) {
       // If search is present with $or, combine department filter with search using $and
       matchStage.$and = [
@@ -698,7 +698,7 @@ router.get('/alerts/action-required', async (req, res) => {
     if (department) {
       matchQuery.departments_tagged = { $regex: new RegExp(department, 'i') };
     }
-    
+
     // Find documents that require action, potentially filtered by department
     const actionRequiredDocs = await Document.find(matchQuery)
       .select('document_title UrgencyLevel DueDate Department createdAt');
@@ -706,12 +706,12 @@ router.get('/alerts/action-required', async (req, res) => {
     // Calculate dynamic urgency based on due date proximity
     const alertsWithDynamicUrgency = actionRequiredDocs.map(doc => {
       let dynamicUrgency = doc.UrgencyLevel || 'Low';
-      
+
       if (doc.DueDate) {
         const dueDate = new Date(doc.DueDate);
         const timeDiff = dueDate.getTime() - now.getTime();
         const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-        
+
         // Adjust urgency based on due date proximity
         if (daysDiff <= 1) {
           dynamicUrgency = 'High';
@@ -721,7 +721,7 @@ router.get('/alerts/action-required', async (req, res) => {
           dynamicUrgency = 'Medium';
         }
       }
-      
+
       return {
         id: doc._id,
         title: doc.document_title,
@@ -738,16 +738,16 @@ router.get('/alerts/action-required', async (req, res) => {
     const sortedAlerts = alertsWithDynamicUrgency.sort((a, b) => {
       const urgencyDiff = urgencyOrder[b.dynamicUrgency] - urgencyOrder[a.dynamicUrgency];
       if (urgencyDiff !== 0) return urgencyDiff;
-      
+
       // If same urgency, sort by due date (closest first)
       if (a.dueDate && b.dueDate) {
         return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
       }
-      
+
       // If one has due date and other doesn't, prioritize the one with due date
       if (a.dueDate && !b.dueDate) return -1;
       if (!a.dueDate && b.dueDate) return 1;
-      
+
       // Finally sort by creation date (newest first)
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
@@ -784,11 +784,11 @@ router.get('/knowledge', async (req, res) => {
     const sortOrder = sort === 'asc' ? 1 : -1;
 
     const matchStage = { is_active: true };
-    
+
     if (department) {
       matchStage.department = department;
     }
-    
+
     if (search) {
       matchStage.$text = { $search: search };
     }
@@ -936,7 +936,7 @@ router.get('/knowledge/recent', async (req, res) => {
   try {
     const { limit = 10, department } = req.query;
     const parsedLimit = parseInt(limit);
-    
+
     const knowledge = await Knowledge.findRecent(parsedLimit, department);
 
     res.json({
@@ -955,23 +955,23 @@ router.get('/knowledge/recent', async (req, res) => {
 
 // Updated 404 handler using named wildcard parameter (Express v5 compatible)
 router.use('/{*splat}', (req, res) => {
-    res.status(404).json({
-        error: 'API endpoint not found',
-        path: req.originalUrl,
-        availableEndpoints: [
-        'GET /api/health',
-        'GET /api/data',
-        'GET /api/data/:id',
-        'POST /api/createData',
-        'GET /api/alerts/action-required',
-        'PUT /api/data/:id',
-        'DELETE /api/data/:id',
-        'GET /api/data/recent',
-        'GET /api/data/department/:name',
-        'GET /api/stats/data',
-        'GET /api/stats/connections'
-        ]
-    });
+  res.status(404).json({
+    error: 'API endpoint not found',
+    path: req.originalUrl,
+    availableEndpoints: [
+      'GET /api/health',
+      'GET /api/data',
+      'GET /api/data/:id',
+      'POST /api/createData',
+      'GET /api/alerts/action-required',
+      'PUT /api/data/:id',
+      'DELETE /api/data/:id',
+      'GET /api/data/recent',
+      'GET /api/data/department/:name',
+      'GET /api/stats/data',
+      'GET /api/stats/connections'
+    ]
+  });
 });
 
 module.exports = router;

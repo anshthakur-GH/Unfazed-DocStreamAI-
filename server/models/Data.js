@@ -12,7 +12,7 @@ const ImageSubSchema = new mongoose.Schema(
   { _id: false }
 );
 
-// KMRL metadata substructures (nullable-first design)
+// DocStreamAI metadata substructures (nullable-first design)
 const TableExtractedSubSchema = new mongoose.Schema(
   {
     tableId: { type: String, default: null },
@@ -165,7 +165,7 @@ DocumentSchema.methods.getSummary = function () {
   };
 };
 
-// KMRL stakeholder snapshot
+// DocStreamAI stakeholder snapshot
 DocumentSchema.methods.toStakeholderCard = function () {
   return {
     id: this._id,
