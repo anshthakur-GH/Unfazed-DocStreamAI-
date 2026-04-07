@@ -25,7 +25,7 @@ export default function LoginPage() {
       alert("Please select a profile.");
       return;
     }
-    
+
     // Simple mock authentication
     if ((loginId === "admin" && password === "admin") || (loginId && password)) {
       setIsAuthenticated(true);
@@ -75,62 +75,30 @@ export default function LoginPage() {
         <div className="flex-1 space-y-12 text-center lg:text-left">
           <motion.div variants={itemVariants} className="space-y-4">
             <h1 className="text-6xl md:text-8xl font-black text-slate-900 tracking-tighter leading-none">
-              Unfazed AI<br />
-              <span className="text-blue-600">CORE HUB</span>
+              Unfazed <br />
+              <span className="text-blue-600">DocStream </span>AI
             </h1>
             <p className="text-2xl md:text-3xl text-slate-500 font-light tracking-wide max-w-2xl mx-auto lg:mx-0">
               Intelligence, unburdened.
             </p>
           </motion.div>
 
-          <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="flex items-start gap-4 text-left p-6 bg-white/40 backdrop-blur-xl rounded-2xl border border-white/60 shadow-xl shadow-blue-900/5 group hover:bg-white/60 transition-all">
-              <div className="bg-blue-600 p-3 rounded-xl shadow-lg shadow-blue-600/20 group-hover:scale-110 transition-transform">
-                <Zap className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-slate-900">CONTEXT-AWARE</h3>
-                <p className="text-sm text-slate-500 mt-1 leading-relaxed">
-                  Every research paper and policy connected in real-time within your institutional node.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4 text-left p-6 bg-white/40 backdrop-blur-xl rounded-2xl border border-white/60 shadow-xl shadow-blue-900/5 group hover:bg-white/60 transition-all">
-              <div className="bg-blue-600 p-3 rounded-xl shadow-lg shadow-blue-600/20 group-hover:scale-110 transition-transform">
-                <Cpu className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-slate-900">FLUID LOGIC</h3>
-                <p className="text-sm text-slate-500 mt-1 leading-relaxed">
-                  Proprietary liquid-cooled neural processing ensuring zero-latency extraction and analysis.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4 text-left p-6 bg-white/40 backdrop-blur-xl rounded-2xl border border-white/60 shadow-xl shadow-blue-900/5 group hover:bg-white/60 transition-all">
-              <div className="bg-blue-600 p-3 rounded-xl shadow-lg shadow-blue-600/20 group-hover:scale-110 transition-transform">
-                <ShieldCheck className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-slate-900">SECURE TUNNEL</h3>
-                <p className="text-sm text-slate-500 mt-1 leading-relaxed">
-                  Military-grade encryption for all data flow, ensuring your research stays private.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4 text-left p-6 bg-white/40 backdrop-blur-xl rounded-2xl border border-white/60 shadow-xl shadow-blue-900/5 group hover:bg-white/60 transition-all">
-              <div className="bg-blue-600 p-3 rounded-xl shadow-lg shadow-blue-600/20 group-hover:scale-110 transition-transform">
-                <BookOpen className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-slate-900">DYNAMIC INDEXING</h3>
-                <p className="text-sm text-slate-500 mt-1 leading-relaxed">
-                  Automatically categorized intelligence with instant semantic retrieval.
-                </p>
-              </div>
-            </div>
+          <motion.div 
+            variants={itemVariants} 
+            className="w-full max-w-2xl bg-slate-900 shadow-2xl shadow-blue-900/40 rounded-3xl overflow-hidden border-4 border-white/20 aspect-video relative group mt-8 mx-auto lg:mx-0"
+          >
+            {/* Overlay to block all interactions */}
+            <div className="absolute inset-0 z-10 bg-transparent cursor-default" />
+            
+            <iframe 
+              className="absolute inset-0 w-full h-full"
+              src="https://www.youtube.com/embed/xAkm7oiXIsM?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=xAkm7oiXIsM" 
+              title="YouTube video player" 
+              frameBorder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              referrerPolicy="strict-origin-when-cross-origin" 
+              allowFullScreen
+            />
           </motion.div>
         </div>
 
@@ -204,6 +172,16 @@ export default function LoginPage() {
                     <span className="relative z-10">Initialize Node</span>
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[100%] group-hover:animate-[shimmer_2s_infinite]" />
                   </Button>
+                  
+                  <Button 
+                    type="button"
+                    variant="outline"
+                    onClick={() => window.location.href = "https://zynd-aickathon-policy-navigator-agents.onrender.com/"}
+                    className="w-full h-14 mt-4 border-2 border-slate-200 text-slate-600 font-bold tracking-wider uppercase rounded-xl hover:bg-slate-50 hover:text-blue-600 transition-all flex items-center justify-center gap-2"
+                  >
+                    Understand policy
+                  </Button>
+
                   <p className="text-[10px] text-slate-400 text-center mt-6 font-medium tracking-wide">
                     By entering, you agree to the Institutional Data Governance Protocol.
                   </p>

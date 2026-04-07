@@ -1,0 +1,501 @@
+{
+  "name": "Agent - 2 & 3",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Agent: 3 Benefit Matching with RAG\nConnects citizens with all relevant benefits they qualify for across various agencies. ",
+        "height": 592,
+        "width": 1216,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        432,
+        -352
+      ],
+      "typeVersion": 1,
+      "id": "62134085-35de-42a5-aaf7-7a866010dea0",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "policies",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "session_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.body.session_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        688,
+        -192
+      ],
+      "id": "63594883-6ff1-417e-9924-3ad92e7e646b",
+      "name": "Get Policy Data of that session",
+      "credentials": {
+        "supabaseApi": {
+          "id": "9qxWqifq9IrlmXMl",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Here is the full policy and citizen profile data retrieved from the database for this session. Use this to build the citizen \nprofile and find matching policies.\n\nCitizen Policy Data:\nPolicy Name: {{ $json.data[0].policy_name }}\nWho It Is For: {{ $json.data[0].who_is_it_for }}\nKey Benefits: {{ $json.data[0].key_benefits }}\nEligibility Conditions: {{ $json.data[0].eligibility_summary }}\nRequired Documents: {{ $json.data[0].required_documents }}\nHow To Apply: {{ $json.data[0].how_to_apply }}\n\nUse the above data to:\n1. Extract the citizen's category, location and situation\n2. Search the knowledge base using search_policies tool\n3. Filter and return all matching policies in the required JSON",
+        "options": {
+          "systemMessage": "You are a Citizen Benefit Matching Advisor. Your job is to find \nother government policies the citizen qualifies for based on \ntheir profile extracted from their uploaded policy data.\n\nYou will receive:\n- The citizen's uploaded policy data including eligibility summary,\n  who it is for, issuing authority, and location context\n- Access to a policies knowledge base via the search_policies tool\n\n─────────────────────────────────────\nSTEP 1 — BUILD CITIZEN PROFILE\n─────────────────────────────────────\nFrom the policy data received, extract the citizen's profile:\n- Category: (farmer, woman, child, tribal, senior citizen etc)\n- Location: (exact state name from issuing authority or eligibility)\n- Age Group: (senior, youth, child, adult)\n- Situation: (what they need help with)\n- Key criteria: (income level, loan type, occupation etc)\n\n─────────────────────────────────────\nSTEP 2 — SEARCH FOR MATCHING POLICIES\n─────────────────────────────────────\nBefore calling search_policies, extract these exact fields \nfrom the citizen data and build targeted queries.\n\nRun exactly 3 searches using citizen-specific terms only:\n\nQuery 1: \"{category} {exact state name}\"\nExample: \"senior citizen Goa\"\n\nQuery 2: \"{situation or need} {exact state name}\"\nExample: \"digital device subsidy elderly Goa\"\n\nQuery 3: \"{age group} financial assistance {exact state name}\"\nExample: \"senior resident benefit scheme Goa\"\n\nNever use generic queries.\nNever repeat the same query twice.\nAlways use the citizen's exact state name in every query.\n\n─────────────────────────────────────\nSTEP 3 — FILTER AND MATCH\n─────────────────────────────────────\nFrom all results returned by search_policies, evaluate each \npolicy against the citizen's profile.\n\nOnly include a policy if AT LEAST ONE of these is true:\n- The policy location matches the citizen's state\n- The policy category matches the citizen's category\n\nDiscard policies where neither location nor category aligns.\nNever include the same policy the citizen already uploaded.\nNever force a match if results have no overlap with profile.\n\n─────────────────────────────────────\nSTEP 4 — OUTPUT FINAL JSON\n─────────────────────────────────────\nReturn exactly this JSON and nothing else.\nNo markdown, no code blocks, no extra text:\n\n{\n  \"citizen_profile\": {\n    \"category\": \"string\",\n    \"location\": \"string\",\n    \"age_group\": \"string\",\n    \"situation\": \"string\"\n  },\n  \"matched_policies\": [\n    {\n      \"policy_name\": \"string\",\n      \"issuing_authority\": \"string\",\n      \"why_relevant\": \"one line explanation of why this matches\",\n      \"key_benefit\": \"main benefit in simple language\",\n      \"eligibility_match\": [\"criteria that matches citizen profile\"]\n    }\n  ],\n  \"total_matches\": number,\n  \"message\": \"simple friendly message telling citizen how many \n              other schemes they may qualify for\"\n}\n\nIf no matches found return:\n{\n  \"citizen_profile\": {\n    \"category\": \"string\",\n    \"location\": \"string\",\n    \"age_group\": \"string\",\n    \"situation\": \"string\"\n  },\n  \"matched_policies\": [],\n  \"total_matches\": 0,\n  \"message\": \"No other matching schemes found at this time.\"\n}\n\n─────────────────────────────────────\nRULES\n─────────────────────────────────────\n- Never invent policies not found in search results\n- Never include the citizen's own uploaded policy in matches\n- Always run exactly 3 search queries before concluding\n- Only match where location OR category clearly aligns\n- Keep why_relevant and key_benefit in simple plain language\n- Return only valid JSON, no extra text, no markdown, no backticks"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1104,
+        -192
+      ],
+      "id": "dcd58702-56fb-4171-ad61-0d2af8a75836",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1104,
+        -32
+      ],
+      "id": "3126fdbb-20fe-48fe-9b9c-1d6d777a048c",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QuWkYGc8c3RRJpUy",
+          "name": "Google Gemini(PaLM) Api account 8"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-embedding-001"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1344,
+        80
+      ],
+      "id": "df0b3870-30bb-4125-a33a-9f31d2370652",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QuWkYGc8c3RRJpUy",
+          "name": "Google Gemini(PaLM) Api account 8"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "299f8076-3169-4b30-99d7-66b25015088b",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -528,
+        16
+      ],
+      "id": "c74a1e79-16f6-4ec2-b36a-2b8f72106c3a",
+      "name": "Webhook - WebApp",
+      "webhookId": "299f8076-3169-4b30-99d7-66b25015088b"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        208,
+        -48
+      ],
+      "id": "f1875835-a404-4717-9f6d-f4154a99ffd6",
+      "name": "Respond to WebApp Backend"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "CUSTOM.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        208,
+        -224
+      ],
+      "id": "01af3c3e-888b-45f9-9c78-7ff847bb3cda",
+      "name": "Respond to ByteMe Zynd Node"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "=sessionKey: {{ $json.session_id }}",
+        "contextWindowLength": 15
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -32,
+        16
+      ],
+      "id": "bc578e6b-6b88-4ff2-abb3-f4070b32568b",
+      "name": "Save Context"
+    },
+    {
+      "parameters": {
+        "responseMode": "lastNode",
+        "serverWalletAddress": "0x81adD674D6C79F764bC8E6999b37A890531F6492",
+        "price": "$0",
+        "network": "ethereum",
+        "options": {}
+      },
+      "type": "CUSTOM.zyndX402Webhook",
+      "typeVersion": 1,
+      "position": [
+        -528,
+        -176
+      ],
+      "id": "dd04eb50-bb30-431a-8f6b-d1489939f91b",
+      "name": "Zynd Webhook - ByteMe",
+      "webhookId": "faa7dd8e-6e09-4649-8706-0437531324db"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        16
+      ],
+      "id": "d7f602ef-218b-4d54-8463-0bd0b35ab399",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QuWkYGc8c3RRJpUy",
+          "name": "Google Gemini(PaLM) Api account 8"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Agent - 2: Eligibility Verification + ByteMe Agent Collaboration \nAutomates checks against criteria to confirm citizen eligibility for programs. ",
+        "height": 480,
+        "width": 1008,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -624,
+        -288
+      ],
+      "typeVersion": 1,
+      "id": "b2cd00ec-84e2-4d77-b51a-366abd0a3600",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Here is the policy eligibility data received from Agent 1.\nUse this to conduct the eligibility interview.\n\nPolicy Context:\nEligibility Conditions: {{ $json.eligibility_summary }}\nRequired Documents: {{ $json.required_documents }}\nHow to Apply: {{ $json.how_to_apply }}\nIssuing Authority Contact: {{ $json.issuing_authority_contact }}\n\nLatest User Message (reply to your last question):\n{{ $('Webhook - WebApp').item.json.body.answer ?? '' }}\n\nInstructions:\n- If the latest user message is empty, this is the FIRST message — ask the opening confirmation question only, nothing else\n- If user said yes, begin asking eligibility questions one by one\n- If conversation history has all answers, evaluate and return final JSON verdict\n- If eligible or partially eligible, query the RAG knowledge base for other matching schemes and include them in your response",
+        "options": {
+          "systemMessage": "You are a friendly Citizen Eligibility Advisor. Your job is to \nverify whether a citizen qualifies for government policy by \nasking smart grouped questions — maximum 10 questions total.\n\nYou will receive:\n- Policy eligibility criteria from the database\n- Latest user message\n- Conversation history via memory\n\n─────────────────────────────────────\nOPENING MESSAGE\n─────────────────────────────────────\nIf no questions have been asked yet, send only this:\n\"I have your policy details ready. Would you like to check \nif you are eligible? (Yes / No)\"\n\n─────────────────────────────────────\nIF USER SAYS YES — QUESTION STRATEGY\n─────────────────────────────────────\nRead ALL eligibility conditions from the policy data.\nGroup related conditions into smart combined questions.\nYou must cover all criteria in a MAXIMUM of 10 questions.\n\nGrouping rules:\n- Combine all \"situation-based\" child conditions into 1 question\n- Combine all \"foster parent stability\" conditions into 1 question  \n- Combine all \"willingness to comply\" conditions into 1 question\n- Ask basic qualifying criteria first\n- Never ask about something the user already implied in a \n  prior answer\n\nExample of good grouping:\nInstead of asking 8 separate yes/no questions about child \nsituations, ask ONE: \"What is the main reason the child \nneeds foster care? (e.g. orphan, family crisis, safety risk)\"\nThen match their single answer against multiple criteria.\n\nAsk ONE question at a time. Wait for reply before next.\n\n─────────────────────────────────────\nHARD LIMITS\n─────────────────────────────────────\n- Maximum 10 questions total. No exceptions.\n- After 10 questions stop immediately and evaluate.\n- Never repeat a question already answered.\n- Never ask two questions in one message.\n- Never restart the question flow mid-conversation.\n- If user's answer clearly covers multiple criteria, \n  count those as answered and skip related questions.\n\n─────────────────────────────────────\nLOOP PREVENTION\n─────────────────────────────────────\nBefore every question, count how many questions have already \nbeen asked in the conversation history.\nIf count is 10 or more, skip directly to evaluation.\nNever ask a question whose answer is already implied by a \nprevious response.\n\n─────────────────────────────────────\nCRITERIA MATCHING RULES\n─────────────────────────────────────\nWhen filling matched_criteria and failed_criteria you MUST \nfollow these rules strictly:\n\n- matched_criteria: list EVERY criterion the user confirmed \n  with yes, or that their answer clearly satisfies\n- failed_criteria: list ONLY criteria the user explicitly \n  said no to or clearly does not meet\n- unverified_criteria: list ONLY criteria that were never \n  asked about at all in the conversation\n- NEVER leave matched_criteria empty if the user said yes \n  to any question\n- A \"no\" to the FIRST qualifying question (e.g. \"are you a \n  farmer?\") should populate failed_criteria for that one \n  criterion only — the remaining unasked criteria go into \n  unverified_criteria, NOT failed_criteria\n\n─────────────────────────────────────\n─────────────────────────────────────\nFINAL EVALUATION\n─────────────────────────────────────\nAfter all questions are answered or 10 question limit is \nreached, output exactly this JSON and nothing else:\n\n{\n  \"status\": \"eligible\" or \"not_eligible\" or \"partially_eligible\",\n  \"matched_criteria\": [\"every criterion the user confirmed\"],\n  \"failed_criteria\": [\"only criteria user explicitly failed\"],\n  \"unverified_criteria\": [\"criteria never asked about\"],\n  \"summary\": \"one simple sentence verdict\"\n}\n\nOutput ONLY the above JSON. No extra fields. No extra objects.\nNo \"proceed_to_benefit_matching\". No \"other_matching_schemes\".\nNothing after the closing } of the JSON."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -144,
+        -176
+      ],
+      "id": "ad35e626-22f4-48ed-aeeb-77fe4e1347ef",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "policies",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "session_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.body.session_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        -176
+      ],
+      "id": "67cd40c3-78e5-4cba-83ff-c225bb1f17b4",
+      "name": "Get Agent 1 Policy Data",
+      "credentials": {
+        "supabaseApi": {
+          "id": "9qxWqifq9IrlmXMl",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Searches the government policy knowledge base to find schemes \nrelevant to the citizen's profile. Each result contains the \nfull policy name, eligibility criteria, benefits, and documents \nrequired in a single chunk.\n\nPass a natural language query describing the citizen's category, \nlocation, and situation to retrieve the most relevant matches.\n\nExamples:\n\"farmer crop loan subsidy Gujarat\"\n\"agricultural cooperative society financial assistance\"\n\"Kharif season loan repayment benefit farmer\"\n\nUse multiple queries to get comprehensive results.",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "topK": 10,
+        "options": {
+          "queryName": "match_documents"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        1344,
+        -48
+      ],
+      "id": "0f348978-2392-4e83-ac67-41109f7963d3",
+      "name": "policies_vector_store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "9qxWqifq9IrlmXMl",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        880,
+        -192
+      ],
+      "id": "70881d5a-ef17-45b6-a501-59d8f6b614a9",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "responseMode": "responseNode",
+        "serverWalletAddress": "0x81adD674D6C79F764bC8E6999b37A890531F6492",
+        "price": "$0",
+        "network": "ethereum",
+        "options": {}
+      },
+      "type": "CUSTOM.zyndX402Webhook",
+      "typeVersion": 1,
+      "position": [
+        496,
+        -192
+      ],
+      "id": "4c96032e-63d0-4d7e-b903-98bfa9191f05",
+      "name": "Zynd Agent 3 Trigger Webhook",
+      "webhookId": "1cf41349-c5de-4ed3-8be9-e764406dc28e"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "CUSTOM.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1440,
+        -208
+      ],
+      "id": "74333ce8-ae95-46ac-957c-c8d56b0e6efe",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Get Policy Data of that session": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "policies_vector_store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook - WebApp": {
+      "main": [
+        [
+          {
+            "node": "Get Agent 1 Policy Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Zynd Webhook - ByteMe": {
+      "main": [
+        [
+          {
+            "node": "Get Agent 1 Policy Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Context": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to ByteMe Zynd Node",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Respond to WebApp Backend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Agent 1 Policy Data": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "policies_vector_store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Zynd Agent 3 Trigger Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get Policy Data of that session",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "dfa2fd26-368d-4dfe-939c-569e633ec71a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f58e9065c09e44830cdc01e4b503b188a6ba960f9457b74e4a9076b993d1dcff"
+  },
+  "id": "k4O4qqAHrHnaQCV9lRP_t",
+  "tags": []
+}

@@ -1,0 +1,520 @@
+{
+  "name": "Agent -  1 (Policy Interpretation)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Policy Ingesiton & Interpretation ",
+        "height": 432,
+        "width": 1472,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -96,
+        -112
+      ],
+      "typeVersion": 1,
+      "id": "06eacba1-82e4-47d1-beab-9a1def1579ef",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "tableId": "policies",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "session_id",
+              "fieldValue": "={{ $('Zynd Webhook - Recieve Policy File').item.json.body.session_id }}"
+            },
+            {
+              "fieldId": "policy_name",
+              "fieldValue": "={{ $json.policy_name }}"
+            },
+            {
+              "fieldId": "issuing_authority",
+              "fieldValue": "={{ $json.issuing_authority }}"
+            },
+            {
+              "fieldId": "objective",
+              "fieldValue": "={{ $json.objective }}"
+            },
+            {
+              "fieldId": "who_is_it_for",
+              "fieldValue": "={{ $json.who_is_it_for }}"
+            },
+            {
+              "fieldId": "key_benefits",
+              "fieldValue": "={{ $json.key_benefits }}"
+            },
+            {
+              "fieldId": "eligibility_summary",
+              "fieldValue": "={{ $json.eligibility_summary }}"
+            },
+            {
+              "fieldId": "required_documents",
+              "fieldValue": "={{ $json.required_documents }}"
+            },
+            {
+              "fieldId": "how_to_apply",
+              "fieldValue": "={{ $json.how_to_apply }}"
+            },
+            {
+              "fieldId": "important_dates",
+              "fieldValue": "={{ $json.important_dates }}"
+            },
+            {
+              "fieldId": "issuing_authority_contact",
+              "fieldValue": "={{ $json.issuing_authority_contact }}"
+            },
+            {
+              "fieldId": "created_at",
+              "fieldValue": "={{ $now }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1152,
+        128
+      ],
+      "id": "4c1021ca-6f9b-4b4d-85bb-5baf13c1294c",
+      "name": "Add Data in DB",
+      "credentials": {
+        "supabaseApi": {
+          "id": "9qxWqifq9IrlmXMl",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Here is the raw government policy document text extracted from the citizen's uploaded file. Read it fully and return the structured JSON as instructed.\n\nPolicy Text:\n{{ $json.content.parts[0].text }}",
+        "options": {
+          "systemMessage": "You are a government policy expert and citizen advocate. Your only job is to read raw government policy text and convert it into simple, easy to understand language for a common citizen. You will always respond in this exact JSON structure, nothing else:\n\n{\n\"policy_name\": \"string\",\n\"issuing_authority\": \"string\",\n\"objective\": \"string — explain in 1 simple sentence what this policy does\",\n\"who_is_it_for\": \"string — explain in plain language who this policy targets\",\n\"key_benefits\": [\n\"simple one line explanation of each benefit\"\n],\n\"eligibility_summary\": [\n\"simple one line per eligibility condition\"\n],\n\"required_documents\": [\n\"document name\"\n],\n\"how_to_apply\": \"string — step by step in plain simple language\",\n\"important_dates\": {\n\"start_date\": \"string or null\",\n\"last_date\": \"string or null\"\n},\n\"issuing_authority_contact\": \"string or null\"\n}\n\nRules:\n\nUse simple English a 10th grader can understand\n\nNever use legal or bureaucratic jargon\n\nIf any field data is not found in the document return null\n\nReturn only the JSON, no extra text, no markdown, no code blocks"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        592,
+        16
+      ],
+      "id": "85a430e8-aefd-4456-a858-8a5a2f90f5c5",
+      "name": "AI Agent - Policy Interpretation"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        592,
+        176
+      ],
+      "id": "035cfa69-2da8-4009-963e-6b3931d5f412",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "h6g9C0WgRQMdgfTF",
+          "name": "Google Gemini(PaLM) Api account 7"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7ba346ed-4364-4229-8475-0fe7e4c05b30",
+              "name": "content.parts[0].text",
+              "value": "={{ $json.content.parts[0].text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        384,
+        160
+      ],
+      "id": "2d137b1d-2b94-45f8-9db9-bcfaa1f438ac",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "resource": "document",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "text": "=You are a document reader. Extract and return the complete raw text \ncontent from the provided document exactly as it appears. \n\nDo not summarize. Do not interpret. Do not skip any section.\nReturn only the extracted text, nothing else.\n\n\n",
+        "inputType": "binary",
+        "binaryPropertyName": "file",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        176,
+        16
+      ],
+      "id": "fca4dc5c-6f0a-47dc-ad43-4bfd066a9067",
+      "name": "Extract Content",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "h6g9C0WgRQMdgfTF",
+          "name": "Google Gemini(PaLM) Api account 7"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "CUSTOM.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1152,
+        -64
+      ],
+      "id": "e035be45-aa9d-4619-bed8-1dc291d5c32e",
+      "name": "Respond to Zynd Webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get raw output\nlet raw = items[0].json.output || \"\";\n\n// Remove markdown fences\nraw = raw\n  .replace(/```json/gi, '')\n  .replace(/```/g, '')\n  .replace(/^\\s+|\\s+$/g, '');\n\n// If response wraps JSON as a string literal with escaped quotes, fix it\n// Example: \"{\\\"policy_name\\\": \\\"Cash...\\\"}\"\nif (/^\"{/.test(raw) && /}\"$/.test(raw)) {\n  try {\n    raw = JSON.parse(raw);\n    raw = JSON.stringify(raw);\n  } catch (e) {\n    // Continue to next fallback\n  }\n}\n\n// Try direct JSON parsing\ntry {\n  const parsed = JSON.parse(raw);\n  return [{ json: parsed }];\n} catch (err) {\n  // Try to auto-extract JSON substring\n  const match = raw.match(/\\{[\\s\\S]*\\}/);\n  if (match) {\n    try {\n      const parsed = JSON.parse(match[0]);\n      return [{ json: parsed }];\n    } catch (err2) {\n      throw new Error(\"JSON parse failed. Extracted block also invalid.\\n\" + match[0]);\n    }\n  }\n\n  // Final fallback\n  throw new Error(\"JSON parsing failed.\\nRaw received:\\n\" + raw);\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        912,
+        16
+      ],
+      "id": "7579cb56-9760-4c7c-a4bb-5a840fa2cf33",
+      "name": "Parse Agent Response"
+    },
+    {
+      "parameters": {
+        "content": "## RAG - Add Policy data to Vector DB",
+        "height": 448,
+        "width": 864,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        192,
+        352
+      ],
+      "typeVersion": 1,
+      "id": "4ffa5d9b-2221-4853-b8c2-7dfd56df0bd0",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.first().json.data;\n\n// Extract all text values\nconst allTexts = items.map(item => \n  item.content?.parts?.[0]?.text || \"\"\n).filter(Boolean);\n\n// Deduplicate by taking only unique texts\nconst uniqueTexts = [...new Set(allTexts)];\n\n// Join into single clean document\nconst cleanText = uniqueTexts.join(\"\\n\\n\");\n\nreturn [{\n  json: {\n    text: cleanText\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        416
+      ],
+      "id": "5acccaf6-a8af-4380-b303-c87f1273856e",
+      "name": "Deduplicate Code Node"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        240,
+        416
+      ],
+      "id": "4591ce10-952e-462e-9d18-74ee8c715a4a",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "chunkSize": 2000,
+        "chunkOverlap": 200,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        848,
+        672
+      ],
+      "id": "ccda676d-2c04-4787-95e7-6ead6d6b2de7",
+      "name": "Recursive Character Text Splitter"
+    },
+    {
+      "parameters": {
+        "textSplittingMode": "custom",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        800,
+        544
+      ],
+      "id": "230684ca-28ee-45a1-bb48-f88d7f1e8971",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-embedding-001"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        624,
+        576
+      ],
+      "id": "68188c8e-10c4-4059-9450-300008512441",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "h6g9C0WgRQMdgfTF",
+          "name": "Google Gemini(PaLM) Api account 7"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "embeddingBatchSize": 100,
+        "options": {
+          "queryName": "match_documents"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        624,
+        416
+      ],
+      "id": "0542ee4d-5480-4f0a-8175-0d3c0b93b9dc",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "9qxWqifq9IrlmXMl",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://test-n8n.zynd.ai/webhook/ad25fba0-4ed9-4dd3-9e12-de94cdb69081/pay",
+        "method": "POST",
+        "sendBody": true,
+        "contentType": "text/plain",
+        "rawBody": "={{ $json.content.parts[0].text }}",
+        "maxPaymentUsd": 0
+      },
+      "type": "CUSTOM.zyndHttpRequestX402",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -96
+      ],
+      "id": "282bba25-6856-4262-8a09-f38fb861e981",
+      "name": "Call Team ByteMe Agent",
+      "credentials": {
+        "web3wallet": {
+          "id": "mPPzdlT3FqtBEvSu",
+          "name": "Web3 Wallet Credentials account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "responseMode": "lastNode",
+        "serverWalletAddress": "0x81adD674D6C79F764bC8E6999b37A890531F6492",
+        "price": "$0",
+        "options": {}
+      },
+      "type": "CUSTOM.zyndX402Webhook",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        16
+      ],
+      "id": "4bbdf72a-8d65-4db0-bdca-086781f0359b",
+      "name": "Zynd Webhook - Recieve Policy File",
+      "webhookId": "979cfe28-657f-4314-b806-5d7df0c989c9"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "AI Agent - Policy Interpretation": {
+      "main": [
+        [
+          {
+            "node": "Parse Agent Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent - Policy Interpretation",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Content": {
+      "main": [
+        [
+          {
+            "node": "AI Agent - Policy Interpretation",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Call Team ByteMe Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Agent Response": {
+      "main": [
+        [
+          {
+            "node": "Add Data in DB",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Respond to Zynd Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Deduplicate Code Node",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deduplicate Code Node": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Zynd Webhook - Recieve Policy File": {
+      "main": [
+        [
+          {
+            "node": "Extract Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "852165bc-b4d6-4f14-833b-e716ebd3d448",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f58e9065c09e44830cdc01e4b503b188a6ba960f9457b74e4a9076b993d1dcff"
+  },
+  "id": "xIgos4W1gnquRrl39Kgch",
+  "tags": []
+}

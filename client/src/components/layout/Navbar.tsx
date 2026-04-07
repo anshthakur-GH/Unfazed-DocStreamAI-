@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
-import { BarChart3 } from "lucide-react";
-import { KnowledgeModal } from "@/components/common/KnowledgeModal";
+import { BarChart3, Upload } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
 
 export const Navbar = () => {
   const location = useLocation();
@@ -30,7 +30,14 @@ export const Navbar = () => {
 
           {/* Actions (right) */}
           <div className="flex items-center space-x-3 z-10">
-            {isAuthenticated && <KnowledgeModal />}
+            {isAuthenticated && (
+              <Button asChild className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 h-auto text-sm font-bold tracking-widest uppercase transition-all shadow-lg shadow-blue-600/20">
+                <a href="https://n8n.cognigenai.in/form/ac89d498-e2b8-4e85-9dd0-893c3b7f18d5" target="_blank" rel="noopener noreferrer">
+                  <Upload className="h-4 w-4 mr-2" />
+                  Upload Doc
+                </a>
+              </Button>
+            )}
 
             <Link
               to="/stats"
