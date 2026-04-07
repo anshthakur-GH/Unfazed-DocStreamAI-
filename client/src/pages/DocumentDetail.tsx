@@ -111,7 +111,12 @@ export default function DocumentDetail() {
               </Badge>
             </div>
             
+<<<<<<< HEAD
             <h1 className="text-4xl font-black text-slate-900 mb-2 tracking-tighter leading-tight uppercase">
+=======
+<<<<<<< HEAD
+            <h1 className="text-4xl font-black text-slate-900 mb-4 tracking-tighter" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
+>>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
               {document.document_title}
             </h1>
             
@@ -125,13 +130,31 @@ export default function DocumentDetail() {
                 <span className="font-bold text-[10px] uppercase tracking-widest text-slate-500">Uploaded {safeFormatDate(document.upload_timestamp || document.createdAt)}</span>
               </div>
               <div className="flex items-center space-x-2 bg-slate-100/50 px-3 py-1.5 rounded-full border border-slate-200">
+<<<<<<< HEAD
                 <Users className="h-4 w-4 text-blue-600" />
                 <span className="font-bold text-[10px] uppercase tracking-widest text-slate-500">By {document.uploaded_by} ({document.user_profile})</span>
+=======
+                <Clock className="h-4 w-4 text-blue-600" />
+                <span className="font-medium">Modified {safeFormatDate(document.updatedAt || document.createdAt || document._id)}</span>
+=======
+            <h1 className="text-3xl font-bold text-foreground mb-4">{document.document_title}</h1>
+            
+            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+              <div className="flex items-center space-x-2 border border-black/10 p-1.5 rounded-md">
+                <Calendar className="h-4 w-4" />
+                <span>Uploaded {safeFormatDate(document.upload_timestamp)}</span>
+              </div>
+              <div className="flex items-center space-x-2 border border-black/10 p-1.5 rounded-md">
+                <Users className="h-4 w-4" />
+                <span>By {document.uploaded_by} ({document.user_profile})</span>
+>>>>>>> d37c9d43293122daf4f5c2819b40669957f939f7
+>>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
               </div>
             </div>
           </div>
 
           <div className="flex items-center space-x-3">
+<<<<<<< HEAD
             {(document.webViewLink || document.google_drive_link) && (
               <a 
                 href={document.webViewLink || document.google_drive_link || "#"} 
@@ -143,6 +166,20 @@ export default function DocumentDetail() {
               </a>
             )}
             <Button variant="outline" size="sm" className="bg-green-500 text-white hover:bg-green-600 font-bold tracking-widest uppercase shadow-lg shadow-green-500/20 h-10 px-5 border-none rounded-xl active:scale-95" onClick={handleDownloadPdf}>
+=======
+<<<<<<< HEAD
+            {document.webViewLink && (
+              <a 
+                href={document.webViewLink} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-bold tracking-widest uppercase transition-all shadow-lg bg-orange-500 text-white hover:bg-orange-600 h-10 px-4 shadow-orange-500/20"
+              >
+                See Original Document
+              </a>
+            )}
+            <Button variant="outline" size="sm" className="bg-green-500 text-white hover:bg-green-600 font-bold tracking-widest uppercase shadow-lg shadow-green-500/20 h-10 px-4 border-none" onClick={handleDownloadPdf}>
+>>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
               <Download className="h-4 w-4 mr-2" />
               PDF
             </Button>
@@ -151,12 +188,30 @@ export default function DocumentDetail() {
                 <Edit className="h-4 w-4 mr-2" />
                 Edit
               </Link>
+<<<<<<< HEAD
+=======
+=======
+            {(document.webViewLink || document.google_drive_link) && (
+              <a href={document.webViewLink || document.google_drive_link || "#"} target="_blank" rel="noopener noreferrer" 
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium border border-input bg-orange-500 text-white hover:bg-orange-600 h-9 px-3">
+                <ExternalLink className="h-4 w-4 mr-2" />
+                View Original
+              </a>
+            )}
+            <Button variant="outline" size="sm" className="bg-green-500 text-white hover:bg-green-600" onClick={handleDownloadPdf}>
+              <Download className="h-4 w-4 mr-2" />Download
+            </Button>
+            <Button size="sm" asChild className="bg-[#008285] text-white hover:bg-[#008285]/90">
+              <Link to={`/documents/${document._id}/edit`}><Edit className="h-4 w-4 mr-2" />Edit</Link>
+>>>>>>> d37c9d43293122daf4f5c2819b40669957f939f7
+>>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
             </Button>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-3">
+<<<<<<< HEAD
             <Card className="bg-white/80 backdrop-blur-3xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden mb-8">
               <CardContent className="p-8 md:p-12" ref={documentRef}>
                 <div className="space-y-8">
@@ -168,6 +223,26 @@ export default function DocumentDetail() {
                     ) : (
                       <p className="text-slate-700 leading-relaxed text-lg">{document.summary}</p>
                     )}
+=======
+<<<<<<< HEAD
+            <Card className="bg-white/80 backdrop-blur-3xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden">
+              <CardContent className="p-8 md:p-12" ref={documentRef}>
+                <div className="prose prose-gray max-w-none">
+                  {document.content ? (
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {document.content}
+                    </ReactMarkdown>
+                  ) : (
+                    <p className="text-muted-foreground italic">No content available for this document.</p>
+                  )}
+=======
+            <Card>
+              <CardContent className="p-8" ref={documentRef}>
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-xl font-semibold mb-3">Summary</h3>
+                    <p className="text-foreground leading-relaxed">{document.summary}</p>
+>>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
                   </div>
 
                   <Separator className="bg-slate-100" />
@@ -201,6 +276,31 @@ export default function DocumentDetail() {
                       ))}
                     </div>
                   </div>
+<<<<<<< HEAD
+=======
+
+                  <Separator />
+                  
+                  <div className="grid grid-cols-2 gap-6">
+                    <div>
+                      <h4 className="text-sm font-medium text-muted-foreground mb-1">Research Domain</h4>
+                      <p>{document.research_domain || "N/A"}</p>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-medium text-muted-foreground mb-1">Academic Year</h4>
+                      <p>{document.academic_year || "N/A"}</p>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-medium text-muted-foreground mb-1">Course Code</h4>
+                      <p>{document.course_code || "N/A"}</p>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-medium text-muted-foreground mb-1">Funding Source</h4>
+                      <p>{document.funding_source || "N/A"}</p>
+                    </div>
+                  </div>
+>>>>>>> d37c9d43293122daf4f5c2819b40669957f939f7
+>>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
                 </div>
               </CardContent>
             </Card>
@@ -261,14 +361,27 @@ export default function DocumentDetail() {
           </div>
 
           <div className="lg:col-span-1">
+<<<<<<< HEAD
             <Card className="bg-white/70 backdrop-blur-2xl border-slate-200 shadow-lg shadow-slate-200/30 rounded-2xl overflow-hidden sticky top-24">
+=======
+<<<<<<< HEAD
+            <Card className="bg-white/70 backdrop-blur-2xl border-slate-200 shadow-lg shadow-slate-200/30 rounded-2xl overflow-hidden">
+>>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
               <CardHeader className="border-b border-slate-100">
                 <h3 className="font-black text-slate-900 uppercase tracking-widest text-xs flex items-center">
                   <FileText className="h-4 w-4 mr-2 text-blue-600" />
                   Intelligence Node
                 </h3>
               </CardHeader>
+<<<<<<< HEAD
               <CardContent className="space-y-6 pt-6">
+=======
+=======
+            <Card>
+              <CardHeader><h3 className="font-semibold flex items-center"><FileText className="h-5 w-5 mr-2" />Information</h3></CardHeader>
+>>>>>>> d37c9d43293122daf4f5c2819b40669957f939f7
+              <CardContent className="space-y-4">
+>>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
                 <div>
                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1.5">Node Type</label>
                   <p className="text-sm font-bold text-slate-700">{document.document_type}</p>
@@ -300,6 +413,133 @@ export default function DocumentDetail() {
             </Card>
           </div>
         </div>
+<<<<<<< HEAD
+=======
+
+<<<<<<< HEAD
+        {/* Related Documents Section - Full Width */}
+        <Card className="mt-8 bg-white/70 backdrop-blur-2xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden">
+          <CardHeader className="border-b border-slate-100">
+            <h3 className="text-xl font-semibold text-foreground flex items-center">
+              <Users className="h-6 w-6 mr-3" />
+              Related Documents
+            </h3>
+          </CardHeader>
+          <CardContent>
+            {relatedLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <RefreshCw className="h-5 w-5 animate-spin mr-3" />
+                <span className="text-muted-foreground">Loading related documents...</span>
+              </div>
+            ) : relatedDocuments && relatedDocuments.data.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {relatedDocuments.data.map((relatedDoc) => (
+                  <div key={relatedDoc._id} className="border rounded-lg p-4 hover:bg-muted/50 transition-colors hover:shadow-md">
+                    <Link to={`/documents/${relatedDoc._id}`} className="block h-full">
+                      <div className="flex items-start justify-between mb-3">
+                        <h4 className="font-medium text-foreground line-clamp-2 flex-1 text-base">
+                          {relatedDoc.document_title}
+                        </h4>
+                        <ExternalLink className="h-4 w-4 text-muted-foreground ml-2 flex-shrink-0" />
+                      </div>
+                      
+                      <div className="flex flex-wrap items-center gap-2 mb-3">
+                        <Badge 
+                          variant="outline" 
+                          className={`text-xs px-2 py-0 border-none transition-all ${documentTypeColors[relatedDoc.document_type as keyof typeof documentTypeColors] || "bg-gray-100 text-gray-800"}`}
+                        >
+                          {relatedDoc.document_type}
+                        </Badge>
+                        {relatedDoc.UrgencyLevel && (
+                          <Badge 
+                            variant="outline" 
+                            className={`text-xs px-2 py-0 border-none transition-all ${
+                              relatedDoc.UrgencyLevel === 'High' ? 'bg-red-100 text-red-800' :
+                              relatedDoc.UrgencyLevel === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-green-100 text-green-800'
+                            }`}
+                          >
+                            {relatedDoc.UrgencyLevel}
+                          </Badge>
+                        )}
+                      </div>
+                      
+                      {relatedDoc.summary && (
+                        <p className="text-sm text-muted-foreground line-clamp-3 mb-3">
+                          {relatedDoc.summary}
+                        </p>
+                      )}
+                      
+                      <div className="flex items-center justify-between mt-auto">
+                        <div className="flex flex-wrap gap-1">
+                          {relatedDoc.departments_tagged?.slice(0, 2).map((dept, index) => (
+                            <Badge key={index} variant="secondary" className="text-xs">
+                              {dept}
+                            </Badge>
+                          ))}
+                          {relatedDoc.departments_tagged && relatedDoc.departments_tagged.length > 2 && (
+                            <Badge variant="secondary" className="text-xs">
+                              +{relatedDoc.departments_tagged.length - 2}
+                            </Badge>
+                          )}
+                        </div>
+                        <span className="text-sm text-muted-foreground">
+                          {safeFormatDate(relatedDoc.createdAt)}
+=======
+        {/* Relevant Research Papers Section - Only for Lecture Notes */}
+        {document.document_type === 'Lecture Notes' && relatedDocuments && relatedDocuments.data.length > 0 && (
+          <div className="mt-12">
+            <div className="flex items-center space-x-3 mb-6 border-b border-blue-500/20 pb-4">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <FileText className="h-6 w-6 text-blue-600" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-foreground">Relevant Research Papers</h2>
+                <p className="text-sm text-muted-foreground">Expand your knowledge with these related publications</p>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {relatedDocuments.data.map((relatedDoc: any) => (
+                <Card key={relatedDoc._id} className="group hover:border-blue-400/50 hover:shadow-lg transition-all duration-300 border-cyan-100">
+                  <CardContent className="p-6">
+                    <div className="flex flex-col h-full">
+                      <div className="flex items-center justify-between mb-3">
+                        <Badge variant="secondary" className="bg-blue-100 text-blue-800 text-[10px] font-semibold border-none">
+                          RESEARCH PAPER
+                        </Badge>
+                        <span className="text-[10px] text-muted-foreground font-medium flex items-center">
+                          <Calendar className="h-3 w-3 mr-1 opacity-70" />
+                          {safeFormatDate(relatedDoc.upload_timestamp, 'MMM dd, yyyy')}
+>>>>>>> d37c9d43293122daf4f5c2819b40669957f939f7
+                        </span>
+                      </div>
+                      <Link to={`/documents/${relatedDoc._id}`} className="group-hover:text-blue-600 transition-colors mb-3">
+                        <h4 className="font-bold text-lg line-clamp-1 text-foreground leading-tight">{relatedDoc.document_title}</h4>
+                      </Link>
+                      <p className="text-sm text-muted-foreground line-clamp-2 mb-5 flex-grow italic">
+                        {relatedDoc.summary}
+                      </p>
+                      <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100">
+                        <div className="text-xs font-medium text-slate-500 truncate max-w-[150px] flex items-center">
+                          <Users className="h-3 w-3 mr-1.5 opacity-50" />
+                          {relatedDoc.authors?.length > 0 ? relatedDoc.authors[0] : 'Unknown Author'}
+                          {relatedDoc.authors?.length > 1 && ` +${relatedDoc.authors.length - 1}`}
+                        </div>
+                        <Button variant="ghost" size="sm" asChild className="h-8 px-3 text-blue-600 hover:text-blue-700 hover:bg-blue-50 font-semibold group-hover:translate-x-1 transition-transform">
+                          <Link to={`/documents/${relatedDoc._id}`}>
+                            Details <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
+                          </Link>
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
+>>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
       </div>
     </div>
   );
