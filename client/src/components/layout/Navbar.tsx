@@ -16,7 +16,7 @@ export const Navbar = () => {
 
           {/* Branding on the left */}
           <Link to="/dashboard" className="flex items-center space-x-2 z-10">
-            <span className="text-2xl font-black tracking-tighter text-blue-600 uppercase">
+            <span className="text-3xl font-black tracking-tighter text-blue-600 uppercase">
               Unfazed <span className="text-slate-900">DocStream AI</span>
             </span>
           </Link>

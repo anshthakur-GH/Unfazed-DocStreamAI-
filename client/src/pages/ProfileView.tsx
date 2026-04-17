@@ -39,7 +39,7 @@ export default function ProfileView() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-6xl font-black text-slate-900 mb-3 tracking-tighter uppercase leading-none">
+          <h1 className="text-4xl font-black text-slate-900 mb-3 tracking-tighter uppercase leading-none">
             {profileName} <span className="text-blue-600">NODE</span>
           </h1>
           <p className="text-slate-500 font-medium tracking-widest uppercase text-xs">
