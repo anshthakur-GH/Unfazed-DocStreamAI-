@@ -27,6 +27,7 @@ import { useDocument, useRelatedDocuments } from "@/hooks/useDocuments";
 import { safeFormatDate } from "@/lib/utils";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { DocAIChat } from "@/components/documents/DocAIChat";
 
 import { useRef } from "react";
 
@@ -264,10 +265,13 @@ export default function DocumentDetail() {
           <div className="lg:col-span-1">
             <Card className="bg-white/70 backdrop-blur-2xl border-slate-200 shadow-lg shadow-slate-200/30 rounded-2xl overflow-hidden sticky top-24">
               <CardHeader className="border-b border-slate-100">
-                <h3 className="font-black text-slate-900 uppercase tracking-widest text-xs flex items-center">
-                  <FileText className="h-4 w-4 mr-2 text-blue-600" />
-                  Intelligence Node
-                </h3>
+                <div className="flex flex-col gap-4">
+                  <h3 className="font-black text-slate-900 uppercase tracking-widest text-xs flex items-center">
+                    <FileText className="h-4 w-4 mr-2 text-blue-600" />
+                    Intelligence Node
+                  </h3>
+                  <DocAIChat documentId={document._id} documentTitle={document.document_title} />
+                </div>
               </CardHeader>
               <CardContent className="space-y-6 pt-6">
                 <div>
