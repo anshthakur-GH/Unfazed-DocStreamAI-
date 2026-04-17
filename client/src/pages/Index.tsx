@@ -2,9 +2,11 @@ import { Navbar } from "@/components/layout/Navbar";
 import { HeroSection } from "@/components/layout/HeroSection";
 import { DocumentTable } from "@/components/documents/DocumentTable";
 import { LatestNewsSection } from "@/components/layout/LatestNewsSection";
-import { BookOpen, FileText, Layout } from "lucide-react";
+import { useSearch } from "@/contexts/SearchContext";
+import { BookOpen, FileText, Layout, Search } from "lucide-react";
 
 const Index = () => {
+  const { searchTerm } = useSearch();
   return (
     <div className="relative min-h-screen bg-background text-foreground font-sans overflow-hidden">
 
