@@ -39,7 +39,7 @@ export const Navbar = () => {
               </Button>
             )}
 
-            <Button asChild variant="outline" className="bg-white/70 backdrop-blur-md border-slate-200 text-slate-900 font-bold tracking-widest uppercase hover:bg-white rounded-lg px-4 py-2 h-auto text-sm transition-all shadow-lg shadow-slate-200/50">
+            <Button asChild className="bg-[#2dd4bf] hover:bg-[#26bba7] text-slate-900 rounded-lg px-4 py-2 h-auto text-sm font-bold tracking-widest uppercase transition-all shadow-lg shadow-teal-500/30 border-none">
               <a href="https://latexly.unfazedai.in" target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="h-4 w-4 mr-2" />
                 Visit Latexly
