@@ -112,15 +112,15 @@ export default function DocumentDetail() {
                 {document.urgency_level}
               </Badge>
             </div>
-            
+
             <h1 className="text-4xl font-black text-slate-900 mb-2 tracking-tighter leading-tight uppercase">
               {document.document_title}
             </h1>
-            
+
             <p className="text-lg text-slate-500 font-medium tracking-tight w-full mb-6 leading-relaxed">
               {highlightDatesInText(document.summary || 'No summary available')}
             </p>
-            
+
             <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
               <div className="flex items-center space-x-2 bg-slate-100/50 px-3 py-1.5 rounded-full border border-slate-200">
                 <Calendar className="h-4 w-4 text-blue-600" />
@@ -133,25 +133,30 @@ export default function DocumentDetail() {
             </div>
           </div>
 
-          <div className="flex items-center space-x-3">
+          <div className="flex flex-col gap-2 shrink-0 items-end">
+            <DocAIChat documentId={document._id} documentTitle={document.document_title} />
+
             {(document.webViewLink || document.google_drive_link) && (
-              <a 
-                href={document.webViewLink || document.google_drive_link || "#"} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm font-bold tracking-widest uppercase transition-all shadow-lg bg-orange-500 text-white hover:bg-orange-600 h-10 px-5 shadow-orange-500/20 active:scale-95"
+              <a
+                href={document.webViewLink || document.google_drive_link || "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-xl text-[10px] font-bold tracking-widest uppercase transition-all shadow-lg bg-orange-500 text-white hover:bg-orange-600 h-9 w-48 shadow-orange-500/20 active:scale-95"
               >
+                <ExternalLink className="h-3.5 w-3.5 mr-2" />
                 View Original
               </a>
             )}
-            <Button variant="outline" size="sm" className="bg-green-500 text-white hover:bg-green-600 font-bold tracking-widest uppercase shadow-lg shadow-green-500/20 h-10 px-5 border-none rounded-xl active:scale-95" onClick={handleDownloadPdf}>
-              <Download className="h-4 w-4 mr-2" />
-              PDF
+
+            <Button variant="outline" size="sm" className="bg-green-500 text-white hover:bg-green-600 font-bold tracking-widest uppercase shadow-lg shadow-green-500/20 h-9 w-48 border-none rounded-xl active:scale-95 text-[10px]" onClick={handleDownloadPdf}>
+              <Download className="h-3.5 w-3.5 mr-2" />
+              PDF Download
             </Button>
-            <Button size="sm" asChild className="bg-blue-600 text-white hover:bg-blue-700 font-bold tracking-widest uppercase shadow-lg shadow-blue-600/20 h-10 px-5 rounded-xl active:scale-95">
+
+            <Button size="sm" asChild className="bg-blue-600 text-white hover:bg-blue-700 font-bold tracking-widest uppercase shadow-lg shadow-blue-600/20 h-9 w-48 rounded-xl active:scale-95 text-[10px]">
               <Link to={`/documents/${document._id}/edit`}>
-                <Edit className="h-4 w-4 mr-2" />
-                Edit
+                <Edit className="h-3.5 w-3.5 mr-2" />
+                Edit Doc
               </Link>
             </Button>
           </div>
@@ -173,7 +178,7 @@ export default function DocumentDetail() {
                   </div>
 
                   <Separator className="bg-slate-100" />
-                  
+
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                     <div>
                       <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Research Domain</h4>
@@ -219,7 +224,7 @@ export default function DocumentDetail() {
                     <p className="text-slate-500 font-medium tracking-wide">Expand your knowledge with these specialized publications</p>
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {relatedDocuments.data.map((relatedDoc: any) => (
                     <Card key={relatedDoc._id} className="group bg-white/70 backdrop-blur-xl border-slate-200 hover:border-blue-400/50 hover:shadow-2xl hover:shadow-blue-600/10 transition-all duration-500 rounded-2xl overflow-hidden">
@@ -240,7 +245,7 @@ export default function DocumentDetail() {
                               {relatedDoc.summary}
                             </p>
                           </Link>
-                          
+
                           <div className="flex items-center justify-between mt-auto pt-5 border-t border-slate-50">
                             <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest truncate max-w-[150px] flex items-center">
                               <Users className="h-3 w-3 mr-2 opacity-50" />
@@ -265,13 +270,10 @@ export default function DocumentDetail() {
           <div className="lg:col-span-1">
             <Card className="bg-white/70 backdrop-blur-2xl border-slate-200 shadow-lg shadow-slate-200/30 rounded-2xl overflow-hidden sticky top-24">
               <CardHeader className="border-b border-slate-100">
-                <div className="flex flex-col gap-4">
-                  <h3 className="font-black text-slate-900 uppercase tracking-widest text-xs flex items-center">
-                    <FileText className="h-4 w-4 mr-2 text-blue-600" />
-                    Intelligence Node
-                  </h3>
-                  <DocAIChat documentId={document._id} documentTitle={document.document_title} />
-                </div>
+                <h3 className="font-black text-slate-900 uppercase tracking-widest text-xs flex items-center">
+                  <FileText className="h-4 w-4 mr-2 text-blue-600" />
+                  Intelligence Node
+                </h3>
               </CardHeader>
               <CardContent className="space-y-6 pt-6">
                 <div>

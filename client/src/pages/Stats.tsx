@@ -66,7 +66,7 @@ const Stats = () => {
             </CardHeader>
             <CardContent>
               <div className="flex items-center space-x-2">
-                <Badge 
+                <Badge
                   variant={health?.database === 'connected' ? 'default' : 'destructive'}
                   className={`text-[10px] font-black uppercase tracking-widest px-2 py-0 h-5 border-none ${health?.database === 'connected' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}
                 >

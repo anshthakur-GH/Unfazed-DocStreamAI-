@@ -84,8 +84,8 @@ export const DocAIChat: React.FC<DocAIChatProps> = ({ documentId, documentTitle 
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger asChild>
-        <Button className="bg-indigo-600 hover:bg-indigo-700 text-white font-black tracking-widest uppercase shadow-xl shadow-indigo-600/20 h-10 px-6 rounded-xl active:scale-95 transition-all flex items-center gap-2">
-          <MessageSquare className="h-4 w-4" />
+        <Button className="bg-indigo-600 hover:bg-indigo-700 text-white font-black tracking-widest uppercase shadow-xl shadow-indigo-600/20 h-9 w-48 rounded-xl active:scale-95 transition-all flex items-center justify-center gap-2 text-[10px]">
+          <MessageSquare className="h-3.5 w-3.5" />
           Talk with DocAI
         </Button>
       </DrawerTrigger>
