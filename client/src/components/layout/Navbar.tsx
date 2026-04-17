@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { BarChart3, Upload } from "lucide-react";
+import { BarChart3, Upload, ExternalLink } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 
@@ -38,6 +38,13 @@ export const Navbar = () => {
                 </a>
               </Button>
             )}
+
+            <Button asChild variant="outline" className="bg-white/70 backdrop-blur-md border-slate-200 text-slate-900 font-bold tracking-widest uppercase hover:bg-white rounded-lg px-4 py-2 h-auto text-sm transition-all shadow-lg shadow-slate-200/50">
+              <a href="https://latexly.unfazedai.in" target="_blank" rel="noopener noreferrer">
+                <ExternalLink className="h-4 w-4 mr-2" />
+                Visit Latexly
+              </a>
+            </Button>
 
             <Link
               to="/stats"
