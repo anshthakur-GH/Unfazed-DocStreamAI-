@@ -24,7 +24,7 @@ const Index = () => {
           <LatestNewsSection title="Latest Alerts" />
           
           {/* Categorized Document Sections or Search Results */}
-          <div className="space-y-16">
+          <div className="space-y-8">
             {searchTerm ? (
               <section>
                 <div className="flex items-center space-x-3 mb-6 border-b border-blue-500/10 pb-4">

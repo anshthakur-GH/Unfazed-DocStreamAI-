@@ -52,7 +52,7 @@ export const HeroSection = () => {
   };
 
   return (
-    <div className="relative overflow-hidden pt-12 pb-24">
+    <div className="relative overflow-hidden pt-12 pb-12">
       {/* Decorative Cool Blue Ripples behind the hero */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-400/10 rounded-full blur-[140px] pointer-events-none -z-10" />
 
