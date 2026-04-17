@@ -15,18 +15,14 @@ export const Navbar = () => {
         <div className="flex items-center justify-between h-28 relative">
 
           {/* Branding on the left */}
-          <div className="flex items-center space-x-2 w-48">
-            <span className="text-2xl font-black tracking-tighter text-blue-600">
-              DocStream <span className="text-slate-900">AI</span>
+          <Link to="/dashboard" className="flex items-center space-x-2 z-10">
+            <span className="text-2xl font-black tracking-tighter text-blue-600 uppercase">
+              Unfazed <span className="text-slate-900">DocStream AI</span>
             </span>
-          </div>
+          </Link>
 
-          {/* Title in the middle */}
-          <div className="absolute inset-x-0 text-center pointer-events-none flex flex-col items-center justify-center h-full">
-            <h1 className="text-3xl font-black tracking-tighter text-slate-900 uppercase">
-              Unfazed AI
-            </h1>
-          </div>
+          {/* Spacer to push actions to the right */}
+          <div className="flex-1"></div>
 
           {/* Actions (right) */}
           <div className="flex items-center space-x-3 z-10">
