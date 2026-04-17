@@ -61,7 +61,7 @@ app.get('/api', (req, res) => {
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
-app.get('/:splat*', (req, res) => {
+app.get('/:path(.*)', (req, res) => {
   // If the request starts with /api, it shouldn't be handled by the catchall if it reached here (means 404)
   if (req.path.startsWith('/api')) {
     return res.status(404).json({
