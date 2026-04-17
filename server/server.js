@@ -59,16 +59,17 @@ app.get('/api', (req, res) => {
   });
 });
 
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
-app.get('/:path(.*)', (req, res) => {
-  // If the request starts with /api, it shouldn't be handled by the catchall if it reached here (means 404)
+// Fallback for SPA: for any request that doesn't match an API route or static file,
+// send back React's index.html file.
+app.use((req, res) => {
+  // If the request starts with /api, it's a 404 for the API
   if (req.path.startsWith('/api')) {
     return res.status(404).json({
       error: 'API Endpoint not found',
       path: req.originalUrl
     });
   }
+  // Otherwise, serve the frontend
   res.sendFile(path.join(clientDistPath, 'index.html'));
 });
 
