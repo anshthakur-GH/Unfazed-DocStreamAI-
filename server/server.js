@@ -1,0 +1,119 @@
+const express = require('express');
+const http = require('http');
+const cors = require('cors');
+require('dotenv').config({ override: true });
+
+// Import custom modules
+const connectDB = require('./config/database');
+const WebSocketService = require('./services/webSocket');
+const ChangeStreamHandler = require('./utils/changeStream');
+const apiRoutes = require('./routes/api');
+
+const app = express();
+const server = http.createServer(app);
+
+const PORT = process.env.PORT || 4000;
+
+// CORS allowlist (comma-separated origins in env), fallback to dev wildcard without credentials
+const allowlist = (process.env.CORS_ORIGINS || '').split(',').map(s => s.trim()).filter(Boolean);
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true); // non-browser clients
+    if (allowlist.length === 0) return callback(null, true); // dev mode fallback
+    if (allowlist.includes(origin)) return callback(null, true);
+    callback(new Error('Not allowed by CORS'));
+  },
+  credentials: !!process.env.CORS_CREDENTIALS, // only enable when origins are restricted
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+app.use(cors(corsOptions)); // safer CORS configuration [7][13]
+
+app.use(express.json());
+
+// Routes
+app.use('/api', apiRoutes);
+
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Real-time MongoDB API Server',
+    version: '1.0.0',
+    endpoints: {
+        health: '/api/health',
+        data: '/api/data',
+        recent: '/api/data/recent',
+        department: '/api/data/department/:name',
+        statsData: '/api/stats/data',
+        statsConnections: '/api/stats/connections'
+    },
+    websocket: `ws://${req.headers.host}`
+  });
+});
+
+// Updated 404 handler using named wildcard parameter (Express v5 compatible)
+app.use('/{*splat}', (req, res) => {
+  res.status(404).json({
+    error: 'Endpoint not found',
+    path: req.originalUrl
+  });
+});
+
+// Global error handler (after routes)
+app.use((err, req, res, next) => {
+  console.error('❌ Unhandled error:', err);
+  res.status(err.status || 500).json({
+    error: 'Internal server error',
+    details: process.env.NODE_ENV === 'development' ? err.message : undefined
+  });
+});
+
+async function initializeServer() {
+  try {
+    // Connect to MongoDB
+    const db = await connectDB();
+
+    // Initialize WebSocket service attached to the HTTP server (single port)
+    const websocketService = new WebSocketService({ server, pingIntervalMs: 30000 });
+    websocketService.initialize();
+
+    // Make websocket service available to routes
+    app.set('websocketService', websocketService);
+
+    // Initialize Change Stream handler (with resume support from updated util)
+    const changeStreamHandler = new ChangeStreamHandler(db, websocketService, {
+      collectionName: 'processed_documents'
+    });
+    await changeStreamHandler.initialize();
+
+    // Start HTTP server (serves both API and WebSocket upgrades)
+    server.listen(PORT, () => {
+      console.log(`🚀 HTTP server (API + WebSocket) running on port ${PORT}`);
+      console.log(`📡 API available at http://localhost:${PORT}/api`);
+      console.log(`🔌 WebSocket available at ws://localhost:${PORT}`);
+    });
+
+    // Graceful shutdown
+    const shutdown = async (signal) => {
+      console.log(`👋 ${signal} received, shutting down gracefully`);
+      try {
+        await changeStreamHandler.close();
+      } catch {}
+      try {
+        await websocketService.close();
+      } catch {}
+      server.close(() => process.exit(0));
+      // Force exit after timeout
+      setTimeout(() => process.exit(0), 5000).unref();
+    };
+
+    process.on('SIGTERM', () => shutdown('SIGTERM'));
+    process.on('SIGINT', () => shutdown('SIGINT'));
+  } catch (error) {
+    console.error('❌ Failed to initialize server:', error);
+    process.exit(1);
+  }
+}
+
+// Start the server
+initializeServer();
