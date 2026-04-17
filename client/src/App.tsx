@@ -14,6 +14,7 @@ import KnowledgePage from "./pages/KnowledgePage";
 import Stats from "./pages/Stats";
 import { DocumentForm } from "./components/documents/DocumentForm";
 import { Navbar } from "./components/layout/Navbar";
+import { ScrollToTop } from "./components/layout/ScrollToTop";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import LoginPage from "./pages/LoginPage"; // Import the new LoginPage component
 import Unauthorized from "./pages/Unauthorized"; // Import the new Unauthorized component
@@ -58,6 +59,7 @@ const App = () => {
             <Sonner />
             <ErrorBoundary>
               <BrowserRouter>
+                <ScrollToTop />
                 <Routes>
                   <Route path="/login" element={<LoginWrapper />} />
                   <Route path="/unauthorized" element={<Unauthorized />} />
