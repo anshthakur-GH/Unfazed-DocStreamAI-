@@ -125,11 +125,11 @@ const TestConnection = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-2 text-sm font-mono">
-                <div>GET http://localhost:4000/api/health</div>
-                <div>GET http://localhost:4000/api/data</div>
-                <div>POST http://localhost:4000/api/createData</div>
-                <div>GET http://localhost:4000/api/stats/data</div>
-                <div>GET http://localhost:4000/api/stats/connections</div>
+                <div>GET {apiService.getBaseUrl()}/health</div>
+                <div>GET {apiService.getBaseUrl()}/data</div>
+                <div>POST {apiService.getBaseUrl()}/createData</div>
+                <div>GET {apiService.getBaseUrl()}/stats/data</div>
+                <div>GET {apiService.getBaseUrl()}/stats/connections</div>
               </div>
             </CardContent>
           </Card>

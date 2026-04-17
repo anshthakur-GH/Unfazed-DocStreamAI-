@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config({ override: true });
 
 // Import custom modules
@@ -11,6 +12,9 @@ const apiRoutes = require('./routes/api');
 
 const app = express();
 const server = http.createServer(app);
+
+// Trust Render's proxy
+app.set('trust proxy', 1);
 
 const PORT = process.env.PORT || 4000;
 
@@ -34,8 +38,12 @@ app.use(express.json());
 // Routes
 app.use('/api', apiRoutes);
 
-// Root endpoint
-app.get('/', (req, res) => {
+// Serve static files from the React app
+const clientDistPath = path.join(__dirname, '../client/dist');
+app.use(express.static(clientDistPath));
+
+// Root API info endpoint (moved to /api)
+app.get('/api', (req, res) => {
   res.json({
     message: 'Real-time MongoDB API Server',
     version: '1.0.0',
@@ -47,16 +55,21 @@ app.get('/', (req, res) => {
         statsData: '/api/stats/data',
         statsConnections: '/api/stats/connections'
     },
-    websocket: `ws://${req.headers.host}`
+    websocket: `${req.protocol === 'https' ? 'wss' : 'ws'}://${req.headers.host}`
   });
 });
 
-// Updated 404 handler using named wildcard parameter (Express v5 compatible)
-app.use('/{*splat}', (req, res) => {
-  res.status(404).json({
-    error: 'Endpoint not found',
-    path: req.originalUrl
-  });
+// The "catchall" handler: for any request that doesn't
+// match one above, send back React's index.html file.
+app.get('*', (req, res) => {
+  // If the request starts with /api, it shouldn't be handled by the catchall if it reached here (means 404)
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({
+      error: 'API Endpoint not found',
+      path: req.originalUrl
+    });
+  }
+  res.sendFile(path.join(clientDistPath, 'index.html'));
 });
 
 // Global error handler (after routes)
