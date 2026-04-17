@@ -16,9 +16,9 @@ export const Navbar = () => {
 
           {/* Branding on the left */}
           <Link to="/dashboard" className="flex items-center space-x-2 z-10">
-            <h1 className="text-3xl font-black tracking-tighter text-blue-600">
-              DocStreamAI
-            </h1>
+            <span className="text-3xl font-black tracking-tighter text-blue-600">
+              DocStream<span className="text-slate-900">AI</span>
+            </span>
           </Link>
 
           {/* Spacer to push actions to the right */}
