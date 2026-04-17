@@ -81,67 +81,90 @@ export default function ProfileView() {
           </Link>
         </div>
 
-        {/* Categorized Streams */}
+        {/* Categorized Streams or Search Results */}
         <div className="space-y-24">
-          <section>
-            <div className="flex items-center justify-between mb-8 border-b-2 border-slate-100 pb-6">
-              <div className="flex items-center space-x-4">
-                <div className="p-3 bg-blue-600 rounded-2xl shadow-lg shadow-blue-600/20">
-                  <BookOpen className="h-6 w-6 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">Academic Intelligence</h2>
-                  <p className="text-sm text-slate-500 font-medium">Lecture notes and course documentation.</p>
+          {searchTerm ? (
+            <section>
+              <div className="flex items-center justify-between mb-8 border-b-2 border-slate-100 pb-6">
+                <div className="flex items-center space-x-4">
+                  <div className="p-3 bg-blue-600 rounded-2xl shadow-lg shadow-blue-600/20">
+                    <Search className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">Search Results</h2>
+                    <p className="text-sm text-slate-500 font-medium">Displaying all documents matching "{searchTerm}"</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <DocumentTable 
-              userProfileFilter={profileName}
-              documentTypeFilter="Lecture Notes" 
-              showControls={false} 
-              hideHeading={true} 
-            />
-          </section>
+              <DocumentTable 
+                userProfileFilter={profileName}
+                showControls={true} 
+                hideHeading={true} 
+              />
+            </section>
+          ) : (
+            <>
+              <section>
+                <div className="flex items-center justify-between mb-8 border-b-2 border-slate-100 pb-6">
+                  <div className="flex items-center space-x-4">
+                    <div className="p-3 bg-blue-600 rounded-2xl shadow-lg shadow-blue-600/20">
+                      <BookOpen className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">Academic Intelligence</h2>
+                      <p className="text-sm text-slate-500 font-medium">Lecture notes and course documentation.</p>
+                    </div>
+                  </div>
+                </div>
+                <DocumentTable 
+                  userProfileFilter={profileName}
+                  documentTypeFilter="Lecture Notes" 
+                  showControls={false} 
+                  hideHeading={true} 
+                />
+              </section>
 
-          <section>
-            <div className="flex items-center justify-between mb-8 border-b-2 border-slate-100 pb-6">
-              <div className="flex items-center space-x-4">
-                <div className="p-3 bg-blue-600 rounded-2xl shadow-lg shadow-blue-600/20">
-                  <FileText className="h-6 w-6 text-white" />
+              <section>
+                <div className="flex items-center justify-between mb-8 border-b-2 border-slate-100 pb-6">
+                  <div className="flex items-center space-x-4">
+                    <div className="p-3 bg-blue-600 rounded-2xl shadow-lg shadow-blue-600/20">
+                      <FileText className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">Research Papers</h2>
+                      <p className="text-sm text-slate-500 font-medium">Published papers and specialized research data.</p>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <h2 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">Research Papers</h2>
-                  <p className="text-sm text-slate-500 font-medium">Published papers and specialized research data.</p>
-                </div>
-              </div>
-            </div>
-            <DocumentTable 
-              userProfileFilter={profileName}
-              documentTypeFilter="Research Paper" 
-              showControls={false} 
-              hideHeading={true} 
-            />
-          </section>
+                <DocumentTable 
+                  userProfileFilter={profileName}
+                  documentTypeFilter="Research Paper" 
+                  showControls={false} 
+                  hideHeading={true} 
+                />
+              </section>
 
-          <section>
-            <div className="flex items-center justify-between mb-8 border-b-2 border-slate-100 pb-6">
-              <div className="flex items-center space-x-4">
-                <div className="p-3 bg-blue-600 rounded-2xl shadow-lg shadow-blue-600/20">
-                  <Layout className="h-6 w-6 text-white" />
+              <section>
+                <div className="flex items-center justify-between mb-8 border-b-2 border-slate-100 pb-6">
+                  <div className="flex items-center space-x-4">
+                    <div className="p-3 bg-blue-600 rounded-2xl shadow-lg shadow-blue-600/20">
+                      <Layout className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">Other Assets</h2>
+                      <p className="text-sm text-slate-500 font-medium">Miscellaneous institutional documentation.</p>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <h2 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">Other Assets</h2>
-                  <p className="text-sm text-slate-500 font-medium">Miscellaneous institutional documentation.</p>
-                </div>
-              </div>
-            </div>
-            <DocumentTable 
-              userProfileFilter={profileName}
-              documentTypeFilter="Other" 
-              showControls={false} 
-              hideHeading={true} 
-            />
-          </section>
+                <DocumentTable 
+                  userProfileFilter={profileName}
+                  documentTypeFilter="Other" 
+                  showControls={false} 
+                  hideHeading={true} 
+                />
+              </section>
+            </>
+          )}
         </div>
       </div>
     </div>
