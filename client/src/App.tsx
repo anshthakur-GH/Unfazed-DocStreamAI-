@@ -69,37 +69,37 @@ const App = () => {
                     {/* Protected Routes */}
                     <Route path="/dashboard" element={<Index />} />
                     <Route path="/documents/:id" element={
-                      <div className="min-h-screen bg-background">
+                      <div className="min-h-screen bg-background pt-28">
                         <Navbar />
                         <DocumentDetail />
                       </div>
                     } />
                     <Route path="/documents/:id/edit" element={
-                      <div className="min-h-screen bg-background">
+                      <div className="min-h-screen bg-background pt-28">
                         <Navbar />
                         <DocumentForm mode="edit" />
                       </div>
                     } />
                     <Route path="/documents/new" element={
-                      <div className="min-h-screen bg-background">
+                      <div className="min-h-screen bg-background pt-28">
                         <Navbar />
                         <DocumentForm mode="create" />
                       </div>
                     } />
                     <Route path="/profiles/:profile" element={
-                      <div className="min-h-screen bg-background">
+                      <div className="min-h-screen bg-background pt-28">
                         <Navbar />
                         <ProfileView />
                       </div>
                     } />
                     <Route path="/profiles/:profile/knowledge" element={
-                      <div className="min-h-screen bg-background">
+                      <div className="min-h-screen bg-background pt-28">
                         <Navbar />
                         <KnowledgePage />
                       </div>
                     } />
                     <Route path="/stats" element={
-                      <div className="min-h-screen bg-background">
+                      <div className="min-h-screen bg-background pt-28">
                         <Navbar />
                         <Stats />
                       </div>

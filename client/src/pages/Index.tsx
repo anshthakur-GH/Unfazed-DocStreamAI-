@@ -18,7 +18,7 @@ const Index = () => {
       </div>
 
       <Navbar />
-      <div className="relative z-10 w-full h-full pb-12">
+      <div className="relative z-10 w-full h-full pb-12 pt-28">
         <HeroSection />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
           <LatestNewsSection title="Latest Alerts" />
