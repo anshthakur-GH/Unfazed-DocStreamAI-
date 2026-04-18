@@ -8,6 +8,9 @@ export const Navbar = () => {
   const { isAuthenticated } = useAuth();
 
   const isActive = (path: string) => location.pathname === path;
+  const { userProfile } = useAuth();
+
+  const knowledgeLink = userProfile ? `/profiles/${userProfile.toLowerCase()}/knowledge` : "/dashboard";
 
   return (
     <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4 md:px-6">
@@ -28,7 +31,7 @@ export const Navbar = () => {
           <Link to="/dashboard" className={`text-sm font-bold tracking-tight transition-colors ${isActive("/dashboard") ? "text-blue-600" : "text-slate-600 hover:text-blue-500"}`}>
             Home
           </Link>
-          <Link to="/knowledge" className={`text-sm font-bold tracking-tight transition-colors ${isActive("/knowledge") ? "text-blue-600" : "text-slate-600 hover:text-blue-500"}`}>
+          <Link to={knowledgeLink} className={`text-sm font-bold tracking-tight transition-colors ${location.pathname.includes("/knowledge") ? "text-blue-600" : "text-slate-600 hover:text-blue-500"}`}>
             Knowledge Base
           </Link>
           <Link to="/stats" className={`text-sm font-bold tracking-tight transition-colors ${isActive("/stats") ? "text-blue-600" : "text-slate-600 hover:text-blue-500"}`}>
