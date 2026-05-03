@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate, Outlet, useParams } from "react-router-dom";
-import React, { useState } from 'react'; // Import useState and React
+import React from 'react';
 import { SearchProvider } from "@/contexts/SearchContext";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
@@ -16,14 +16,14 @@ import { DocumentForm } from "./components/documents/DocumentForm";
 import { Navbar } from "./components/layout/Navbar";
 import { ScrollToTop } from "./components/layout/ScrollToTop";
 import { ErrorBoundary } from "./components/ErrorBoundary";
-import LoginPage from "./pages/LoginPage"; // Import the new LoginPage component
-import Unauthorized from "./pages/Unauthorized"; // Import the new Unauthorized component
+import LoginPage from "./pages/LoginPage";
+import Unauthorized from "./pages/Unauthorized";
 
 const queryClient = new QueryClient();
 
 // ProtectedRoute component to guard routes
 const ProtectedRouteWrapper = () => {
-  const { profile } = useParams(); // Get profile from URL
+  const { profile } = useParams();
   const { isAuthenticated, userProfile } = useAuth();
 
   if (!isAuthenticated) {
@@ -32,7 +32,7 @@ const ProtectedRouteWrapper = () => {
 
   // If accessing a profile route, check if the user belongs to that profile
   if (profile && userProfile !== profile) {
-    return <Navigate to="/unauthorized" replace />; // Redirect to an unauthorized page
+    return <Navigate to="/unauthorized" replace />;
   }
 
   return <Outlet />;
@@ -57,12 +57,6 @@ const App = () => {
           <SearchProvider>
             <Toaster />
             <Sonner />
-            <ErrorBoundary>
-              <BrowserRouter>
-                <Routes>
-                  <Route path="/login" element={<LoginWrapper />} />
-                  <Route path="/unauthorized" element={<Unauthorized />} />
-                  <Route path="/" element={<Navigate to="/login" replace />} />
             <ErrorBoundary>
               <BrowserRouter>
                 <ScrollToTop />
@@ -117,8 +111,8 @@ const App = () => {
                 </Routes>
               </BrowserRouter>
             </ErrorBoundary>
-        </SearchProvider>
-      </AuthProvider>
+          </SearchProvider>
+        </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
