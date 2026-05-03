@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { motion, Variants } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -12,14 +12,8 @@ export default function LoginPage() {
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
   const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
-  const { isAuthenticated, setIsAuthenticated, setUserProfile } = useAuth();
+  const { setIsAuthenticated, setUserProfile } = useAuth();
   const navigate = useNavigate();
-
-  React.useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/dashboard");
-    }
-  }, [isAuthenticated, navigate]);
 
   const handleProfileSelect = (value: string) => {
     setSelectedProfile(value);

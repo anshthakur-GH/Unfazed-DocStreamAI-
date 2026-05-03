@@ -52,7 +52,6 @@ interface DocumentTableProps {
 }
 
 export const DocumentTable = ({
-export const DocumentTable = ({
   userProfileFilter,
   documentTypeFilter,
   showControls = true,
@@ -196,7 +195,6 @@ export const DocumentTable = ({
                 window.open(url, '_blank');
               }}
               className="bg-blue-600 hover:bg-blue-500 text-white font-black tracking-widest uppercase rounded-xl h-10 px-6 shadow-xl shadow-blue-600/30 transition-all active:scale-95"
-              className="bg-blue-600 hover:bg-blue-500 text-white font-black tracking-widest uppercase rounded-xl h-10 px-6 shadow-xl shadow-blue-600/30 transition-all active:scale-95"
             >
               <Plus className="h-4 w-4 mr-2" />
               Publish
@@ -210,7 +208,6 @@ export const DocumentTable = ({
           <div className="w-full sm:w-48">
             <Select value={sortOrder} onValueChange={(value: 'asc' | 'desc') => handleSortOrder(value)}>
               <SelectTrigger className="bg-white/70 backdrop-blur-md border-slate-200 rounded-xl h-12 font-bold tracking-widest uppercase text-slate-700"><SelectValue /></SelectTrigger>
-              <SelectTrigger className="bg-white/70 backdrop-blur-md border-slate-200 rounded-xl h-12 font-bold tracking-widest uppercase text-slate-700"><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="desc">LATEST ENTRY</SelectItem>
                 <SelectItem value="asc">EARLIEST ENTRY</SelectItem>
@@ -219,9 +216,6 @@ export const DocumentTable = ({
           </div>
           <div className="w-full sm:w-56">
             <Select value={urgencySort} onValueChange={(value) => setUrgencySort(value === "all" ? undefined : value)}>
-              <SelectTrigger className="bg-white/70 backdrop-blur-md border-slate-200 rounded-xl h-12 font-bold tracking-widest uppercase text-slate-700">
-                <SelectValue placeholder="URGENCY RANKING" />
-              </SelectTrigger>
               <SelectTrigger className="bg-white/70 backdrop-blur-md border-slate-200 rounded-xl h-12 font-bold tracking-widest uppercase text-slate-700">
                 <SelectValue placeholder="URGENCY RANKING" />
               </SelectTrigger>

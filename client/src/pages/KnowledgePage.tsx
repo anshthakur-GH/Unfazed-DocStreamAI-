@@ -70,12 +70,10 @@ export default function KnowledgePage() {
     fetchKnowledge(false, searchTerm);
   }, [profileName, searchTerm]);
 
-  // Update search term when debounced value changes (real-time search)
   useEffect(() => {
     setSearchTerm(debouncedSearchTerm);
   }, [debouncedSearchTerm, setSearchTerm]);
 
-  // Update local search input when global search term changes
   useEffect(() => {
     setCurrentSearchInput(searchTerm);
   }, [searchTerm]);
@@ -100,7 +98,6 @@ export default function KnowledgePage() {
             </div>
             <div className="h-4 w-48 bg-slate-100 rounded animate-pulse mb-10"></div>
           </div>
-          
           <div className="space-y-6">
             {[...Array(5)].map((_, i) => (
               <div key={i} className="bg-white/50 backdrop-blur-xl border border-slate-200 rounded-2xl p-8 animate-pulse">
@@ -134,28 +131,6 @@ export default function KnowledgePage() {
             <h1 className="text-4xl font-black text-slate-900 tracking-tighter flex items-center gap-4 uppercase">
               <BookOpen className="h-9 w-9 text-blue-600" />
               KNOWLEDGE SHARED
-        <div className="mb-10">
-          <div className="flex items-center gap-6 mb-6">
-            <Link to={`/departments/${department}`}>
-              <Button variant="outline" size="sm" className="bg-white/70 backdrop-blur-md border-slate-200 text-slate-900 hover:bg-white font-bold tracking-widest uppercase shadow-lg shadow-slate-200/50 rounded-xl h-10 px-5 active:scale-95 group">
-                <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform" />
-                Back to {departmentName}
-              </Button>
-            </Link>
-            <h1 className="text-4xl font-black text-slate-900 tracking-tighter flex items-center gap-3" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
-              <BookOpen className="h-9 w-9 text-blue-600" />
-              KNOWLEDGE SHARED
-        <div className="mb-8">
-          <div className="flex items-center gap-4 mb-4">
-            <Link to={`/profiles/${profile}`}>
-              <Button variant="outline" size="sm" className="flex items-center gap-2">
-                <ArrowLeft className="h-4 w-4" />
-                Back to {profileName}
-              </Button>
-            </Link>
-            <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-              <BookOpen className="h-8 w-8" />
-              Knowledge Shared - {profileName}
             </h1>
           </div>
           <p className="text-slate-500 font-medium tracking-wide">
@@ -168,8 +143,8 @@ export default function KnowledgePage() {
           <div className="flex items-center space-x-2 relative group w-full max-w-md">
             <div className="absolute inset-0 bg-blue-600/5 blur-2xl rounded-xl opacity-0 group-focus-within:opacity-100 transition-opacity -z-10" />
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
-            <Input 
-              type="text" 
+            <Input
+              type="text"
               placeholder="Query departmental wisdom..."
               value={currentSearchInput}
               onChange={(e) => setCurrentSearchInput(e.target.value)}
@@ -206,7 +181,7 @@ export default function KnowledgePage() {
               {searchTerm ? 'No matching intelligence discovered' : 'No knowledge records found'}
             </h3>
             <p className="text-slate-500 font-medium tracking-wide mb-8">
-              {searchTerm 
+              {searchTerm
                 ? `The query "${searchTerm}" returned no results within the ${profileName} node.`
                 : `The departmental wisdom library is currently awaiting its first contribution for the ${profileName} profile.`
               }

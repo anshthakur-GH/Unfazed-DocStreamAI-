@@ -40,8 +40,6 @@ export default function ProfileView() {
         {/* Header */}
         <div className="mb-12">
           <h1 className="text-6xl font-black text-slate-900 mb-3 tracking-tighter uppercase leading-none">
-        <div className="mb-12">
-          <h1 className="text-4xl font-black text-slate-900 mb-3 tracking-tighter uppercase leading-none">
             {profileName} <span className="text-blue-600">NODE</span>
           </h1>
           <p className="text-slate-500 font-medium tracking-widest uppercase text-xs">
@@ -54,9 +52,8 @@ export default function ProfileView() {
           <div className="flex w-full max-w-xl items-center relative group">
             <div className="absolute inset-0 bg-blue-600/5 blur-3xl rounded-3xl opacity-0 group-focus-within:opacity-100 transition-opacity -z-10" />
             <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
-            <Input 
-              type="text" 
-              placeholder="Query institutional node..."
+            <Input
+              type="text"
               placeholder="Query institutional node..."
               value={currentSearchInput}
               onChange={(e) => setCurrentSearchInput(e.target.value)}
@@ -75,7 +72,7 @@ export default function ProfileView() {
           </div>
           
           <Link to={`/profiles/${profile}/knowledge`} className="w-full md:w-auto">
-            <Button 
+            <Button
               className="w-full h-14 bg-slate-900 hover:bg-slate-800 text-white shadow-xl shadow-slate-900/20 rounded-2xl px-8 flex items-center justify-center space-x-3 border-none font-black tracking-widest uppercase text-xs transition-all active:scale-95"
             >
               <BookOpen className="h-4 w-4" />
@@ -84,67 +81,6 @@ export default function ProfileView() {
           </Link>
         </div>
 
-        {/* Categorized Streams */}
-        <div className="space-y-24">
-          <section>
-            <div className="flex items-center justify-between mb-8 border-b-2 border-slate-100 pb-6">
-              <div className="flex items-center space-x-4">
-                <div className="p-3 bg-blue-600 rounded-2xl shadow-lg shadow-blue-600/20">
-                  <BookOpen className="h-6 w-6 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">Academic Intelligence</h2>
-                  <p className="text-sm text-slate-500 font-medium">Lecture notes and course documentation.</p>
-                </div>
-              </div>
-            </div>
-            <DocumentTable 
-              userProfileFilter={profileName}
-              documentTypeFilter="Lecture Notes" 
-              showControls={false} 
-              hideHeading={true} 
-            />
-          </section>
-
-          <section>
-            <div className="flex items-center justify-between mb-8 border-b-2 border-slate-100 pb-6">
-              <div className="flex items-center space-x-4">
-                <div className="p-3 bg-blue-600 rounded-2xl shadow-lg shadow-blue-600/20">
-                  <FileText className="h-6 w-6 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">Research Papers</h2>
-                  <p className="text-sm text-slate-500 font-medium">Published papers and specialized research data.</p>
-                </div>
-              </div>
-            </div>
-            <DocumentTable 
-              userProfileFilter={profileName}
-              documentTypeFilter="Research Paper" 
-              showControls={false} 
-              hideHeading={true} 
-            />
-          </section>
-
-          <section>
-            <div className="flex items-center justify-between mb-8 border-b-2 border-slate-100 pb-6">
-              <div className="flex items-center space-x-4">
-                <div className="p-3 bg-blue-600 rounded-2xl shadow-lg shadow-blue-600/20">
-                  <Layout className="h-6 w-6 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">Other Assets</h2>
-                  <p className="text-sm text-slate-500 font-medium">Miscellaneous institutional documentation.</p>
-                </div>
-              </div>
-            </div>
-            <DocumentTable 
-              userProfileFilter={profileName}
-              documentTypeFilter="Other" 
-              showControls={false} 
-              hideHeading={true} 
-            />
-          </section>
         {/* Categorized Streams or Search Results */}
         <div className="space-y-24">
           {searchTerm ? (
@@ -160,10 +96,10 @@ export default function ProfileView() {
                   </div>
                 </div>
               </div>
-              <DocumentTable 
+              <DocumentTable
                 userProfileFilter={profileName}
-                showControls={true} 
-                hideHeading={true} 
+                showControls={true}
+                hideHeading={true}
               />
             </section>
           ) : (
@@ -180,11 +116,11 @@ export default function ProfileView() {
                     </div>
                   </div>
                 </div>
-                <DocumentTable 
+                <DocumentTable
                   userProfileFilter={profileName}
-                  documentTypeFilter="Lecture Notes" 
-                  showControls={false} 
-                  hideHeading={true} 
+                  documentTypeFilter="Lecture Notes"
+                  showControls={false}
+                  hideHeading={true}
                 />
               </section>
 
@@ -200,11 +136,11 @@ export default function ProfileView() {
                     </div>
                   </div>
                 </div>
-                <DocumentTable 
+                <DocumentTable
                   userProfileFilter={profileName}
-                  documentTypeFilter="Research Paper" 
-                  showControls={false} 
-                  hideHeading={true} 
+                  documentTypeFilter="Research Paper"
+                  showControls={false}
+                  hideHeading={true}
                 />
               </section>
 
@@ -220,11 +156,11 @@ export default function ProfileView() {
                     </div>
                   </div>
                 </div>
-                <DocumentTable 
+                <DocumentTable
                   userProfileFilter={profileName}
-                  documentTypeFilter="Other" 
-                  showControls={false} 
-                  hideHeading={true} 
+                  documentTypeFilter="Other"
+                  showControls={false}
+                  hideHeading={true}
                 />
               </section>
             </>

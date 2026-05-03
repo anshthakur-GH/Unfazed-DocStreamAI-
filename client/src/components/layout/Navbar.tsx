@@ -1,42 +1,20 @@
 import { Link, useLocation } from "react-router-dom";
-import { BarChart3, Upload, ExternalLink, Home, BookOpen, Phone } from "lucide-react";
+import { BarChart3, Upload, ExternalLink } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 
 export const Navbar = () => {
   const location = useLocation();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, userProfile } = useAuth();
 
   const isActive = (path: string) => location.pathname === path;
-        <div className="flex items-center justify-between h-28">
-          {/* Logo Section - Images removed as requested */}
-          <div className="flex items-center space-x-2">
-
-          </div>
-
-          {/* Title in the middle */}
-          <div className="absolute inset-x-0 text-center pointer-events-none flex flex-col items-center justify-center h-full">
-            <h1 className="text-3xl font-black tracking-tighter text-slate-900 uppercase">
-              Unfazed AI
-            </h1>
-          </div>
-
-          {/* Actions (right) */}
-          <div className="flex items-center space-x-3 z-10">
-            {isAuthenticated && (
-              <Button asChild className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 h-auto text-sm font-bold tracking-widest uppercase transition-all shadow-lg shadow-blue-600/20">
-                <a href="https://n8n.cognigenai.in/form/ac89d498-e2b8-4e85-9dd0-893c3b7f18d5" target="_blank" rel="noopener noreferrer">
-                  <Upload className="h-4 w-4 mr-2" />
-                  Upload Doc
-  const { userProfile } = useAuth();
-
   const knowledgeLink = userProfile ? `/profiles/${userProfile.toLowerCase()}/knowledge` : "/dashboard";
 
   return (
     <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4 md:px-6">
       <nav className="relative bg-white/80 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.1)] rounded-full px-4 md:px-8 py-3 max-w-7xl w-full flex items-center justify-between transition-all duration-500 hover:shadow-[0_8px_48px_rgba(59,130,246,0.15)] group">
         
-        {/* Subtle Glow Effect on the left - matching the image style but with theme colors */}
+        {/* Subtle Glow Effect */}
         <div className="absolute left-0 top-0 bottom-0 w-1/3 bg-gradient-to-r from-blue-400/10 to-transparent rounded-l-full pointer-events-none group-hover:from-blue-400/20 transition-all duration-500"></div>
         
         {/* Branding on the left */}
@@ -46,7 +24,7 @@ export const Navbar = () => {
           </span>
         </Link>
 
-        {/* Center Navigation Links (Hidden on small screens) */}
+        {/* Center Navigation Links */}
         <div className="hidden lg:flex items-center space-x-8 z-10">
           <Link to="/dashboard" className={`text-sm font-bold tracking-tight transition-colors ${isActive("/dashboard") ? "text-blue-600" : "text-slate-600 hover:text-blue-500"}`}>
             Home

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+﻿import React, { useState, useRef, useEffect } from 'react';
 import { motion, useMotionValue, useTransform, useSpring, AnimatePresence } from 'framer-motion';
 import { Dna, BookOpen, Network, ChevronDown } from 'lucide-react';
 
@@ -107,7 +107,7 @@ const AntiGravityLogin: React.FC = () => {
           </div>
           
           <h1 className="text-white text-2xl font-light tracking-[0.2em] font-sans">
-            DocStreamAI
+            Unfazed DocStreamAI
           </h1>
           
           <div className="text-white/70 flex items-center space-x-2 text-sm font-light">
