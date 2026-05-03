@@ -55,7 +55,7 @@ app.get('/api', (req, res) => {
 });
 
 // 404 handler for API
-app.use('/api/*', (req, res) => {
+app.use('/api/*path', (req, res) => {
   res.status(404).json({
     error: 'API Endpoint not found',
     path: req.originalUrl
