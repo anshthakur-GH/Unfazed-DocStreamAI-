@@ -24,6 +24,8 @@ const corsOptions = {
     if (!origin) return callback(null, true); // non-browser clients (like Postman)
     if (allowlist.length === 0) return callback(null, true); // dev mode fallback
     if (allowlist.includes(origin)) return callback(null, true);
+    // Allow all Vercel preview deployment URLs for this project
+    if (origin.match(/https:\/\/unfazed-doc-stream.*\.vercel\.app$/)) return callback(null, true);
     callback(new Error('Not allowed by CORS'));
   },
   credentials: !!process.env.CORS_CREDENTIALS,
