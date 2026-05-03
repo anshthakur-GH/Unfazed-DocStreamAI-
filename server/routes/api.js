@@ -269,8 +269,6 @@ router.get('/stats/data', async (req, res) => {
 });
 
 
-<<<<<<< HEAD
-=======
 // Talk with DocAI - send document link to n8n webhook
 router.post('/data/:id/talk', async (req, res) => {
   try {
@@ -319,8 +317,6 @@ router.post('/data/:id/talk', async (req, res) => {
     res.status(500).json({ error: 'Failed to initiate talk with DocAI', details: error.message });
   }
 });
-
->>>>>>> render/CODES
 // Get WebSocket connection stats
 router.get('/stats/connections', (req, res) => {
   const connectedClients = req.app.get('websocketService')?.getConnectedClientsCount() || 0;
