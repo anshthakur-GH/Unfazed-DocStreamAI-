@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config({ override: true });
 
 // Import custom modules
@@ -31,6 +32,9 @@ app.use(cors(corsOptions)); // safer CORS configuration [7][13]
 
 app.use(express.json());
 
+// Serve static files from the React frontend build folder
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
 // Routes
 app.use('/api', apiRoutes);
 
@@ -51,12 +55,9 @@ app.get('/', (req, res) => {
   });
 });
 
-// Updated 404 handler using named wildcard parameter (Express v5 compatible)
-app.use('/{*splat}', (req, res) => {
-  res.status(404).json({
-    error: 'Endpoint not found',
-    path: req.originalUrl
-  });
+// All other GET requests not handled before will return our React app
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
 // Global error handler (after routes)
