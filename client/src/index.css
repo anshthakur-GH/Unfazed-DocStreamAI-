@@ -32,9 +32,15 @@
     --muted: 210 40% 94%;
     --muted-foreground: 215 16% 47%;
 
+<<<<<<< HEAD
     /* Accent - Crisp Cyan */
     --accent: 188 86% 53%;
     /* #22D3EE */
+=======
+    /* Accent - Deep Cobalt (Matching Primary) */
+    --accent: 221 83% 45%;
+    /* #1E40AF */
+>>>>>>> render/CODES
     --accent-foreground: 0 0% 100%;
 
     /* Status Colors */

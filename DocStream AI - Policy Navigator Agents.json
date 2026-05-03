@@ -1,0 +1,653 @@
+{
+  "name": "DocStream AI - Policy Navigator Agents",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "# Agent - 3 : Policy Ingesiton & Interpretation ",
+        "height": 448,
+        "width": 1248,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -288,
+        -992
+      ],
+      "typeVersion": 1,
+      "id": "737483d9-aa09-4e98-9d5c-c6647376c7f0",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "tableId": "policies",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "policy_name",
+              "fieldValue": "={{ $json.policy_name }}"
+            },
+            {
+              "fieldId": "session_id",
+              "fieldValue": "={{ $('Webhook1').item.json.body.session_id }}"
+            },
+            {
+              "fieldId": "issuing_authority",
+              "fieldValue": "={{ $json.issuing_authority }}"
+            },
+            {
+              "fieldId": "objective",
+              "fieldValue": "={{ $json.objective }}"
+            },
+            {
+              "fieldId": "who_is_it_for",
+              "fieldValue": "={{ $json.who_is_it_for }}"
+            },
+            {
+              "fieldId": "key_benefits",
+              "fieldValue": "={{ $json.key_benefits }}"
+            },
+            {
+              "fieldId": "eligibility_summary",
+              "fieldValue": "={{ $json.eligibility_summary }}"
+            },
+            {
+              "fieldId": "required_documents",
+              "fieldValue": "={{ $json.required_documents }}"
+            },
+            {
+              "fieldId": "how_to_apply",
+              "fieldValue": "={{ $json.how_to_apply }}"
+            },
+            {
+              "fieldId": "important_dates",
+              "fieldValue": "={{ $json.important_dates }}"
+            },
+            {
+              "fieldId": "issuing_authority_contact",
+              "fieldValue": "={{ $json.issuing_authority_contact }}"
+            },
+            {
+              "fieldId": "created_at",
+              "fieldValue": "={{ $now }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        768,
+        -864
+      ],
+      "id": "fb436098-749d-4419-b52e-e96c20b54ee8",
+      "name": "Add Data in DB",
+      "credentials": {
+        "supabaseApi": {
+          "id": "a9BsTB4wSbvtAYgg",
+          "name": "Saxena Supabase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Here is the raw government policy document text extracted from the citizen's uploaded file. Read it fully and return the structured JSON as instructed.\n\nPolicy Text:\n{{ $json.content.parts[0].text }}",
+        "options": {
+          "systemMessage": "You are a government policy expert and citizen advocate. Your only job is to read raw government policy text and convert it into simple, easy to understand language for a common citizen. You will always respond in this exact JSON structure, nothing else:\n\n{\n\"policy_name\": \"string\",\n\"issuing_authority\": \"string\",\n\"objective\": \"string — explain in 1 simple sentence what this policy does\",\n\"who_is_it_for\": \"string — explain in plain language who this policy targets\",\n\"key_benefits\": [\n\"simple one line explanation of each benefit\"\n],\n\"eligibility_summary\": [\n\"simple one line per eligibility condition\"\n],\n\"required_documents\": [\n\"document name\"\n],\n\"how_to_apply\": \"string — step by step in plain simple language\",\n\"important_dates\": {\n\"start_date\": \"string or null\",\n\"last_date\": \"string or null\"\n},\n\"issuing_authority_contact\": \"string or null\"\n}\n\nRules:\n\nUse simple English a 10th grader can understand\n\nNever use legal or bureaucratic jargon\n\nIf any field data is not found in the document return null\n\nReturn only the JSON, no extra text, no markdown, no code blocks"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        288,
+        -864
+      ],
+      "id": "8358c782-e82a-4965-a5d9-d8e6e8f9794a",
+      "name": "AI Agent - Policy Interpretation"
+    },
+    {
+      "parameters": {
+        "resource": "document",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-pro",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-pro"
+        },
+        "text": "=You are a document reader. Extract and return the complete raw text \ncontent from the provided document exactly as it appears. \n\nDo not summarize. Do not interpret. Do not skip any section.\nReturn only the extracted text, nothing else.\n\n\n",
+        "inputType": "binary",
+        "binaryPropertyName": "file",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -80,
+        -864
+      ],
+      "id": "3e397f71-1912-479a-88b4-362b4c32e533",
+      "name": "Extract Content",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "PJwYBpZXp8TyPbIa",
+          "name": "Saxena 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get raw output\nlet raw = items[0].json.output || \"\";\n\n// Remove markdown fences\nraw = raw\n  .replace(/```json/gi, '')\n  .replace(/```/g, '')\n  .replace(/^\\s+|\\s+$/g, '');\n\n// If response wraps JSON as a string literal with escaped quotes, fix it\n// Example: \"{\\\"policy_name\\\": \\\"Cash...\\\"}\"\nif (/^\"{/.test(raw) && /}\"$/.test(raw)) {\n  try {\n    raw = JSON.parse(raw);\n    raw = JSON.stringify(raw);\n  } catch (e) {\n    // Continue to next fallback\n  }\n}\n\n// Try direct JSON parsing\ntry {\n  const parsed = JSON.parse(raw);\n  return [{ json: parsed }];\n} catch (err) {\n  // Try to auto-extract JSON substring\n  const match = raw.match(/\\{[\\s\\S]*\\}/);\n  if (match) {\n    try {\n      const parsed = JSON.parse(match[0]);\n      return [{ json: parsed }];\n    } catch (err2) {\n      throw new Error(\"JSON parse failed. Extracted block also invalid.\\n\" + match[0]);\n    }\n  }\n\n  // Final fallback\n  throw new Error(\"JSON parsing failed.\\nRaw received:\\n\" + raw);\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        592,
+        -864
+      ],
+      "id": "62cc9f4c-b1ba-4670-82a5-38e9fa744038",
+      "name": "Parse Agent Response"
+    },
+    {
+      "parameters": {
+        "content": "# RAG - Add Policy data to Vector DB",
+        "height": 544,
+        "width": 880,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        752,
+        -512
+      ],
+      "typeVersion": 1,
+      "id": "2748c297-30c8-4b05-b02b-924b9289674d",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.first().json.data;\n\n// Extract all text values\nconst allTexts = items.map(item => \n  item.content?.parts?.[0]?.text || \"\"\n).filter(Boolean);\n\n// Deduplicate by taking only unique texts\nconst uniqueTexts = [...new Set(allTexts)];\n\n// Join into single clean document\nconst cleanText = uniqueTexts.join(\"\\n\\n\");\n\nreturn [{\n  json: {\n    text: cleanText\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1008,
+        -352
+      ],
+      "id": "2d62ddb4-19a1-48f9-83df-c6f23ed87782",
+      "name": "Deduplicate Code Node"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -352
+      ],
+      "id": "55456ab0-73be-4c71-bd9d-c204696ae923",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "chunkSize": 2000,
+        "chunkOverlap": 200,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        1424,
+        -96
+      ],
+      "id": "f4122dd5-0402-4198-a11e-74ec0a0da723",
+      "name": "Recursive Character Text Splitter"
+    },
+    {
+      "parameters": {
+        "textSplittingMode": "custom",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        1376,
+        -224
+      ],
+      "id": "2c35da36-dfc1-46a7-91fc-d3baae1fa840",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-embedding-001"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        -192
+      ],
+      "id": "a3811cd0-343d-4ce4-8404-10f47340a1dc",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "BKMZId32fLWb38PA",
+          "name": "Saxena API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "embeddingBatchSize": 100,
+        "options": {
+          "queryName": "match_documents"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        1200,
+        -352
+      ],
+      "id": "afc01579-06f1-4287-b2e6-d8ccbcba1787",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "VKoabbJQnegsVFoB",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        288,
+        -704
+      ],
+      "id": "c0935b12-fdc8-4e6d-99e6-3caaf1da1d1e",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "PJwYBpZXp8TyPbIa",
+          "name": "Saxena 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7ba346ed-4364-4229-8475-0fe7e4c05b30",
+              "name": "content.parts[0].text",
+              "value": "={{ $json.content.parts[0].text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        80,
+        -704
+      ],
+      "id": "8be7af02-e739-44dd-91aa-3cbdd8dfa8f8",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "0577d629-452d-45d5-ba0a-260934fcc50e",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -240,
+        -864
+      ],
+      "id": "6cae8974-6638-4407-b715-bf4bffc75d58",
+      "name": "Webhook1",
+      "webhookId": "0577d629-452d-45d5-ba0a-260934fcc50e"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "299f8076-3169-4b30-99d7-66b25015088b",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -192,
+        -336
+      ],
+      "id": "0c98aae2-814d-4252-a8cd-190f5136e640",
+      "name": "Webhook - WebApp",
+      "webhookId": "299f8076-3169-4b30-99d7-66b25015088b"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        512,
+        -336
+      ],
+      "id": "a558732d-2ef2-4fad-9619-1bab9577d5af",
+      "name": "Respond to WebApp Backend"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "=sessionKey: {{ $json.session_id }}",
+        "contextWindowLength": 15
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        320,
+        -144
+      ],
+      "id": "95d101de-6fa7-4dc6-8d69-61b0833756fe",
+      "name": "Save Context"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "policies",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "session_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.body.session_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        32,
+        -336
+      ],
+      "id": "4e460056-54e3-40b0-bb51-70cf2053b68e",
+      "name": "Get Agent 1 Policy Data",
+      "credentials": {
+        "supabaseApi": {
+          "id": "a9BsTB4wSbvtAYgg",
+          "name": "Saxena Supabase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        160,
+        -144
+      ],
+      "id": "fe52914d-b779-461d-ab17-89dbe09ba79f",
+      "name": "Google Gemini Chat Model4",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "PJwYBpZXp8TyPbIa",
+          "name": "Saxena 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Agent - 4: Eligibility Verification + ByteMe Agent Collaboration \nAutomates checks against criteria to confirm citizen eligibility for programs. ",
+        "height": 544,
+        "width": 992,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -272,
+        -512
+      ],
+      "typeVersion": 1,
+      "id": "0716fb12-4c68-4767-b820-6ddf5fe26b4c",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Here is the policy eligibility data received from Agent 1.\nUse this to conduct the eligibility interview.\n\nPolicy Context:\nEligibility Conditions: {{ $json.eligibility_summary }}\nRequired Documents: {{ $json.required_documents }}\nHow to Apply: {{ $json.how_to_apply }}\nIssuing Authority Contact: {{ $json.issuing_authority_contact }}\n\nLatest User Message (reply to your last question):\n{{ $('Webhook - WebApp').item.json.body.answer ?? '' }}\n\nInstructions:\n- If the latest user message is empty, this is the FIRST message — ask the opening confirmation question only, nothing else\n- If user said yes, begin asking eligibility questions one by one\n- If conversation history has all answers, evaluate and return final JSON verdict\n- If eligible or partially eligible, query the RAG knowledge base for other matching schemes and include them in your response",
+        "options": {
+          "systemMessage": "You are a friendly Citizen Eligibility Advisor. Your job is to \nverify whether a citizen qualifies for government policy by \nasking smart grouped questions — maximum 10 questions total.\n\nYou will receive:\n- Policy eligibility criteria from the database\n- Latest user message\n- Conversation history via memory\n\n─────────────────────────────────────\nOPENING MESSAGE\n─────────────────────────────────────\nIf no questions have been asked yet, send only this:\n\"I have your policy details ready. Would you like to check \nif you are eligible? (Yes / No)\"\n\n─────────────────────────────────────\nIF USER SAYS YES — QUESTION STRATEGY\n─────────────────────────────────────\nRead ALL eligibility conditions from the policy data.\nGroup related conditions into smart combined questions.\nYou must cover all criteria in a MAXIMUM of 10 questions.\n\nGrouping rules:\n- Combine all \"situation-based\" child conditions into 1 question\n- Combine all \"foster parent stability\" conditions into 1 question  \n- Combine all \"willingness to comply\" conditions into 1 question\n- Ask basic qualifying criteria first\n- Never ask about something the user already implied in a \n  prior answer\n\nExample of good grouping:\nInstead of asking 8 separate yes/no questions about child \nsituations, ask ONE: \"What is the main reason the child \nneeds foster care? (e.g. orphan, family crisis, safety risk)\"\nThen match their single answer against multiple criteria.\n\nAsk ONE question at a time. Wait for reply before next.\n\n─────────────────────────────────────\nHARD LIMITS\n─────────────────────────────────────\n- Maximum 10 questions total. No exceptions.\n- After 10 questions stop immediately and evaluate.\n- Never repeat a question already answered.\n- Never ask two questions in one message.\n- Never restart the question flow mid-conversation.\n- If user's answer clearly covers multiple criteria, \n  count those as answered and skip related questions.\n\n─────────────────────────────────────\nLOOP PREVENTION\n─────────────────────────────────────\nBefore every question, count how many questions have already \nbeen asked in the conversation history.\nIf count is 10 or more, skip directly to evaluation.\nNever ask a question whose answer is already implied by a \nprevious response.\n\n─────────────────────────────────────\nCRITERIA MATCHING RULES\n─────────────────────────────────────\nWhen filling matched_criteria and failed_criteria you MUST \nfollow these rules strictly:\n\n- matched_criteria: list EVERY criterion the user confirmed \n  with yes, or that their answer clearly satisfies\n- failed_criteria: list ONLY criteria the user explicitly \n  said no to or clearly does not meet\n- unverified_criteria: list ONLY criteria that were never \n  asked about at all in the conversation\n- NEVER leave matched_criteria empty if the user said yes \n  to any question\n- A \"no\" to the FIRST qualifying question (e.g. \"are you a \n  farmer?\") should populate failed_criteria for that one \n  criterion only — the remaining unasked criteria go into \n  unverified_criteria, NOT failed_criteria\n\n─────────────────────────────────────\n─────────────────────────────────────\nFINAL EVALUATION\n─────────────────────────────────────\nAfter all questions are answered or 10 question limit is \nreached, output exactly this JSON and nothing else:\n\n{\n  \"status\": \"eligible\" or \"not_eligible\" or \"partially_eligible\",\n  \"matched_criteria\": [\"every criterion the user confirmed\"],\n  \"failed_criteria\": [\"only criteria user explicitly failed\"],\n  \"unverified_criteria\": [\"criteria never asked about\"],\n  \"summary\": \"one simple sentence verdict\"\n}\n\nOutput ONLY the above JSON. No extra fields. No extra objects.\nNo \"proceed_to_benefit_matching\". No \"other_matching_schemes\".\nNothing after the closing } of the JSON."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        -336
+      ],
+      "id": "c21b312c-f3f0-4590-bb12-51b2c5578a29",
+      "name": "AI Agent2"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "AI Agent - Policy Interpretation": {
+      "main": [
+        [
+          {
+            "node": "Parse Agent Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Content": {
+      "main": [
+        [
+          {
+            "node": "AI Agent - Policy Interpretation",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Agent Response": {
+      "main": [
+        [
+          {
+            "node": "Add Data in DB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deduplicate Code Node": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Deduplicate Code Node",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent - Policy Interpretation",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        []
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Extract Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook - WebApp": {
+      "main": [
+        [
+          {
+            "node": "Get Agent 1 Policy Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Context": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Agent 1 Policy Data": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "Respond to WebApp Backend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Data in DB": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "045f69d0-c088-4892-84c7-cd353eac3ede",
+  "meta": {
+    "instanceId": "42abd1b1c7df812105bbfd3bb50b2e1728db05a238f0d03e8ea5bcd929351fe0"
+  },
+  "id": "1UUfJ9VtVhz2gzTalpqRO",
+  "tags": []
+}

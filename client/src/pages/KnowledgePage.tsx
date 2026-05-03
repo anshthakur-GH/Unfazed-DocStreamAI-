@@ -124,6 +124,9 @@ export default function KnowledgePage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> render/CODES
         <div className="mb-10">
           <div className="flex items-center gap-6 mb-6">
             <Link to={`/profiles/${profile}`}>
@@ -135,6 +138,7 @@ export default function KnowledgePage() {
             <h1 className="text-4xl font-black text-slate-900 tracking-tighter flex items-center gap-4 uppercase">
               <BookOpen className="h-9 w-9 text-blue-600" />
               KNOWLEDGE SHARED
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
         <div className="mb-10">
@@ -162,6 +166,8 @@ export default function KnowledgePage() {
               Knowledge Shared - {profileName}
 >>>>>>> d37c9d43293122daf4f5c2819b40669957f939f7
 >>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
+=======
+>>>>>>> render/CODES
             </h1>
           </div>
           <p className="text-slate-500 font-medium tracking-wide">

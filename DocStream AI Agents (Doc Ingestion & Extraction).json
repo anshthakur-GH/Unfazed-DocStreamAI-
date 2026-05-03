@@ -1,0 +1,1071 @@
+{
+  "name": "DocStream AI Agents (Doc Ingestion & Extraction)",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Here is the input:\nEmail Subject: {{ $json.Subject }}\nEmail Body: {{ $json.Body }}\nSubmitted at: {{ $now }}\nAttached File Data: {{ $json['File Analysis Content '] }}\nDocument Content: {{ $json['File Analysis Content '] }}\nUpload Timestamp: {{ $now }}",
+        "options": {
+          "systemMessage": "You are an academic document intelligence extractor for an educational institution.\n\nYou will receive extracted text from a document. Your job is to analyze it and return a single valid JSON object. No extra text, no markdown, no commentary — only the JSON.\n\nINPUT:\nDocument Content: {{ $json['File Analysis Content'] }}\nUploaded By: {{ $json.uploaded_by }}\nUser ID: {{ $json.user_id }}\nUser Profile: {{ $json.user_profile }}\nUpload Timestamp: {{ $now }}\nGoogle Drive Link: {{ $json.google_drive_link }}\n\nEXTRACTION RULES:\n\ndocument_title\n- Extract the actual title from the document content\n- If not found, generate a concise descriptive title from the content\n- string\n\ndocument_type\n- Classify into exactly one: \"Research Paper\" | \"Lecture Notes\" | \"Policy Document\" | \"Other\"\n- Base this on content structure and language, not the filename\n- string\n\nuploaded_by\n- Use the value passed in input: {{ $json.uploaded_by }}\n- string\n\nupload_timestamp\n- Use: {{ $now }} in ISO format\n- string\n\nuser_id\n- Use the value passed in input: {{ $json.user_id }}\n- Do not generate or modify this value\n- string\n\nuser_profile\n- Use the value passed in input: {{ $json.user_profile }}\n- Must be exactly one of: \"Head\" | \"Teacher\" | \"Student\"\n- string\n\nresearch_domain\n- The primary academic discipline of the document\n- Examples: \"Machine Learning\", \"Constitutional Law\", \"Organic Chemistry\", \"Urban Planning\"\n- If not determinable, return null\n- string or null\n\nsubject_tags\n- Array of 3-7 broad subject labels that describe the document\n- Examples: [\"Artificial Intelligence\", \"Education Policy\", \"Neural Networks\"]\n- array of strings\n\ncourse_code\n- Extract if explicitly mentioned in the document (e.g., \"CS601\", \"MBA204\")\n- Return null if not present\n- string or null\n\nacademic_year\n- Extract if mentioned (e.g., \"2023-24\", \"2024-2025\", \"Semester 2 2024\")\n- Return null if not found\n- string or null\n\nauthors\n- Array of all author or contributor names found in the document\n- Return empty array [] if none found\n- array of strings\n\ndate_published\n- Publication, submission, or issuance date if present in the document\n- Return in ISO format: \"YYYY-MM-DDT00:00:00.000Z\"\n- Return null if not found\n- string or null\n\ndate_received\n- Use: {{ $now }} in ISO format\n- string\n\nfunding_source\n- Name of funding body, grant, or sponsoring organization if mentioned\n- Return null if not present\n- string or null\n\nsummary\n- Write 3-4 sentences covering: what the document is about, key argument or topic, main findings or content, and relevance\n- Must be written in third person\n- string\n\nkeywords\n- Array of 8-12 important terms extracted from the document\n- Include: key concepts, methodologies, named theories, important entities, and years if relevant\n- array of strings\n\nurgency_level\n- \"High\" if document contains a deadline within 72 hours or is marked urgent\n- \"Medium\" if deadline is within 7 days or requires near-term action\n- \"Low\" for all standard documents with no immediate action required\n- Default to \"Low\" for research papers and lecture notes unless stated otherwise\n- string: \"High\" | \"Medium\" | \"Low\"\n\ngoogle_drive_link\n- Use the value passed in input: {{ $json.google_drive_link }}\n- string or null\n\nOUTPUT FORMAT (return exactly this structure, no extra keys):\n\n{\n  \"document_title\": \"\",\n  \"document_type\": \"\",\n  \"uploaded_by\": \"\",\n  \"upload_timestamp\": \"\",\n  \"user_id\": \"\",\n  \"user_profile\": \"\",\n  \"research_domain\": null,\n  \"subject_tags\": [],\n  \"course_code\": null,\n  \"academic_year\": null,\n  \"authors\": [],\n  \"date_published\": null,\n  \"date_received\": \"\",\n  \"funding_source\": null,\n  \"summary\": \"\",\n  \"keywords\": [],\n  \"urgency_level\": \"Low\",\n  \"google_drive_link\": null\n}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        240,
+        384
+      ],
+      "id": "ed2469b5-c94e-4dae-8dbf-92aeb6117fc1",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "content": "# MAIN AI Agent (NER)",
+        "height": 464,
+        "width": 432,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        128,
+        240
+      ],
+      "typeVersion": 1,
+      "id": "6e54c39a-9805-4683-b609-d2ea1259bed8",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "# Agent - 1 : EMAIL & WHATSAPP CHANNEL PROCESSING",
+        "height": 784,
+        "width": 2032,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1056,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "2845591a-3a90-443a-9ff8-675c43272657",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "# Agent - 2 : UPLOAD FILE VIA UPLOAD BUTTON (UI) PROCESSING PIPELINE\n",
+        "height": 688,
+        "width": 2032,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1056,
+        752
+      ],
+      "typeVersion": 1,
+      "id": "1d1e02fd-368d-4845-9239-d6b026c76f8f",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "# CENTRAL DATABASE",
+        "height": 272,
+        "width": 384
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1024,
+        624
+      ],
+      "typeVersion": 1,
+      "id": "f7273f7d-5253-4d02-a205-881d35911a9e",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "# MAIN AI Agent (NER)",
+        "height": 448,
+        "width": 448,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        144,
+        816
+      ],
+      "typeVersion": 1,
+      "id": "c0d02693-5e56-4c26-92e9-c32e7ce3cbe1",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        240,
+        1104
+      ],
+      "id": "1ec7e1a2-4c92-4647-b350-d15ba74fd138",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QnegQiT1vOWmjfTP",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        240,
+        560
+      ],
+      "id": "a8fc056f-83b2-4594-bce3-d7ddaf7c0106",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QnegQiT1vOWmjfTP",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c75e1beb-083d-4076-98f0-893d6c26c4e8",
+              "name": "File Analysis Content ",
+              "value": "={{ $json.content.parts[0].text }}",
+              "type": "string"
+            },
+            {
+              "id": "0e6646fb-7919-401d-9105-7ee5d411099a",
+              "name": "Sender ",
+              "value": "={{ $('Fetches message + Files').item.json.headers.from }}",
+              "type": "string"
+            },
+            {
+              "id": "a90ec6db-cf3a-4972-a20d-34a1f82233e7",
+              "name": "Subject",
+              "value": "={{ $('Fetches message + Files').item.json.headers.subject }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        384
+      ],
+      "id": "fd51cce8-3ca7-4887-b85f-f70a84fa2285",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "formTitle": "Upload Document",
+        "formDescription": "Upload KMRL related document directly ",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "UserID",
+              "placeholder": "User ID",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Upload Document ",
+              "fieldType": "file"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -992,
+        1104
+      ],
+      "id": "500dec68-5dbb-4ce9-92d5-e2e4fd4026bb",
+      "name": "On any File Upload",
+      "webhookId": "ac89d498-e2b8-4e85-9dd0-893c3b7f18d5"
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "collection": "=processed_documents",
+        "fields": "document_title, document_type, uploaded_by, upload_timestamp, user_id, user_profile, research_domain, subject_tags, course_code, academic_year, authors, date_published, date_received, funding_source, summary, keywords, urgency_level, google_drive_link, webViewLink",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.2,
+      "position": [
+        1136,
+        720
+      ],
+      "id": "25eb91ca-a2d8-43f3-a068-d37ad2a6f274",
+      "name": "Insert Document",
+      "credentials": {
+        "mongoDb": {
+          "id": "9BIvYnWoGIWgSeCU",
+          "name": "Ansh's MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "721988b6-8807-40de-b560-504398071370",
+              "name": "['Upload Document '][0].filename",
+              "value": "={{ $('On any File Upload').item.json['Upload Document '][0].filename }}",
+              "type": "string"
+            },
+            {
+              "id": "42996a26-dd52-4ca3-a708-54d54055269b",
+              "name": "submittedAt",
+              "value": "={{ $('On any File Upload').item.json.submittedAt }}",
+              "type": "string"
+            },
+            {
+              "id": "b588ebca-375e-4e22-acc1-29753ec5b455",
+              "name": "File Analysis Content",
+              "value": "={{ $json.content.parts[0].text }}",
+              "type": "string"
+            },
+            {
+              "id": "5fdcba0d-00a2-4c9e-b26e-314ca94753af",
+              "name": "UserID",
+              "value": "={{ $('On any File Upload').item.json.UserID }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -336,
+        928
+      ],
+      "id": "56b753ce-0669-41bd-9e21-eb0d505d8397",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=INPUT:\nDocument Content: {{ $json['File Analysis Content'] }}\nUser ID: {{ $json.UserID }}\nUpload Timestamp: {{ $now }}",
+        "options": {
+          "systemMessage": "You are an academic document intelligence extractor for an educational institution.\n\nYou will receive extracted text from a document. Your job is to analyze it and return a single valid JSON object. No extra text, no markdown, no commentary — only the JSON.\n\nINPUT:\nDocument Content: {{ $json['File Analysis Content'] }}\nUploaded By: {{ $json.uploaded_by }}\nUser ID: {{ $json.user_id }}\nUser Profile: {{ $json.user_profile }}\nUpload Timestamp: {{ $now }}\nGoogle Drive Link: {{ $json.google_drive_link }}\n\nEXTRACTION RULES:\n\ndocument_title\n- Extract the actual title from the document content\n- If not found, generate a concise descriptive title from the content\n- string\n\ndocument_type\n- Classify into exactly one: \"Research Paper\" | \"Lecture Notes\" | \"Policy Document\" | \"Other\"\n- Base this on content structure and language, not the filename\n- string\n\nuploaded_by\n- Use the value passed in input: {{ $json.uploaded_by }}\n- string\n\nupload_timestamp\n- Use: {{ $now }} in ISO format\n- string\n\nuser_id\n- Use the value passed in input: {{ $json.user_id }}\n- Do not generate or modify this value\n- string\n\nuser_profile\n- Use the value passed in input: {{ $json.user_profile }}\n- Must be exactly one of: \"Head\" | \"Teacher\" | \"Student\"\n- string\n\nresearch_domain\n- The primary academic discipline of the document\n- Examples: \"Machine Learning\", \"Constitutional Law\", \"Organic Chemistry\", \"Urban Planning\"\n- If not determinable, return null\n- string or null\n\nsubject_tags\n- Array of 3-7 broad subject labels that describe the document\n- Examples: [\"Artificial Intelligence\", \"Education Policy\", \"Neural Networks\"]\n- array of strings\n\ncourse_code\n- Extract if explicitly mentioned in the document (e.g., \"CS601\", \"MBA204\")\n- Return null if not present\n- string or null\n\nacademic_year\n- Extract if mentioned (e.g., \"2023-24\", \"2024-2025\", \"Semester 2 2024\")\n- Return null if not found\n- string or null\n\nauthors\n- Array of all author or contributor names found in the document\n- Return empty array [] if none found\n- array of strings\n\ndate_published\n- Publication, submission, or issuance date if present in the document\n- Return in ISO format: \"YYYY-MM-DDT00:00:00.000Z\"\n- Return null if not found\n- string or null\n\ndate_received\n- Use: {{ $now }} in ISO format\n- string\n\nfunding_source\n- Name of funding body, grant, or sponsoring organization if mentioned\n- Return null if not present\n- string or null\n\nsummary\n- Write 3-4 sentences covering: what the document is about, key argument or topic, main findings or content, and relevance\n- Must be written in third person\n- string\n\nkeywords\n- Array of 8-12 important terms extracted from the document\n- Include: key concepts, methodologies, named theories, important entities, and years if relevant\n- array of strings\n\nurgency_level\n- \"High\" if document contains a deadline within 72 hours or is marked urgent\n- \"Medium\" if deadline is within 7 days or requires near-term action\n- \"Low\" for all standard documents with no immediate action required\n- Default to \"Low\" for research papers and lecture notes unless stated otherwise\n- string: \"High\" | \"Medium\" | \"Low\"\n\ngoogle_drive_link\n- Use the value passed in input: {{ $json.google_drive_link }}\n- string or null\n\nOUTPUT FORMAT (return exactly this structure, no extra keys):\n\n{\n  \"document_title\": \"\",\n  \"document_type\": \"\",\n  \"uploaded_by\": \"\",\n  \"upload_timestamp\": \"\",\n  \"user_id\": \"\",\n  \"user_profile\": \"\",\n  \"research_domain\": null,\n  \"subject_tags\": [],\n  \"course_code\": null,\n  \"academic_year\": null,\n  \"authors\": [],\n  \"date_published\": null,\n  \"date_received\": \"\",\n  \"funding_source\": null,\n  \"summary\": \"\",\n  \"keywords\": [],\n  \"urgency_level\": \"Low\",\n  \"google_drive_link\": null\n}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        240,
+        928
+      ],
+      "id": "e0af1da5-baf8-4c5a-8515-82c7ecbdc93a",
+      "name": "AI Agent 1.0"
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "attachment_0",
+        "name": "={{ $json.id }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1cYG2FARpjhqvWqtgmQpHBKO5jC6UqC44",
+          "mode": "list",
+          "cachedResultName": "Processed PDF",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1cYG2FARpjhqvWqtgmQpHBKO5jC6UqC44"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -176,
+        144
+      ],
+      "id": "f6d962f8-275d-46fe-ac32-9a62573bb292",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "4xucVB4EAxFZYgAC",
+          "name": "Ansh's Google Drive API"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        640,
+        160
+      ],
+      "id": "e95a6c6a-2144-42d7-b405-f27900d5a8ce",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b64f3aaf-cb04-4c8f-8d40-9a1c72375f67",
+              "name": "webViewLink",
+              "value": "={{ $json.webViewLink }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -16,
+        144
+      ],
+      "id": "999e2395-8dd2-4e01-a7d6-5a52269a6835",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "=Upload_Document_",
+        "name": "={{ $json[\"Upload Document \"][0].filename }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1cYG2FARpjhqvWqtgmQpHBKO5jC6UqC44",
+          "mode": "list",
+          "cachedResultName": "Processed PDF",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1cYG2FARpjhqvWqtgmQpHBKO5jC6UqC44"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -576,
+        1248
+      ],
+      "id": "12f9240a-de16-4dce-a14f-1f379f15d917",
+      "name": "Upload via Upload Button(Website)",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "4xucVB4EAxFZYgAC",
+          "name": "Ansh's Google Drive API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "579413a8-c22a-4961-adbe-5fb6b1fa4cb3",
+              "name": "webViewLink",
+              "value": "={{ $json.webViewLink }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -336,
+        1248
+      ],
+      "id": "db692d8e-419c-4124-84fa-8e2b411f53fe",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        672,
+        1232
+      ],
+      "id": "86b900d1-b528-4e01-a3ce-239ef0f0d15d",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f1f38561-bbdd-42a7-aa7d-a56af9e7f9ee",
+              "leftValue": "={{ $json }}",
+              "rightValue": "=True",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -784,
+        1104
+      ],
+      "id": "1cd7d5c8-853c-4fa7-ac33-f48eb6907dbb",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f1f38561-bbdd-42a7-aa7d-a56af9e7f9ee",
+              "leftValue": "={{ $json.candidates[0].content.parts[0].text }}",
+              "rightValue": "=True",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -592,
+        288
+      ],
+      "id": "f3543e09-5fb6-4710-b5bb-51c97c5a2046",
+      "name": "Filters"
+    },
+    {
+      "parameters": {
+        "resource": "document",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-pro",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-pro"
+        },
+        "text": "=\"You are a specialized AI assistant designed to perform a high-level relevance check, if the message is informal you just reply False otherwise True.\n\nInput:\nSubject: {{ $json.headers.subject }}\nBody: {{ $json.text }}\nFile Attached\n\n\nInstructions:\nLook for keyword in that makes it formal.\n\nIf the content is clearly related, your output should be a single word \"True\"\n\nIf the content is not relevant, your output should be a single word \"False\"\n\nYour entire response MUST be a single word. Do not add any extra text, notes, or conversational filler.\n\nExample Input (for testing):\nDocument_Content: [Text from a document about a new HR policy]\nMessage_Text: [Email from the Head of HR regarding the new policy]\n\nNote:\nOutput:\n\"True\"/\"False\"",
+        "inputType": "binary",
+        "binaryPropertyName": "attachment_0",
+        "simplify": false,
+        "options": {
+          "maxOutputTokens": 300
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -768,
+        288
+      ],
+      "id": "7b175eb1-803c-4ad0-8c57-49cf490da000",
+      "name": "AI Filter",
+      "alwaysOutputData": true,
+      "executeOnce": false,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QnegQiT1vOWmjfTP",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": "={{ $('Gmail 1').item.json.id }}",
+        "simple": false,
+        "options": {
+          "downloadAttachments": true
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -400,
+        272
+      ],
+      "id": "fb1c2964-cf4c-481c-b392-36dcdc7f92c0",
+      "name": "Fetches message + Files",
+      "webhookId": "67d30930-b263-4d21-b747-434388524735",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "n2x0o1AUiINK2gzr",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const agentOutputItem = $input.all().find(item => item.json.output);\nconst webViewLinkItem = $input.all().find(item => item.json.webViewLink);\n\nif (!agentOutputItem || !webViewLinkItem) {\n  throw new Error(\"Missing 'output' or 'webViewLink' in input data.\");\n}\n\nconst agentOutput = agentOutputItem.json.output;\nconst webViewLink = webViewLinkItem.json.webViewLink;\n\nconst parsedJson = JSON.parse(agentOutput.replace(/```json\\n|```/g, \"\"));\n\nparsedJson.webViewLink = webViewLink;\n\nreturn { json: parsedJson };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        816,
+        512
+      ],
+      "id": "ace3a5ca-ee53-41eb-b25a-b2d670e62db5",
+      "name": "Parse Json"
+    },
+    {
+      "parameters": {
+        "jsCode": "const agentOutputItem = $input.all().find(item => item.json.output);\nconst webViewLinkItem = $input.all().find(item => item.json.webViewLink);\n\nif (!agentOutputItem || !webViewLinkItem) {\n  throw new Error(\"Missing 'output' or 'webViewLink' in input data.\");\n}\n\nconst agentOutput = agentOutputItem.json.output;\nconst webViewLink = webViewLinkItem.json.webViewLink;\n\nconst parsedJson = JSON.parse(agentOutput.replace(/```json\\n|```/g, \"\"));\n\nparsedJson.webViewLink = webViewLink;\n\nreturn { json: parsedJson };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        816,
+        976
+      ],
+      "id": "2e73ffed-af48-45f9-90f3-64126393e353",
+      "name": "Parse json"
+    },
+    {
+      "parameters": {
+        "resource": "document",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "text": "=Analyze the attached file and provide me the exact content in the file in the same format.\nIf the data is in bilingual language then your output should be in the below format:\nLanguage name:\nOriginal Language Content Extracted: \nContent Converted to english:",
+        "inputType": "binary",
+        "binaryPropertyName": "attachment_0",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        384
+      ],
+      "id": "0012bdf9-edde-4026-85c6-ad63ff55f7f1",
+      "name": "Ai Analysis (Bilingual) OCR",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QnegQiT1vOWmjfTP",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "document",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-pro",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-pro"
+        },
+        "text": "=Analyze the attached file and provide me all the content.",
+        "inputType": "binary",
+        "binaryPropertyName": "=Upload_Document_",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -576,
+        928
+      ],
+      "id": "362fa233-e345-4a7d-ad80-3f44cc6c9854",
+      "name": "Ai Analysis ( Bilingual ) OCR",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QnegQiT1vOWmjfTP",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {},
+        "options": {
+          "downloadAttachments": true
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -992,
+        224
+      ],
+      "id": "2afa3d39-cdaf-4989-8bb6-a9bcb1b15d6e",
+      "name": "Gmail 2",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "n2x0o1AUiINK2gzr",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {},
+        "options": {
+          "downloadAttachments": true
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -992,
+        48
+      ],
+      "id": "f6e0353e-72ac-4b3c-a482-1e62e2361553",
+      "name": "Gmail 1",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "iLetl7zyDEFQe6Mc",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "ec4958c9-6a86-4640-9005-1ba7ab87b539",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -992,
+        400
+      ],
+      "id": "f16bb535-9126-421e-a166-58c7963710c9",
+      "name": "Webhook",
+      "webhookId": "ec4958c9-6a86-4640-9005-1ba7ab87b539"
+    }
+  ],
+  "pinData": {
+    "Gmail 2": [
+      {
+        "json": {
+          "id": "19d9aebdb75b9455",
+          "threadId": "19d9aebdb75b9455",
+          "labelIds": [
+            "CATEGORY_PERSONAL",
+            "INBOX"
+          ],
+          "sizeEstimate": 46046,
+          "headers": {
+            "delivered-to": "Delivered-To: unfazed.services@gmail.com",
+            "received": "Received: from mail-sor-f65.google.com (mail-sor-f65.google.com. [209.85.220.65])\r\n        by mx.google.com with SMTPS id 586e51a60fabf-42b9fb21034sor379247fac.3.2026.04.17.03.10.41\r\n        for <unfazed.services@gmail.com>\r\n        (Google Transport Security);\r\n        Fri, 17 Apr 2026 03:10:41 -0700 (PDT)",
+            "x-received": "X-Received: by 2002:a05:6870:88a3:b0:3e8:926e:bf9f with SMTP id\r\n 586e51a60fabf-42a99ab5f12mr952675fac.13.1776420640868; Fri, 17 Apr 2026\r\n 03:10:40 -0700 (PDT)",
+            "arc-seal": "ARC-Seal: i=1; a=rsa-sha256; t=1776420641; cv=none;\r\n        d=google.com; s=arc-20240605;\r\n        b=Bi/wXKuVgZ1HM0AJD05/uHWRKyNUReiB5YDLMnO3tXGkX9rMN4HbDxqe2AHy38j2TP\r\n         EgQ7D87pYuV/Tua0+bKEgl+VexaZQQLRo6yskt1L1ISgTBupuIh2lfqt/qd85VFaQGYE\r\n         uslbx9a9lxVXElUbrih7v0dk6niTgw4w7eCbmfadtNZI8isMBtePfqup49fl3+dRQs0l\r\n         7bLac2I2BTnWN6azYvQZW+bhbrU2E0j+OaQ1qDGwUbvi3ZH2waetsrEVoxMnQIIMLARO\r\n         gv6BH3bnRuOm1AB09iOlQgxFfkFpumv45/Ad/YK8UD1Va5555HidwD6B75bajfJ7qS0E\r\n         JnVQ==",
+            "arc-message-signature": "ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;\r\n        h=to:subject:message-id:date:from:mime-version:dkim-signature;\r\n        bh=LzANy9OaMSxVfaH2YJ0q3SMIR8xvAhzRCjwqPPVCaaQ=;\r\n        fh=oB8GesEVzF97DogPK3cRq7jQjljykzR4UaT/qT2u6T0=;\r\n        b=B0f9115YEg9+/p+B2d+uQniat/Jl55qpkc8fTE9gajyYlRhUcFRbEDNDNp7AjM1yAJ\r\n         eDq6xHx15hMK0jk2CRpsPoCEs61WlavB0DyTovNYzw/1h0ycZWJHqTrcba58Zkh7JaYx\r\n         CHoA9+x3eR7Gd23/VjzM2Lc4yMQdd0fBqT9swtGUX7gNzakXNluxGjv9a5hQ4DWU023l\r\n         Al8uTjY+W56Uz7BsQmlzb8zjxE+cAybjhjLojS9VEJlRechF82Ydu4NCbVhj05kT4d+u\r\n         Fb2ve7WGC5saL/dfNsRGGTM99RMxErXE9LKA1s4Ocmd6uoFLctPfF1bf64SGevainZD1\r\n         GYKg==;\r\n        dara=google.com",
+            "arc-authentication-results": "ARC-Authentication-Results: i=1; mx.google.com; arc=none",
+            "return-path": "Return-Path: <navtejworks@gmail.com>",
+            "received-spf": "Received-SPF: pass (google.com: domain of navtejworks@gmail.com designates 209.85.220.65 as permitted sender) client-ip=209.85.220.65;",
+            "authentication-results": "Authentication-Results: mx.google.com;\r\n       dkim=pass header.i=@gmail.com header.s=20251104 header.b=eH2KHwB3;\r\n       arc=pass (i=1);\r\n       spf=pass (google.com: domain of navtejworks@gmail.com designates 209.85.220.65 as permitted sender) smtp.mailfrom=navtejworks@gmail.com;\r\n       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;\r\n       dara=pass header.i=@gmail.com",
+            "dkim-signature": "DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;\r\n        d=gmail.com; s=20251104; t=1776420641; x=1777025441; dara=google.com;\r\n        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject\r\n         :date:message-id:reply-to;\r\n        bh=LzANy9OaMSxVfaH2YJ0q3SMIR8xvAhzRCjwqPPVCaaQ=;\r\n        b=eH2KHwB35XgELLVhLKKy/9tR7CgE8CiYW+BdVXERrQGpErMUSt1Kc9oBbiaMJQu1cQ\r\n         col/XhRh2NgFDEZJYEnxgE1YnLmDSm8lw/Q111/RdEx0E3eGmyP7NuRB1RuxQ7+BNc4X\r\n         Ui9PdBFnkN7OVjP/MeBIXgKCrpZVR382btK/MOElpldJG2cHghf+pdRuRb3PtJ+kmNR1\r\n         ILJGB0w0vWKc1L4gPd2r0Ibl9dD0tFat77Nd0XBN79W3K4eYnnfI/LgMYbogpEHq1zjg\r\n         eREfhzowcs9cBV93TdNARiHPp7SQqTfSUsICtl5XYPb9i4qtDmt945g35qx9r99xh4G1\r\n         UvZg==",
+            "x-google-dkim-signature": "X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;\r\n        d=1e100.net; s=20251104; t=1776420641; x=1777025441;\r\n        h=to:subject:message-id:date:from:mime-version:x-gm-gg\r\n         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;\r\n        bh=LzANy9OaMSxVfaH2YJ0q3SMIR8xvAhzRCjwqPPVCaaQ=;\r\n        b=X/dYGJdIBaktCCK1IPojuEn3b2+/Ka7cKU5P0mKKbZP3ffw8lLzU+XQMvp7OOJXk2G\r\n         kdueaVgnQhKOrr/k5D9oXGIxNq/4KFWNgVkNRA1IedMu+jACANuh8mf5Lylu4NHw/5T9\r\n         xhmGsqyEeRdwXF/3lk9E08++QUyW6iYeYz8EsTCH0q0KoDb9E0vgsDw/qtj48kZbuK5c\r\n         PxySl9Iy8PhdfOI9rViX1GSnr7u5k1KPoKQYjN97VWmee3Bs3C7LU+6jtYA4qCbmONYv\r\n         dSYjaN308dgFg5ysri9CFKkA1F2GgzVs8YcYb3Hq/f0e2ocJFrpJLv31j1jOKeP9PIix\r\n         xU0g==",
+            "x-gm-message-state": "X-Gm-Message-State: AOJu0YwDrplOjUxC9tfVjMtswmk2gM2I3biJY3aCPa26bp359a2/Ozcq\r\n\t+0go9DN1mruWxBzTZMzIp7eAWzCJ95bnETM6tJwyfiQmqAx08njBgzzEjqfZXpyBBZSkAni/pVM\r\n\tLsvc+tq0uHsrMcM3GHTWz6yH9KE0e6yOTdBo6RtA=",
+            "x-gm-gg": "X-Gm-Gg: AeBDietJqa3qJ0GGKMWBi2Ke/npiYogTgCeS4qR2AlASezwaEYMjWUCAlEfTVXKYfaW\r\n\ti8/Kkw/MQRYsCiuYB0R7SmpZ6EAC8GEAV1ULvFRkxPJrryYkPPrOqOVl0ItPgd+bFbyf4JbfEnf\r\n\tBl7dXGTZBgZNYsax3G5m2zuIAjD9xtgOHevsBGiyY6qPM7DUG3JhNyNMTK9Hv49S0T/m37+NbSM\r\n\tGMFJJGcQ63MB2R+hsVMlDD5PdRQfVP4KTl4njxGpLjBTHUH6XhrGjKuyg+E8s/b+m7xGkklYqZN\r\n\tTiydZC4/HTn6e9CqIFIii7HkAsFJW/y5eX6KhF9gRcJwlwSaRIC8",
+            "mime-version": "MIME-Version: 1.0",
+            "from": "From: Navtej <navtejworks@gmail.com>",
+            "date": "Date: Fri, 17 Apr 2026 15:40:33 +0530",
+            "x-gm-features": "X-Gm-Features: AQROBzDTzLIc0LBGnaITQdlFUIkjD-H4AiG8cnZiuNAL5oUz1WzdN-t9pO7y2DI",
+            "message-id": "Message-ID: <CAMJKMsHWKpoLnYkag74uXnQrbB+WTrMf9LNfPOtt06J0AnUEaQ@mail.gmail.com>",
+            "subject": "Subject: ",
+            "to": "To: unfazed.services@gmail.com",
+            "content-type": "Content-Type: multipart/mixed; boundary=\"000000000000458647064fa5292b\""
+          },
+          "html": "<div dir=\"ltr\"><br></div>\n",
+          "text": "\n",
+          "textAsHtml": "<p></p>",
+          "date": "2026-04-17T10:10:33.000Z",
+          "to": {
+            "value": [
+              {
+                "address": "unfazed.services@gmail.com",
+                "name": ""
+              }
+            ],
+            "html": "<span class=\"mp_address_group\"><a href=\"mailto:unfazed.services@gmail.com\" class=\"mp_address_email\">unfazed.services@gmail.com</a></span>",
+            "text": "unfazed.services@gmail.com"
+          },
+          "from": {
+            "value": [
+              {
+                "address": "navtejworks@gmail.com",
+                "name": "Navtej"
+              }
+            ],
+            "html": "<span class=\"mp_address_group\"><span class=\"mp_address_name\">Navtej</span> &lt;<a href=\"mailto:navtejworks@gmail.com\" class=\"mp_address_email\">navtejworks@gmail.com</a>&gt;</span>",
+            "text": "\"Navtej\" <navtejworks@gmail.com>"
+          },
+          "messageId": "<CAMJKMsHWKpoLnYkag74uXnQrbB+WTrMf9LNfPOtt06J0AnUEaQ@mail.gmail.com>"
+        },
+        "binary": {
+          "attachment_0": {
+            "mimeType": "application/pdf",
+            "fileType": "pdf",
+            "fileExtension": "pdf",
+            "data": "filesystem-v2",
+            "fileName": "Text-to-PDF-EC7.pdf",
+            "id": "filesystem-v2:workflows/0rKdhfYMU1iOK88QLjYM8/executions/temp/binary_data/2e1fd98c-86a9-44d1-958b-8dc140577875",
+            "fileSize": "28.3 kB",
+            "bytes": 28327
+          }
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent 1.0",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On any File Upload": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent 1.0",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent 1.0": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Parse Json",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload via Upload Button(Website)": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Parse json",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Ai Analysis ( Bilingual ) OCR",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Upload via Upload Button(Website)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filters": {
+      "main": [
+        [
+          {
+            "node": "Fetches message + Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Filter": {
+      "main": [
+        [
+          {
+            "node": "Filters",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetches message + Files": {
+      "main": [
+        [
+          {
+            "node": "Ai Analysis (Bilingual) OCR",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Json": {
+      "main": [
+        [
+          {
+            "node": "Insert Document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse json": {
+      "main": [
+        [
+          {
+            "node": "Insert Document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ai Analysis (Bilingual) OCR": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ai Analysis ( Bilingual ) OCR": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail 2": {
+      "main": [
+        [
+          {
+            "node": "AI Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail 1": {
+      "main": [
+        [
+          {
+            "node": "AI Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "60bf14d3-d563-417a-bc2b-dfe50d29cc85",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "42abd1b1c7df812105bbfd3bb50b2e1728db05a238f0d03e8ea5bcd929351fe0"
+  },
+  "id": "0rKdhfYMU1iOK88QLjYM8",
+  "tags": []
+}

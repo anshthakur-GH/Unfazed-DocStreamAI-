@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 const API_BASE_URL = 'http://localhost:4000/api';
+=======
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://localhost:4000/api' : '/api');
+>>>>>>> render/CODES
 
 export interface Document {
   _id: string;
@@ -89,6 +93,13 @@ class ApiService {
     this.baseUrl = baseUrl;
   }
 
+<<<<<<< HEAD
+=======
+  getBaseUrl(): string {
+    return this.baseUrl;
+  }
+
+>>>>>>> render/CODES
   private async request<T>(
     endpoint: string,
     options: RequestInit = {}

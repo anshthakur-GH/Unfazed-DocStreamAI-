@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocStreamAI Project Presentation Handout</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #0ea5e9;
+            --bg: #f8fafc;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --white: #ffffff;
+            --accent: #8b5cf6;
+        }
+
+        @media print {
+            .no-print { display: none; }
+            body { background: white !important; padding: 0 !important; }
+            .container { box-shadow: none !important; border: none !important; max-width: 100% !important; margin: 0 !important; }
+            .page-break { page-break-after: always; }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 60px;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+        }
+
+        header {
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .logo-text {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: var(--text);
+            margin: 40px 0 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 10px;
+        }
+
+        h2::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 24px;
+            background: var(--primary);
+            margin-right: 15px;
+            border-radius: 4px;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            margin: 25px 0 15px;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .tech-card {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .tech-card ul {
+            list-style: none;
+        }
+
+        .tech-card li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .tech-card li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .feature-item {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-left: 4px solid var(--secondary);
+            border-radius: 0 12px 12px 0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: var(--text);
+        }
+
+        .feature-desc {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .footer {
+            margin-top: 60px;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 30px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #eef2ff;
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .floating-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+            transition: transform 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .floating-button:hover {
+            transform: scale(1.05);
+            background: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <button class="floating-button no-print" onclick="window.print()">Save as PDF</button>
+
+    <div class="container">
+        <div class="header-gradient"></div>
+        
+        <header>
+            <div class="logo-text">DocStreamAI</div>
+            <div class="tagline">Real-Time Agentic Document Intelligence Platform</div>
+        </header>
+
+        <section>
+            <p><strong>DocStreamAI</strong> bridges the gap between document storage and action. It automates ingestion, classification, and conversational analysis of documents across multiple enterprise channels using state-of-the-art AI agents.</p>
+        </section>
+
+        <h2>Technical Architecture</h2>
+        <div class="tech-grid">
+            <div class="tech-card">
+                <h3>Frontend Architecture</h3>
+                <div class="badge">React 18 + Vite</div>
+                <ul>
+                    <li><strong>TypeScript</strong> for type safety</li>
+                    <li><strong>Tailwind CSS</strong> & <strong>Shadcn UI</strong></li>
+                    <li><strong>Framer Motion</strong> animations</li>
+                    <li><strong>TanStack Query</strong> state mgmt</li>
+                </ul>
+            </div>
+            <div class="tech-card">
+                <h3>Backend & Infrastructure</h3>
+                <div class="badge">Node.js + MongoDB</div>
+                <ul>
+                    <li><strong>Express</strong> RESTful APIs</li>
+                    <li><strong>MongoDB Change Streams</strong></li>
+                    <li><strong>WebSockets</strong> for real-time push</li>
+                    <li><strong>Google Drive</strong> cloud storage</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="tech-card" style="margin-top: 20px; width: 100%;">
+            <h3>AI & Intelligence Layer</h3>
+            <div class="badge">n8n Agentic Orchestration</div>
+            <p style="font-size: 0.95rem; color: var(--text-light);">
+                Powered by <strong>Gemini 1.5 Pro</strong> and <strong>2.5 Flash</strong> models for OCR, semantic extraction, and RAG (Retrieval-Augmented Generation) via <strong>Supabase Vector</strong>.
+            </p>
+        </div>
+
+        <h2>Core Functionalities</h2>
+        
+        <div class="feature-item">
+            <div class="feature-title">Multi-Channel Ingestion</div>
+            <div class="feature-desc">Automated pipelines for Email (Gmail), WhatsApp (Business API), SharePoint, and IBM Maximo (MIF).</div>
+        </div>
+
+        <div class="feature-item" style="border-left-color: var(--primary);">
+            <div class="feature-title">Semantic Extraction & Tagging</div>
+            <div class="feature-desc">AI agents analyze content to generate structured metadata, priority signals, and departmental routing instructions.</div>
+        </div>
+
+        <div class="feature-item" style="border-left-color: var(--accent);">
+            <div class="feature-title">Per-Document AI Chatbot</div>
+            <div class="feature-desc">Interactive RAG pipeline for every file. Users can "talk" to any document to get summaries or specific answers instantly.</div>
+        </div>
+
+        <div class="feature-item">
+            <div class="feature-title">Real-Time Notice Board</div>
+            <div class="feature-desc">Department-specific dashboards that update via live push as documents are processed and classified.</div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <h2>Strategic Value</h2>
+        <ul>
+            <li style="margin-bottom: 15px;"><strong>Efficiency:</strong> Reduces manual document processing time from hours to seconds.</li>
+            <li style="margin-bottom: 15px;"><strong>Accuracy:</strong> AI-powered semantic tagging ensures documents are never misclassified or lost.</li>
+            <li style="margin-bottom: 15px;"><strong>Accessibility:</strong> Complex policies become approachable through conversational AI interfaces.</li>
+        </ul>
+
+        <div class="footer">
+            <p>© 2026 Unfazed AI • Internal Project Presentation Details</p>
+            <p style="font-size: 0.8rem; margin-top: 5px;">Generated for DocStreamAI Presentation Preparation</p>
+        </div>
+    </div>
+</body>
+</html>

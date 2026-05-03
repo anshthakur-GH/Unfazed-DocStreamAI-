@@ -14,6 +14,10 @@ import KnowledgePage from "./pages/KnowledgePage";
 import Stats from "./pages/Stats";
 import { DocumentForm } from "./components/documents/DocumentForm";
 import { Navbar } from "./components/layout/Navbar";
+<<<<<<< HEAD
+=======
+import { ScrollToTop } from "./components/layout/ScrollToTop";
+>>>>>>> render/CODES
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import LoginPage from "./pages/LoginPage"; // Import the new LoginPage component
 import Unauthorized from "./pages/Unauthorized"; // Import the new Unauthorized component
@@ -42,6 +46,15 @@ const LoginWrapper = () => {
   return <LoginPage />;
 };
 
+<<<<<<< HEAD
+=======
+// Root redirect component
+const RootRedirect = () => {
+  const { isAuthenticated } = useAuth();
+  return <Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />;
+};
+
+>>>>>>> render/CODES
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
@@ -50,6 +63,7 @@ const App = () => {
           <SearchProvider>
             <Toaster />
             <Sonner />
+<<<<<<< HEAD
 <<<<<<< HEAD
             <BrowserRouter>
               <Routes>
@@ -108,42 +122,75 @@ const App = () => {
                   <Route path="/login" element={<LoginWrapper />} />
                   <Route path="/unauthorized" element={<Unauthorized />} />
                   <Route path="/" element={<Navigate to="/login" replace />} />
+=======
+            <ErrorBoundary>
+              <BrowserRouter>
+                <ScrollToTop />
+                <Routes>
+                  <Route path="/login" element={<LoginWrapper />} />
+                  <Route path="/unauthorized" element={<Unauthorized />} />
+                  <Route path="/" element={<RootRedirect />} />
+>>>>>>> render/CODES
                   
                   <Route element={<ProtectedRouteWrapper />}>
                     {/* Protected Routes */}
                     <Route path="/dashboard" element={<Index />} />
                     <Route path="/documents/:id" element={
+<<<<<<< HEAD
                       <div className="min-h-screen bg-background">
+=======
+                      <div className="min-h-screen bg-background pt-28">
+>>>>>>> render/CODES
                         <Navbar />
                         <DocumentDetail />
                       </div>
                     } />
                     <Route path="/documents/:id/edit" element={
+<<<<<<< HEAD
                       <div className="min-h-screen bg-background">
+=======
+                      <div className="min-h-screen bg-background pt-28">
+>>>>>>> render/CODES
                         <Navbar />
                         <DocumentForm mode="edit" />
                       </div>
                     } />
                     <Route path="/documents/new" element={
+<<<<<<< HEAD
                       <div className="min-h-screen bg-background">
+=======
+                      <div className="min-h-screen bg-background pt-28">
+>>>>>>> render/CODES
                         <Navbar />
                         <DocumentForm mode="create" />
                       </div>
                     } />
                     <Route path="/profiles/:profile" element={
+<<<<<<< HEAD
                       <div className="min-h-screen bg-background">
+=======
+                      <div className="min-h-screen bg-background pt-28">
+>>>>>>> render/CODES
                         <Navbar />
                         <ProfileView />
                       </div>
                     } />
                     <Route path="/profiles/:profile/knowledge" element={
+<<<<<<< HEAD
                       <div className="min-h-screen bg-background">
+=======
+                      <div className="min-h-screen bg-background pt-28">
+>>>>>>> render/CODES
                         <Navbar />
                         <KnowledgePage />
                       </div>
                     } />
                     <Route path="/stats" element={
+<<<<<<< HEAD
                       <div className="min-h-screen bg-background">
+=======
+                      <div className="min-h-screen bg-background pt-28">
+>>>>>>> render/CODES
                         <Navbar />
                         <Stats />
                       </div>
@@ -155,7 +202,10 @@ const App = () => {
                 </Routes>
               </BrowserRouter>
             </ErrorBoundary>
+<<<<<<< HEAD
 >>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
+=======
+>>>>>>> render/CODES
         </SearchProvider>
       </AuthProvider>
       </TooltipProvider>

@@ -13,6 +13,12 @@ const apiRoutes = require('./routes/api');
 const app = express();
 const server = http.createServer(app);
 
+<<<<<<< HEAD
+=======
+// Trust Render's proxy
+app.set('trust proxy', 1);
+
+>>>>>>> render/CODES
 const PORT = process.env.PORT || 4000;
 
 // CORS allowlist (comma-separated origins in env), fallback to dev wildcard without credentials
@@ -32,6 +38,7 @@ app.use(cors(corsOptions)); // safer CORS configuration [7][13]
 
 app.use(express.json());
 
+<<<<<<< HEAD
 // Serve static files from the React frontend build folder
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
@@ -40,6 +47,17 @@ app.use('/api', apiRoutes);
 
 // Root endpoint
 app.get('/', (req, res) => {
+=======
+// Routes
+app.use('/api', apiRoutes);
+
+// Serve static files from the React app
+const clientDistPath = path.join(__dirname, '../client/dist');
+app.use(express.static(clientDistPath));
+
+// Root API info endpoint (moved to /api)
+app.get('/api', (req, res) => {
+>>>>>>> render/CODES
   res.json({
     message: 'Real-time MongoDB API Server',
     version: '1.0.0',
@@ -51,6 +69,7 @@ app.get('/', (req, res) => {
         statsData: '/api/stats/data',
         statsConnections: '/api/stats/connections'
     },
+<<<<<<< HEAD
     websocket: `ws://${req.headers.host}`
   });
 });
@@ -58,6 +77,24 @@ app.get('/', (req, res) => {
 // All other GET requests not handled before will return our React app
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+=======
+    websocket: `${req.protocol === 'https' ? 'wss' : 'ws'}://${req.headers.host}`
+  });
+});
+
+// Fallback for SPA: for any request that doesn't match an API route or static file,
+// send back React's index.html file.
+app.use((req, res) => {
+  // If the request starts with /api, it's a 404 for the API
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({
+      error: 'API Endpoint not found',
+      path: req.originalUrl
+    });
+  }
+  // Otherwise, serve the frontend
+  res.sendFile(path.join(clientDistPath, 'index.html'));
+>>>>>>> render/CODES
 });
 
 // Global error handler (after routes)

@@ -39,6 +39,7 @@ export default function ProfileView() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
 <<<<<<< HEAD
+<<<<<<< HEAD
         <div className="mb-8">
           <h1 className="text-4xl font-black text-slate-900 mb-2 tracking-tighter uppercase">
             {profileName} Node
@@ -48,11 +49,18 @@ export default function ProfileView() {
 =======
         <div className="mb-12">
           <h1 className="text-6xl font-black text-slate-900 mb-3 tracking-tighter uppercase leading-none">
+=======
+        <div className="mb-12">
+          <h1 className="text-4xl font-black text-slate-900 mb-3 tracking-tighter uppercase leading-none">
+>>>>>>> render/CODES
             {profileName} <span className="text-blue-600">NODE</span>
           </h1>
           <p className="text-slate-500 font-medium tracking-widest uppercase text-xs">
             {isLoading ? "Synchronizing institutional assets..." : `Access authenticated for ${profileName} profile.`}
+<<<<<<< HEAD
 >>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
+=======
+>>>>>>> render/CODES
           </p>
         </div>
 
@@ -64,10 +72,14 @@ export default function ProfileView() {
             <Input 
               type="text" 
 <<<<<<< HEAD
+<<<<<<< HEAD
               placeholder={`Query ${profileName.toLowerCase()} node...`}
 =======
               placeholder="Query institutional node..."
 >>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
+=======
+              placeholder="Query institutional node..."
+>>>>>>> render/CODES
               value={currentSearchInput}
               onChange={(e) => setCurrentSearchInput(e.target.value)}
               className="pl-14 bg-white/70 backdrop-blur-3xl border-slate-200 text-slate-900 placeholder:text-slate-400 focus:ring-blue-500/50 shadow-2xl shadow-blue-900/5 rounded-2xl h-14 text-lg font-medium transition-all"
@@ -94,6 +106,7 @@ export default function ProfileView() {
           </Link>
         </div>
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         {/* Documents categorized by type (Universal Visibility - No userProfileFilter) */}
         <div className="space-y-12">
@@ -186,6 +199,92 @@ export default function ProfileView() {
               hideHeading={true} 
             />
           </section>
+=======
+        {/* Categorized Streams or Search Results */}
+        <div className="space-y-24">
+          {searchTerm ? (
+            <section>
+              <div className="flex items-center justify-between mb-8 border-b-2 border-slate-100 pb-6">
+                <div className="flex items-center space-x-4">
+                  <div className="p-3 bg-blue-600 rounded-2xl shadow-lg shadow-blue-600/20">
+                    <Search className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">Search Results</h2>
+                    <p className="text-sm text-slate-500 font-medium">Displaying all documents matching "{searchTerm}"</p>
+                  </div>
+                </div>
+              </div>
+              <DocumentTable 
+                userProfileFilter={profileName}
+                showControls={true} 
+                hideHeading={true} 
+              />
+            </section>
+          ) : (
+            <>
+              <section>
+                <div className="flex items-center justify-between mb-8 border-b-2 border-slate-100 pb-6">
+                  <div className="flex items-center space-x-4">
+                    <div className="p-3 bg-blue-600 rounded-2xl shadow-lg shadow-blue-600/20">
+                      <BookOpen className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">Academic Intelligence</h2>
+                      <p className="text-sm text-slate-500 font-medium">Lecture notes and course documentation.</p>
+                    </div>
+                  </div>
+                </div>
+                <DocumentTable 
+                  userProfileFilter={profileName}
+                  documentTypeFilter="Lecture Notes" 
+                  showControls={false} 
+                  hideHeading={true} 
+                />
+              </section>
+
+              <section>
+                <div className="flex items-center justify-between mb-8 border-b-2 border-slate-100 pb-6">
+                  <div className="flex items-center space-x-4">
+                    <div className="p-3 bg-blue-600 rounded-2xl shadow-lg shadow-blue-600/20">
+                      <FileText className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">Research Papers</h2>
+                      <p className="text-sm text-slate-500 font-medium">Published papers and specialized research data.</p>
+                    </div>
+                  </div>
+                </div>
+                <DocumentTable 
+                  userProfileFilter={profileName}
+                  documentTypeFilter="Research Paper" 
+                  showControls={false} 
+                  hideHeading={true} 
+                />
+              </section>
+
+              <section>
+                <div className="flex items-center justify-between mb-8 border-b-2 border-slate-100 pb-6">
+                  <div className="flex items-center space-x-4">
+                    <div className="p-3 bg-blue-600 rounded-2xl shadow-lg shadow-blue-600/20">
+                      <Layout className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">Other Assets</h2>
+                      <p className="text-sm text-slate-500 font-medium">Miscellaneous institutional documentation.</p>
+                    </div>
+                  </div>
+                </div>
+                <DocumentTable 
+                  userProfileFilter={profileName}
+                  documentTypeFilter="Other" 
+                  showControls={false} 
+                  hideHeading={true} 
+                />
+              </section>
+            </>
+          )}
+>>>>>>> render/CODES
         </div>
       </div>
     </div>

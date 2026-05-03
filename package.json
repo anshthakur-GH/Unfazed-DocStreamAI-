@@ -10,6 +10,10 @@
     "concurrently": "^9.2.1"
   },
   "dependencies": {
+<<<<<<< HEAD
+=======
+    "canvg": "^4.0.3",
+>>>>>>> render/CODES
     "html2pdf.js": "^0.12.0"
   }
 }

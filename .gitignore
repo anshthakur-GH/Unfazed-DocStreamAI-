@@ -1,1 +1,44 @@
+<<<<<<< HEAD
 node_modules
+=======
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Build and Production
+dist/
+build/
+coverage/
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Editor directories and files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# Hackathon Session Exclusions
+server/fix_visibility.js
+server/migrate.js
+Unfazed-DocStream-Agents/dummy_test_file.txt
+Unfazed-DocStream-Agents/test_policy.txt
+Unfazed-DocStream-Agents/proxy.py
+Unfazed-DocStream-Agents/app.py
+Unfazed-DocStream-Agents/index.html
+Unfazed-DocStream-Agents/script.js
+Unfazed-DocStream-Agents/styles.css
+Unfazed-DocStream-Agents/requirements.txt
+Unfazed-DocStream-Agents/policy hack.code-workspace
+>>>>>>> render/CODES

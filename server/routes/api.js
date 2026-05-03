@@ -269,6 +269,58 @@ router.get('/stats/data', async (req, res) => {
 });
 
 
+<<<<<<< HEAD
+=======
+// Talk with DocAI - send document link to n8n webhook
+router.post('/data/:id/talk', async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(400).json({ error: 'Invalid document ID' });
+    
+    const document = await Document.findById(id);
+    if (!document) return res.status(404).json({ error: 'Document not found' });
+
+    const driveLink = document.google_drive_link || document.webViewLink;
+    if (!driveLink) return res.status(400).json({ error: 'Document has no Google Drive link' });
+
+    // Send to n8n webhook
+    const webhookUrl = 'https://n8n.cognigenai.in/webhook/6a8b8977-6234-4d36-9b48-0d8b4d16f358';
+    
+    const response = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        document_id: id,
+        document_title: document.document_title,
+        drive_link: driveLink,
+        message: req.body.message || "Hello, I want to talk about this document.",
+        user_profile: document.user_profile
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Webhook failed with status ${response.status}`);
+    }
+
+    // Try to parse as JSON, if it fails, return text
+    const text = await response.text();
+    let result;
+    try {
+      result = JSON.parse(text);
+    } catch (e) {
+      result = { response: text };
+    }
+    
+    res.json({ success: true, data: result });
+  } catch (error) {
+    console.error('❌ Error in talk with DocAI:', error);
+    res.status(500).json({ error: 'Failed to initiate talk with DocAI', details: error.message });
+  }
+});
+
+>>>>>>> render/CODES
 // Get WebSocket connection stats
 router.get('/stats/connections', (req, res) => {
   const connectedClients = req.app.get('websocketService')?.getConnectedClientsCount() || 0;
