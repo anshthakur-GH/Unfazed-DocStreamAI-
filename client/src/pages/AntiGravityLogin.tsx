@@ -107,11 +107,7 @@ const AntiGravityLogin: React.FC = () => {
           </div>
           
           <h1 className="text-white text-2xl font-light tracking-[0.2em] font-sans">
-<<<<<<< HEAD
-            Unfazed DocStreamAI
-=======
             DocStreamAI
->>>>>>> render/CODES
           </h1>
           
           <div className="text-white/70 flex items-center space-x-2 text-sm font-light">

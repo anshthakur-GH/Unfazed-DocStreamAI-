@@ -12,11 +12,6 @@ export default function LoginPage() {
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
   const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
-<<<<<<< HEAD
-  const { setIsAuthenticated, setUserProfile } = useAuth();
-  const navigate = useNavigate();
-
-=======
   const { isAuthenticated, setIsAuthenticated, setUserProfile } = useAuth();
   const navigate = useNavigate();
 
@@ -26,7 +21,6 @@ export default function LoginPage() {
     }
   }, [isAuthenticated, navigate]);
 
->>>>>>> render/CODES
   const handleProfileSelect = (value: string) => {
     setSelectedProfile(value);
   };

@@ -27,12 +27,8 @@ import { useDocument, useRelatedDocuments } from "@/hooks/useDocuments";
 import { safeFormatDate } from "@/lib/utils";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-<<<<<<< HEAD
-import html2pdf from 'html2pdf.js';
-=======
 import { DocAIChat } from "@/components/documents/DocAIChat";
 
->>>>>>> render/CODES
 import { useRef } from "react";
 
 // Function to highlight dates in text
@@ -83,14 +79,9 @@ export default function DocumentDetail() {
 
   if (error || !document) return <Navigate to="/404" replace />;
 
-<<<<<<< HEAD
-  const handleDownloadPdf = () => {
-    if (documentRef.current) {
-=======
   const handleDownloadPdf = async () => {
     if (documentRef.current) {
       const html2pdf = (await import('html2pdf.js')).default;
->>>>>>> render/CODES
       html2pdf().from(documentRef.current).save(`${document.document_title}.pdf`);
     }
   };
@@ -101,11 +92,7 @@ export default function DocumentDetail() {
         <div className="mb-6">
           <Breadcrumb>
             <BreadcrumbList>
-<<<<<<< HEAD
-              <BreadcrumbItem><BreadcrumbLink asChild><Link to="/" className="font-bold text-xs uppercase tracking-widest text-slate-400 hover:text-blue-600">Home</Link></BreadcrumbLink></BreadcrumbItem>
-=======
               <BreadcrumbItem><BreadcrumbLink asChild><Link to="/dashboard" className="font-bold text-xs uppercase tracking-widest text-slate-400 hover:text-blue-600">Home</Link></BreadcrumbLink></BreadcrumbItem>
->>>>>>> render/CODES
               <BreadcrumbSeparator />
               <BreadcrumbItem><BreadcrumbPage className="font-bold text-xs uppercase tracking-widest text-slate-900">{document.document_title}</BreadcrumbPage></BreadcrumbItem>
             </BreadcrumbList>
@@ -116,11 +103,7 @@ export default function DocumentDetail() {
           <div className="flex-1">
             <div className="flex items-center space-x-3 mb-4">
               <Button variant="ghost" size="sm" asChild className="h-9 w-9 p-0 bg-white/70 backdrop-blur-md border border-slate-200 text-slate-900 hover:bg-white rounded-xl shadow-lg shadow-slate-200/50 active:scale-95 group transition-all">
-<<<<<<< HEAD
-                <Link to="/"><ArrowLeft className="h-4 w-4 group-hover:-translate-x-0.5 transition-transform" /></Link>
-=======
                 <Link to="/dashboard"><ArrowLeft className="h-4 w-4 group-hover:-translate-x-0.5 transition-transform" /></Link>
->>>>>>> render/CODES
               </Button>
               <Badge className={`${documentTypeColors[document.document_type as keyof typeof documentTypeColors] || "bg-gray-100 text-gray-800"} rounded-lg font-bold text-[10px] uppercase tracking-wider px-2 py-0.5 shadow-sm border-none`}>
                 {document.document_type}
@@ -129,22 +112,7 @@ export default function DocumentDetail() {
                 {document.urgency_level}
               </Badge>
             </div>
-<<<<<<< HEAD
-            
-<<<<<<< HEAD
-            <h1 className="text-4xl font-black text-slate-900 mb-2 tracking-tighter leading-tight uppercase">
-=======
-<<<<<<< HEAD
             <h1 className="text-4xl font-black text-slate-900 mb-4 tracking-tighter" style={{ fontFamily: 'Geist Sans, sans-serif' }}>
->>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
-              {document.document_title}
-            </h1>
-            
-            <p className="text-lg text-slate-500 font-medium tracking-tight w-full mb-6 leading-relaxed">
-              {highlightDatesInText(document.summary || 'No summary available')}
-            </p>
-            
-=======
 
             <h1 className="text-4xl font-black text-slate-900 mb-2 tracking-tighter leading-tight uppercase">
               {document.document_title}
@@ -154,18 +122,12 @@ export default function DocumentDetail() {
               {highlightDatesInText(document.summary || 'No summary available')}
             </p>
 
->>>>>>> render/CODES
             <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
               <div className="flex items-center space-x-2 bg-slate-100/50 px-3 py-1.5 rounded-full border border-slate-200">
                 <Calendar className="h-4 w-4 text-blue-600" />
                 <span className="font-bold text-[10px] uppercase tracking-widest text-slate-500">Uploaded {safeFormatDate(document.upload_timestamp || document.createdAt)}</span>
               </div>
               <div className="flex items-center space-x-2 bg-slate-100/50 px-3 py-1.5 rounded-full border border-slate-200">
-<<<<<<< HEAD
-<<<<<<< HEAD
-                <Users className="h-4 w-4 text-blue-600" />
-                <span className="font-bold text-[10px] uppercase tracking-widest text-slate-500">By {document.uploaded_by} ({document.user_profile})</span>
-=======
                 <Clock className="h-4 w-4 text-blue-600" />
                 <span className="font-medium">Modified {safeFormatDate(document.updatedAt || document.createdAt || document._id)}</span>
 =======
@@ -179,32 +141,12 @@ export default function DocumentDetail() {
               <div className="flex items-center space-x-2 border border-black/10 p-1.5 rounded-md">
                 <Users className="h-4 w-4" />
                 <span>By {document.uploaded_by} ({document.user_profile})</span>
->>>>>>> d37c9d43293122daf4f5c2819b40669957f939f7
->>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
-=======
                 <Users className="h-4 w-4 text-blue-600" />
                 <span className="font-bold text-[10px] uppercase tracking-widest text-slate-500">By {document.uploaded_by} ({document.user_profile})</span>
->>>>>>> render/CODES
               </div>
             </div>
           </div>
 
-<<<<<<< HEAD
-          <div className="flex items-center space-x-3">
-<<<<<<< HEAD
-            {(document.webViewLink || document.google_drive_link) && (
-              <a 
-                href={document.webViewLink || document.google_drive_link || "#"} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm font-bold tracking-widest uppercase transition-all shadow-lg bg-orange-500 text-white hover:bg-orange-600 h-10 px-5 shadow-orange-500/20 active:scale-95"
-              >
-                View Original
-              </a>
-            )}
-            <Button variant="outline" size="sm" className="bg-green-500 text-white hover:bg-green-600 font-bold tracking-widest uppercase shadow-lg shadow-green-500/20 h-10 px-5 border-none rounded-xl active:scale-95" onClick={handleDownloadPdf}>
-=======
-<<<<<<< HEAD
             {document.webViewLink && (
               <a 
                 href={document.webViewLink} 
@@ -216,17 +158,6 @@ export default function DocumentDetail() {
               </a>
             )}
             <Button variant="outline" size="sm" className="bg-green-500 text-white hover:bg-green-600 font-bold tracking-widest uppercase shadow-lg shadow-green-500/20 h-10 px-4 border-none" onClick={handleDownloadPdf}>
->>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
-              <Download className="h-4 w-4 mr-2" />
-              PDF
-            </Button>
-            <Button size="sm" asChild className="bg-blue-600 text-white hover:bg-blue-700 font-bold tracking-widest uppercase shadow-lg shadow-blue-600/20 h-10 px-5 rounded-xl active:scale-95">
-              <Link to={`/documents/${document._id}/edit`}>
-                <Edit className="h-4 w-4 mr-2" />
-                Edit
-              </Link>
-<<<<<<< HEAD
-=======
 =======
             {(document.webViewLink || document.google_drive_link) && (
               <a href={document.webViewLink || document.google_drive_link || "#"} target="_blank" rel="noopener noreferrer" 
@@ -240,9 +171,6 @@ export default function DocumentDetail() {
             </Button>
             <Button size="sm" asChild className="bg-[#008285] text-white hover:bg-[#008285]/90">
               <Link to={`/documents/${document._id}/edit`}><Edit className="h-4 w-4 mr-2" />Edit</Link>
->>>>>>> d37c9d43293122daf4f5c2819b40669957f939f7
->>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
-=======
           <div className="flex flex-col gap-2 shrink-0 items-end">
             <DocAIChat documentId={document._id} documentTitle={document.document_title} />
 
@@ -268,17 +196,12 @@ export default function DocumentDetail() {
                 <Edit className="h-3.5 w-3.5 mr-2" />
                 Edit Doc
               </Link>
->>>>>>> render/CODES
             </Button>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-3">
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> render/CODES
             <Card className="bg-white/80 backdrop-blur-3xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden mb-8">
               <CardContent className="p-8 md:p-12" ref={documentRef}>
                 <div className="space-y-8">
@@ -290,9 +213,6 @@ export default function DocumentDetail() {
                     ) : (
                       <p className="text-slate-700 leading-relaxed text-lg">{document.summary}</p>
                     )}
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
             <Card className="bg-white/80 backdrop-blur-3xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden">
               <CardContent className="p-8 md:p-12" ref={documentRef}>
                 <div className="prose prose-gray max-w-none">
@@ -303,24 +223,20 @@ export default function DocumentDetail() {
                   ) : (
                     <p className="text-muted-foreground italic">No content available for this document.</p>
                   )}
-=======
             <Card>
               <CardContent className="p-8" ref={documentRef}>
                 <div className="space-y-6">
                   <div>
                     <h3 className="text-xl font-semibold mb-3">Summary</h3>
                     <p className="text-foreground leading-relaxed">{document.summary}</p>
->>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
                   </div>
 
                   <Separator className="bg-slate-100" />
                   
-=======
                   </div>
 
                   <Separator className="bg-slate-100" />
 
->>>>>>> render/CODES
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                     <div>
                       <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Research Domain</h4>
@@ -350,9 +266,6 @@ export default function DocumentDetail() {
                       ))}
                     </div>
                   </div>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
                   <Separator />
                   
@@ -374,10 +287,6 @@ export default function DocumentDetail() {
                       <p>{document.funding_source || "N/A"}</p>
                     </div>
                   </div>
->>>>>>> d37c9d43293122daf4f5c2819b40669957f939f7
->>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
-=======
->>>>>>> render/CODES
                 </div>
               </CardContent>
             </Card>
@@ -394,11 +303,7 @@ export default function DocumentDetail() {
                     <p className="text-slate-500 font-medium tracking-wide">Expand your knowledge with these specialized publications</p>
                   </div>
                 </div>
-<<<<<<< HEAD
-                
-=======
 
->>>>>>> render/CODES
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {relatedDocuments.data.map((relatedDoc: any) => (
                     <Card key={relatedDoc._id} className="group bg-white/70 backdrop-blur-xl border-slate-200 hover:border-blue-400/50 hover:shadow-2xl hover:shadow-blue-600/10 transition-all duration-500 rounded-2xl overflow-hidden">
@@ -419,11 +324,7 @@ export default function DocumentDetail() {
                               {relatedDoc.summary}
                             </p>
                           </Link>
-<<<<<<< HEAD
-                          
-=======
 
->>>>>>> render/CODES
                           <div className="flex items-center justify-between mt-auto pt-5 border-t border-slate-50">
                             <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest truncate max-w-[150px] flex items-center">
                               <Users className="h-3 w-3 mr-2 opacity-50" />
@@ -446,35 +347,19 @@ export default function DocumentDetail() {
           </div>
 
           <div className="lg:col-span-1">
-<<<<<<< HEAD
-<<<<<<< HEAD
-            <Card className="bg-white/70 backdrop-blur-2xl border-slate-200 shadow-lg shadow-slate-200/30 rounded-2xl overflow-hidden sticky top-24">
-=======
-<<<<<<< HEAD
             <Card className="bg-white/70 backdrop-blur-2xl border-slate-200 shadow-lg shadow-slate-200/30 rounded-2xl overflow-hidden">
->>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
-=======
             <Card className="bg-white/70 backdrop-blur-2xl border-slate-200 shadow-lg shadow-slate-200/30 rounded-2xl overflow-hidden sticky top-24">
->>>>>>> render/CODES
               <CardHeader className="border-b border-slate-100">
                 <h3 className="font-black text-slate-900 uppercase tracking-widest text-xs flex items-center">
                   <FileText className="h-4 w-4 mr-2 text-blue-600" />
                   Intelligence Node
                 </h3>
               </CardHeader>
-<<<<<<< HEAD
-<<<<<<< HEAD
-              <CardContent className="space-y-6 pt-6">
-=======
 =======
             <Card>
               <CardHeader><h3 className="font-semibold flex items-center"><FileText className="h-5 w-5 mr-2" />Information</h3></CardHeader>
->>>>>>> d37c9d43293122daf4f5c2819b40669957f939f7
               <CardContent className="space-y-4">
->>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
-=======
               <CardContent className="space-y-6 pt-6">
->>>>>>> render/CODES
                 <div>
                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1.5">Node Type</label>
                   <p className="text-sm font-bold text-slate-700">{document.document_type}</p>
@@ -506,11 +391,7 @@ export default function DocumentDetail() {
             </Card>
           </div>
         </div>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
-<<<<<<< HEAD
         {/* Related Documents Section - Full Width */}
         <Card className="mt-8 bg-white/70 backdrop-blur-2xl border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden">
           <CardHeader className="border-b border-slate-100">
@@ -579,7 +460,6 @@ export default function DocumentDetail() {
                         </div>
                         <span className="text-sm text-muted-foreground">
                           {safeFormatDate(relatedDoc.createdAt)}
-=======
         {/* Relevant Research Papers Section - Only for Lecture Notes */}
         {document.document_type === 'Lecture Notes' && relatedDocuments && relatedDocuments.data.length > 0 && (
           <div className="mt-12">
@@ -605,7 +485,6 @@ export default function DocumentDetail() {
                         <span className="text-[10px] text-muted-foreground font-medium flex items-center">
                           <Calendar className="h-3 w-3 mr-1 opacity-70" />
                           {safeFormatDate(relatedDoc.upload_timestamp, 'MMM dd, yyyy')}
->>>>>>> d37c9d43293122daf4f5c2819b40669957f939f7
                         </span>
                       </div>
                       <Link to={`/documents/${relatedDoc._id}`} className="group-hover:text-blue-600 transition-colors mb-3">
@@ -633,9 +512,6 @@ export default function DocumentDetail() {
             </div>
           </div>
         )}
->>>>>>> 480e4afe8a9934af92be7d8171bf1f3e0f80f7fc
-=======
->>>>>>> render/CODES
       </div>
     </div>
   );
