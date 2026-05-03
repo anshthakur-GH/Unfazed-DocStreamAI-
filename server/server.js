@@ -1,7 +1,6 @@
 const express = require('express');
 const http = require('http');
 const cors = require('cors');
-const path = require('path');
 require('dotenv').config({ override: true });
 
 // Import custom modules
@@ -13,51 +12,33 @@ const apiRoutes = require('./routes/api');
 const app = express();
 const server = http.createServer(app);
 
-<<<<<<< HEAD
-=======
-// Trust Render's proxy
+// Trust Render's proxy (important for headers and rate limiting)
 app.set('trust proxy', 1);
 
->>>>>>> render/CODES
 const PORT = process.env.PORT || 4000;
 
 // CORS allowlist (comma-separated origins in env), fallback to dev wildcard without credentials
 const allowlist = (process.env.CORS_ORIGINS || '').split(',').map(s => s.trim()).filter(Boolean);
 const corsOptions = {
   origin: (origin, callback) => {
-    if (!origin) return callback(null, true); // non-browser clients
+    if (!origin) return callback(null, true); // non-browser clients (like Postman)
     if (allowlist.length === 0) return callback(null, true); // dev mode fallback
     if (allowlist.includes(origin)) return callback(null, true);
     callback(new Error('Not allowed by CORS'));
   },
-  credentials: !!process.env.CORS_CREDENTIALS, // only enable when origins are restricted
+  credentials: !!process.env.CORS_CREDENTIALS,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 };
-app.use(cors(corsOptions)); // safer CORS configuration [7][13]
 
+app.use(cors(corsOptions));
 app.use(express.json());
 
-<<<<<<< HEAD
-// Serve static files from the React frontend build folder
-app.use(express.static(path.join(__dirname, '../client/dist')));
-
-// Routes
+// API Routes
 app.use('/api', apiRoutes);
 
-// Root endpoint
-app.get('/', (req, res) => {
-=======
-// Routes
-app.use('/api', apiRoutes);
-
-// Serve static files from the React app
-const clientDistPath = path.join(__dirname, '../client/dist');
-app.use(express.static(clientDistPath));
-
-// Root API info endpoint (moved to /api)
+// Root API info endpoint
 app.get('/api', (req, res) => {
->>>>>>> render/CODES
   res.json({
     message: 'Real-time MongoDB API Server',
     version: '1.0.0',
@@ -69,35 +50,19 @@ app.get('/api', (req, res) => {
         statsData: '/api/stats/data',
         statsConnections: '/api/stats/connections'
     },
-<<<<<<< HEAD
-    websocket: `ws://${req.headers.host}`
-  });
-});
-
-// All other GET requests not handled before will return our React app
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
-=======
     websocket: `${req.protocol === 'https' ? 'wss' : 'ws'}://${req.headers.host}`
   });
 });
 
-// Fallback for SPA: for any request that doesn't match an API route or static file,
-// send back React's index.html file.
-app.use((req, res) => {
-  // If the request starts with /api, it's a 404 for the API
-  if (req.path.startsWith('/api')) {
-    return res.status(404).json({
-      error: 'API Endpoint not found',
-      path: req.originalUrl
-    });
-  }
-  // Otherwise, serve the frontend
-  res.sendFile(path.join(clientDistPath, 'index.html'));
->>>>>>> render/CODES
+// 404 handler for API
+app.use('/api/*', (req, res) => {
+  res.status(404).json({
+    error: 'API Endpoint not found',
+    path: req.originalUrl
+  });
 });
 
-// Global error handler (after routes)
+// Global error handler
 app.use((err, req, res, next) => {
   console.error('❌ Unhandled error:', err);
   res.status(err.status || 500).json({
@@ -111,24 +76,23 @@ async function initializeServer() {
     // Connect to MongoDB
     const db = await connectDB();
 
-    // Initialize WebSocket service attached to the HTTP server (single port)
+    // Initialize WebSocket service attached to the HTTP server
     const websocketService = new WebSocketService({ server, pingIntervalMs: 30000 });
     websocketService.initialize();
 
     // Make websocket service available to routes
     app.set('websocketService', websocketService);
 
-    // Initialize Change Stream handler (with resume support from updated util)
+    // Initialize Change Stream handler
     const changeStreamHandler = new ChangeStreamHandler(db, websocketService, {
       collectionName: 'processed_documents'
     });
     await changeStreamHandler.initialize();
 
-    // Start HTTP server (serves both API and WebSocket upgrades)
+    // Start HTTP server
     server.listen(PORT, () => {
       console.log(`🚀 HTTP server (API + WebSocket) running on port ${PORT}`);
       console.log(`📡 API available at http://localhost:${PORT}/api`);
-      console.log(`🔌 WebSocket available at ws://localhost:${PORT}`);
     });
 
     // Graceful shutdown
@@ -141,7 +105,6 @@ async function initializeServer() {
         await websocketService.close();
       } catch {}
       server.close(() => process.exit(0));
-      // Force exit after timeout
       setTimeout(() => process.exit(0), 5000).unref();
     };
 
