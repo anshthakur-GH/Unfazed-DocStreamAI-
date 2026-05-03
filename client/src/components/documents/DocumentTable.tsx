@@ -149,7 +149,6 @@ export const DocumentTable = ({
 
   if (documents.length === 0) {
     return (
-=======
       <div className="bg-white/80 backdrop-blur-3xl rounded-3xl border border-dashed border-slate-200 p-16 text-center shadow-xl shadow-slate-200/50">
         <FileText className="h-16 w-16 text-slate-300 mx-auto mb-6 opacity-40" />
         <h3 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">No Intelligence Nodes Found</h3>
@@ -170,7 +169,6 @@ export const DocumentTable = ({
       {!hideHeading && (
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-=======
             <h1 className="text-4xl font-black text-slate-900 tracking-tighter uppercase leading-none">
               {userProfileFilter ? `${userProfileFilter} Protocol` : "Global Stream"}
             </h1>
@@ -183,7 +181,6 @@ export const DocumentTable = ({
               variant="outline"
               onClick={handleRefresh}
               disabled={isLoading || isSpinning}
-=======
               className="bg-white/70 backdrop-blur-md border-slate-200 text-slate-900 font-bold tracking-widest uppercase hover:bg-white rounded-xl shadow-lg shadow-slate-200/50 h-10 transition-all active:scale-95"
             >
               <RefreshCw
@@ -238,7 +235,6 @@ export const DocumentTable = ({
         </div>
       )}
 
-=======
       <div className="bg-white/80 backdrop-blur-3xl rounded-3xl border border-slate-200 shadow-2xl shadow-slate-200/50 overflow-hidden">
         <Table>
           <TableHeader>
@@ -253,7 +249,6 @@ export const DocumentTable = ({
           </TableHeader>
           <TableBody>
             {documents.map((doc) => (
-=======
               <TableRow key={doc._id} className="group border-slate-50 h-24 hover:bg-blue-50/30 transition-all cursor-default">
                 <TableCell className="pl-8">
                   <Link to={`/documents/${doc._id}`} className="block">
@@ -269,7 +264,6 @@ export const DocumentTable = ({
                   </Link>
                 </TableCell>
                 <TableCell>
-=======
                   <Badge variant="outline" className="font-black text-[10px] tracking-widest uppercase border-slate-200 h-6 px-3 bg-white text-slate-600 shadow-sm">
                     {doc.user_profile}
                   </Badge>
@@ -315,7 +309,6 @@ export const DocumentTable = ({
         </Table>
       </div>
 
-=======
       {pagination && pagination.total > 0 && (
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 pb-12">
           <div className="text-xs font-black text-slate-400 uppercase tracking-widest">

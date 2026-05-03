@@ -8,7 +8,6 @@ export const Navbar = () => {
   const { isAuthenticated } = useAuth();
 
   const isActive = (path: string) => location.pathname === path;
-=======
         <div className="flex items-center justify-between h-28">
           {/* Logo Section - Images removed as requested */}
           <div className="flex items-center space-x-2">

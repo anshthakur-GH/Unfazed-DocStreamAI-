@@ -40,7 +40,6 @@ export default function ProfileView() {
         {/* Header */}
         <div className="mb-12">
           <h1 className="text-6xl font-black text-slate-900 mb-3 tracking-tighter uppercase leading-none">
-=======
         <div className="mb-12">
           <h1 className="text-4xl font-black text-slate-900 mb-3 tracking-tighter uppercase leading-none">
             {profileName} <span className="text-blue-600">NODE</span>

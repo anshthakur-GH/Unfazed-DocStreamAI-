@@ -130,7 +130,6 @@ export default function DocumentDetail() {
               <div className="flex items-center space-x-2 bg-slate-100/50 px-3 py-1.5 rounded-full border border-slate-200">
                 <Clock className="h-4 w-4 text-blue-600" />
                 <span className="font-medium">Modified {safeFormatDate(document.updatedAt || document.createdAt || document._id)}</span>
-=======
             <h1 className="text-3xl font-bold text-foreground mb-4">{document.document_title}</h1>
             
             <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
@@ -158,7 +157,6 @@ export default function DocumentDetail() {
               </a>
             )}
             <Button variant="outline" size="sm" className="bg-green-500 text-white hover:bg-green-600 font-bold tracking-widest uppercase shadow-lg shadow-green-500/20 h-10 px-4 border-none" onClick={handleDownloadPdf}>
-=======
             {(document.webViewLink || document.google_drive_link) && (
               <a href={document.webViewLink || document.google_drive_link || "#"} target="_blank" rel="noopener noreferrer" 
                 className="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium border border-input bg-orange-500 text-white hover:bg-orange-600 h-9 px-3">
@@ -355,7 +353,6 @@ export default function DocumentDetail() {
                   Intelligence Node
                 </h3>
               </CardHeader>
-=======
             <Card>
               <CardHeader><h3 className="font-semibold flex items-center"><FileText className="h-5 w-5 mr-2" />Information</h3></CardHeader>
               <CardContent className="space-y-4">

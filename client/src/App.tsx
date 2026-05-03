@@ -63,7 +63,6 @@ const App = () => {
                   <Route path="/login" element={<LoginWrapper />} />
                   <Route path="/unauthorized" element={<Unauthorized />} />
                   <Route path="/" element={<Navigate to="/login" replace />} />
-=======
             <ErrorBoundary>
               <BrowserRouter>
                 <ScrollToTop />
